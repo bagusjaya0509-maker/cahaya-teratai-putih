@@ -246,7 +246,7 @@ async function vKabar() {
   });
   $('[data-terbit-awal]')?.addEventListener('click', (e) => denganMemuat(e.currentTarget, async () => {
     try {
-      for (const k of awalBelum) await L.terbitkan({ ...k, sampul: '', keteranganSampul: '' });
+      for (const k of awalBelum) await L.terbitkan({ ...k, sampul: '', keteranganSampul: k.keteranganSampul || '' });
       roti(`${awalBelum.length} kabar awal terbit.`, 'berhasil');
       vKabar();
     } catch (err) { roti(pesanGalat(err), 'galat'); }
@@ -285,7 +285,7 @@ const keLokal = (ms) => {
 
 // Kategori kabar: bawaan + kategori buatan pengurus yang pernah dipakai.
 const rapikanKategori = (t) => {
-  // Huruf pertama tiap kata kapital (seperti "Dharma Wacana"); sisanya tetap, jadi "HUT RI" tidak berubah.
+  // Huruf pertama tiap kata kapital (seperti "Dharma Sastra"); sisanya tetap, jadi "HUT RI" tidak berubah.
   return String(t || '').replace(/\s+/g, ' ').trim().slice(0, 40).replace(/(^|\s)(\S)/g, (_, a, b) => a + b.toUpperCase());
 };
 

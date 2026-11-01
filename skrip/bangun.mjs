@@ -269,7 +269,10 @@ let jumlahKabar = 0;
       pakaiAwal = true;
       const { KABAR_AWAL } = await import(pathToFileURL(path.join(AKAR, 'aset/js/kabar-awal.js')));
       for (const { delta, ...k } of KABAR_AWAL) semua.push({ id: k.slug, ...k });
-      ambilIsi = async (slug) => ({ delta: KABAR_AWAL.find((k) => k.slug === slug).delta });
+      ambilIsi = async (slug) => {
+        const { delta, keteranganSampul } = KABAR_AWAL.find((k) => k.slug === slug);
+        return { delta, keteranganSampul };
+      };
     }
     for (const kabar of semua) {
       const slug = kabar.id;
@@ -305,7 +308,8 @@ let jumlahKabar = 0;
       await Promise.all(tertunda);
       const ringkas = kabar.ringkasan || deltaKeTeks(isi.delta || '[]').slice(0, 160);
       const iso = kabar.terbitPada ? new Date(kabar.terbitPada).toISOString() : '';
-      const ogGambar = urlSampul ? urlSitus.origin + urlSampul : ASAL + 'aset/img/og-cahaya.jpg';
+      const gambarBagi = urlSampul || (/^\//.test(kabar.sampulKecil || '') ? kabar.sampulKecil : '');
+      const ogGambar = gambarBagi ? urlSitus.origin + gambarBagi : ASAL + 'aset/img/og-cahaya.jpg';
       await tulis(
         `kabar/${slug}/`,
         rakit({

@@ -1,4 +1,4 @@
-// Kabar pertama: empat tulisan Dharma Wacana (sampul menyusul dari pemilik) dan dua kabar
+// Kabar pertama: empat tulisan Dharma Sastra dan dua kabar
 // dari berkas resmi yayasan: Sejarah Singkat (5 Februari 2025),
 // Keputusan Menkumham AHU-0011828.AH.01.04.Tahun 2024, dan Tanda Daftar Ditjen Bimas
 // Hindu Nomor 160/DJ.VI/BA.01.1/02/2025. Mode demo memakainya sebagai isi awal; di
@@ -18,8 +18,9 @@ export const KABAR_AWAL = [
   {
     slug: 'mengenal-betara-sakti-dang-hyang-nirartha',
     judul: 'Mengenal Betara Sakti Dang Hyang Nirartha',
-    kategori: 'Dharma Wacana',
+    kategori: 'Dharma Sastra',
     penulis: 'Sekretariat Yayasan',
+    sampulKecil: 'nirartha',
     terbitPada: wita('2026-11-01') + 30 * MENIT,
     unggulan: true,
     ringkasan: 'Riwayat, ajaran, dan pengaruh pendeta Siwa dari Jawa yang menjadi asas ajaran Yayasan Cahaya Teratai Putih.',
@@ -50,8 +51,9 @@ export const KABAR_AWAL = [
   {
     slug: 'tri-hita-karana-tiga-penyebab-kesejahteraan',
     judul: 'Tri Hita Karana: Tiga Penyebab Kesejahteraan',
-    kategori: 'Dharma Wacana',
+    kategori: 'Dharma Sastra',
     penulis: 'Sekretariat Yayasan',
+    sampulKecil: 'trihita',
     terbitPada: wita('2026-11-01') + 20 * MENIT,
     ringkasan: 'Tri Hita Karana mengajarkan keharmonisan hubungan manusia dengan Tuhan, sesama manusia, dan alam, dan menjadi dasar kegiatan yayasan.',
     delta: jadi(
@@ -75,8 +77,9 @@ export const KABAR_AWAL = [
   {
     slug: 'ajaran-moksa-dalam-agama-hindu',
     judul: 'Ajaran Moksa dalam Agama Hindu',
-    kategori: 'Dharma Wacana',
+    kategori: 'Dharma Sastra',
     penulis: 'Sekretariat Yayasan',
+    sampulKecil: 'moksa',
     terbitPada: wita('2026-11-01') + 10 * MENIT,
     ringkasan: 'Moksa adalah tujuan tertinggi dalam ajaran Hindu, yaitu kebebasan sejati ketika Atman bersatu dengan Brahman.',
     delta: jadi(
@@ -107,8 +110,9 @@ export const KABAR_AWAL = [
   {
     slug: 'fungsi-meditasi-dalam-ajaran-hindu',
     judul: 'Fungsi Meditasi dalam Ajaran Hindu',
-    kategori: 'Dharma Wacana',
+    kategori: 'Dharma Sastra',
     penulis: 'Sekretariat Yayasan',
+    sampulKecil: 'meditasi',
     terbitPada: wita('2026-11-01'),
     ringkasan: 'Meditasi atau dhyana melatih ketenangan dan kesadaran diri, dan merupakan tahap ketujuh dalam Astangga Yoga.',
     delta: jadi(
@@ -144,7 +148,8 @@ export const KABAR_AWAL = [
     penulis: 'Sekretariat Yayasan',
     terbitPada: wita('2025-02-05'),
     ringkasan: 'Tanda Daftar Nomor 160/DJ.VI/BA.01.1/02/2025 menempatkan yayasan dalam binaan Direktorat Jenderal Bimbingan Masyarakat Hindu sampai 5 Februari 2028.',
-    sampulKecil: 'homma',
+    sampulKecil: 'bimas',
+    keteranganSampul: 'Ilustrasi pendaftaran yayasan pada Ditjen Bimas Hindu.',
     delta: jadi(
       p('Direktorat Jenderal Bimbingan Masyarakat Hindu Kementerian Agama mencatat Yayasan Cahaya Teratai Putih sebagai lembaga keagamaan Hindu yang terdaftar dan berada dalam binaannya. Tanda Daftar Nomor 160/DJ.VI/BA.01.1/02/2025 terbit di Jakarta pada 5 Februari 2025 dan berlaku sampai 5 Februari 2028.'),
       p('Pendaftaran ini berjalan berjenjang. Penyelenggara Bimas Hindu Kantor Kementerian Agama Kota Mataram memberikan rekomendasi pada 13 Desember 2024 sesudah memantau kegiatan pembinaan umat di Kecamatan Cakranegara. Bidang Bimas Hindu Kantor Wilayah Kementerian Agama Provinsi NTB menyusul dengan rekomendasi pada 19 Desember 2024.'),

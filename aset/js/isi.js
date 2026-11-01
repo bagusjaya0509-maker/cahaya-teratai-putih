@@ -139,7 +139,7 @@ export function lamaBaca(delta) {
   return Math.max(1, Math.round(kata / 200));
 }
 
-export const KATEGORI_KABAR = ['Kegiatan', 'Berita', 'Pengumuman', 'Opini', 'Dharma Wacana'];
+export const KATEGORI_KABAR = ['Kegiatan', 'Berita', 'Pengumuman', 'Opini', 'Dharma Sastra'];
 
 export function buatSlug(teks) {
   return String(teks || '')

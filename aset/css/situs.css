@@ -863,7 +863,7 @@ body { top: 0 !important; }
 .profil-teks .judul-bagian { margin-bottom: 6px; }
 .profil-teks .tombol-teks { margin-top: 18px; }
 .profil-foto { margin: 0; display: grid; gap: 10px; }
-.profil-foto img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 6px; }
+.profil-foto img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 6px; }
 .profil-foto figcaption { font-size: 0.97rem; color: var(--tinta-2); }
 .fakta { margin: clamp(32px, 4vw, 48px) 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-block: 1px solid var(--garis); }
 .fakta > div { padding: 18px 20px; border-left: 1px solid var(--garis); }
