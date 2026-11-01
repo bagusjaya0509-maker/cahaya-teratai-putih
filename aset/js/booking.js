@@ -10,7 +10,7 @@ const KUNCI_DRAF = 'ctp.draf.booking';
 let atur = null;
 
 // ---------- pilihan ----------
-$('[data-layanan]').innerHTML = LAYANAN_BOOKING.map((l) => `<label class="pilihan"><input type="radio" name="layanan" value="${l.kunci}" required><span><b>${esc(l.nama)}${l.gratis ? ' <span class="lencana-gratis">Gratis</span>' : ''}</b><small>${esc(l.ringkas)}</small></span></label>`).join('');
+$('[data-layanan]').innerHTML = LAYANAN_BOOKING.map((l) => `<label class="pilihan"><input type="radio" name="layanan" value="${l.kunci}" required><span><b>${esc(l.nama)}</b><small>${esc(l.ringkas)}</small></span></label>`).join('');
 $('[data-cara]').innerHTML = CARA_BERTEMU.map((c, i) => `<label class="pilihan"><input type="radio" name="cara" value="${c.kunci}" ${i === 0 ? 'checked' : ''} required><span><b>${esc(c.nama)}</b><small>${esc(c.ket)}</small></span></label>`).join('');
 pasangKota();
 
