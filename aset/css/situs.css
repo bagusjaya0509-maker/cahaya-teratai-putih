@@ -935,7 +935,7 @@ body { top: 0 !important; }
 /* ---------- pilihan ajaran: satu panel terbuka, panel lain menyempit ---------- */
 .pilih { container-type: inline-size; display: flex; gap: 8px; margin-top: clamp(32px, 4vw, 48px); aspect-ratio: 1200 / 418; }
 .pilih-butir {
-  --lebar-aktif: calc((100cqw - 32px) * 7 / 11); --lebar-sempit: calc((100cqw - 32px) / 11);
+  --lebar-aktif: calc((100cqw - 32px) * 7 / 11); --lebar-sempit: calc((100cqw - 32px) / 11); --ikon: 44px;
   position: relative; flex: 1 1 0; min-width: 0; padding: 0; border: 0; border-radius: 6px; overflow: hidden;
   background: var(--telaga); color: #fff; font: inherit; text-align: left; cursor: pointer;
   transition: flex-grow 0.7s cubic-bezier(0.2, 0.7, 0.1, 1);
@@ -949,12 +949,13 @@ body { top: 0 !important; }
 .pilih-butir.aktif img { filter: none; }
 .pilih-butir::after { content: ''; position: absolute; inset: auto 0 0; height: 55%; background: linear-gradient(to top, rgb(8 30 32 / 0.88), transparent); opacity: 0; transition: opacity 0.7s ease; }
 .pilih-butir.aktif::after { opacity: 1; }
-.pilih-label { position: absolute; z-index: 1; left: calc((var(--lebar-sempit) - 44px) / 2); bottom: 16px; display: flex; align-items: center; gap: 12px; }
-.pilih-ikon { flex: none; width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; background: rgb(15 52 55 / 0.82); border: 1px solid rgb(255 255 255 / 0.32); }
+.pilih-label { position: absolute; z-index: 1; left: calc((var(--lebar-sempit) - var(--ikon)) / 2); bottom: 16px; display: flex; align-items: center; gap: 12px; }
+.pilih-ikon { flex: none; width: var(--ikon); height: var(--ikon); display: grid; place-items: center; border-radius: 50%; background: rgb(15 52 55 / 0.82); border: 1px solid rgb(255 255 255 / 0.32); }
 .pilih-teks { flex: none; display: grid; gap: 2px; width: calc(var(--lebar-aktif) - var(--lebar-sempit) - 40px); opacity: 0; translate: 25px 0; transition: opacity 0.7s ease, translate 0.7s ease; }
 .pilih-butir.aktif .pilih-teks { opacity: 1; translate: 0 0; }
 .pilih-teks b { font-family: var(--f-judul); font-weight: 500; font-size: 1.4rem; line-height: 1.2; }
 .pilih-teks small { font-size: 0.97rem; color: rgb(255 255 255 / 0.86); }
+.pilih-ket { display: none; }
 .pilih.m .pilih-butir { opacity: 0; translate: -48px 0; }
 .pilih.m.tampak .pilih-butir { opacity: 1; translate: 0 0; transition: opacity 0.6s ease, translate 0.6s ease; }
 .pilih.m.tampak .pilih-butir:nth-child(2) { transition-delay: 120ms; }
@@ -964,18 +965,17 @@ body { top: 0 !important; }
 @media (hover: hover) {
   .pilih-butir:not(.aktif):hover img { filter: saturate(1) brightness(0.92); }
 }
-@media (max-width: 760px) {
-  .pilih { flex-direction: column; aspect-ratio: auto; }
-  .pilih-butir { flex: none; height: 66px; transition: height 0.55s cubic-bezier(0.2, 0.7, 0.1, 1); }
-  .pilih-butir.aktif { flex-grow: 0; height: calc(100cqw * 9 / 16); }
-  .pilih-butir img { top: 50%; left: 0; translate: 0 -50%; width: 100%; height: calc(100cqw * 9 / 16); filter: saturate(0.8) brightness(0.55); }
-  .pilih-butir::after { height: 100%; opacity: 0; }
-  .pilih-butir.aktif::after { height: 60%; opacity: 1; }
-  .pilih-label { left: 11px; right: 11px; bottom: 11px; }
-  .pilih-teks { flex: 1; min-width: 0; width: auto; opacity: 1; translate: none; }
-  .pilih-teks b { font-size: 1.2rem; }
-  .pilih-teks small { display: none; font-size: 0.9rem; }
-  .pilih-butir.aktif .pilih-teks small { display: block; }
+@media (max-width: 640px) {
+  .pilih { gap: 5px; aspect-ratio: 100 / 64; max-height: 320px; }
+  .pilih-butir { --lebar-aktif: calc((100cqw - 20px) * 6 / 10); --lebar-sempit: calc((100cqw - 20px) / 10); --ikon: 26px; }
+  .pilih-butir.aktif { flex-grow: 6; }
+  .pilih-butir::after { height: 45%; }
+  .pilih-label { bottom: 10px; gap: 8px; }
+  .pilih-ikon .ikon { width: 15px; height: 15px; }
+  .pilih-teks { width: calc(var(--lebar-aktif) - var(--ikon) - 20px); }
+  .pilih-teks b { font-size: 1.02rem; }
+  .pilih-teks small { display: none; }
+  .pilih-ket { display: block; min-height: 3.1em; margin: 12px 0 0; color: var(--tinta-2); }
 }
 @media (prefers-reduced-motion: reduce) {
   .pilih-butir, .pilih-butir img, .pilih-butir::after, .pilih-teks { transition: none; }
