@@ -146,6 +146,7 @@ function pasangKepala() {
     tMenu.setAttribute('aria-expanded', 'true');
     tMenu.innerHTML = ikon('x');
   });
+  nav.addEventListener('click', (e) => { if (e.target.closest('a') && nav.classList.contains('terbuka')) tutupMenu(); });
   addEventListener('keydown', (e) => { if (e.key === 'Escape' && nav.classList.contains('terbuka')) tutupMenu(); });
   matchMedia('(min-width: 1101px)').addEventListener('change', (m) => m.matches && tutupMenu());
 

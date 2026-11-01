@@ -33,3 +33,31 @@ if (tWadah && MODE !== 'mati') {
     tWadah.classList.add('kisi-testimoni');
   }).catch((e) => console.warn(e));
 }
+
+// Dokumentasi kegiatan: layar sentuh menggeser sendiri, tombol untuk tetikus dan papan ketik.
+const jalur = $('[data-geser-jalur]');
+if (jalur) {
+  const foto = [...jalur.children];
+  const hitung = $('[data-geser-hitung]');
+  const mundur = $('[data-geser-mundur]');
+  const maju = $('[data-geser-maju]');
+  const posisi = (i) => foto[i].offsetLeft - foto[0].offsetLeft;
+  const kini = () => {
+    if (jalur.scrollLeft + jalur.clientWidth >= jalur.scrollWidth - 2) return foto.length - 1;
+    return foto.reduce((dekat, _, i) => (Math.abs(posisi(i) - jalur.scrollLeft) < Math.abs(posisi(dekat) - jalur.scrollLeft) ? i : dekat), 0);
+  };
+  const perbarui = () => {
+    const i = kini();
+    hitung.textContent = `${i + 1} / ${foto.length}`;
+    mundur.disabled = i === 0;
+    maju.disabled = i === foto.length - 1;
+  };
+  const halus = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ke = (i) => jalur.scrollTo({ left: posisi(i), behavior: halus ? 'smooth' : 'auto' });
+  mundur.addEventListener('click', () => ke(kini() - 1));
+  maju.addEventListener('click', () => ke(kini() + 1));
+  jalur.addEventListener('scroll', perbarui, { passive: true });
+  addEventListener('resize', perbarui);
+  $('[data-geser-kendali]').hidden = false;
+  perbarui();
+}

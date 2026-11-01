@@ -69,7 +69,7 @@ export const KABAR_AWAL = [
       h2('Penerapan dalam kegiatan yayasan'),
       li('Parahyangan: meditasi bersama, upacara Homma Jnana, pelatihan dharma, serta piodalan dan upacara adat.'),
       li('Pawongan: santunan kaum prasejahtera, layanan konseling kemanusiaan, bantuan bencana, dan dapur umum.'),
-      li('Palemahan: gotong royong membersihkan lingkungan, bantuan bibit talas, dan edukasi lebah trigona.'),
+      li('Palemahan: gotong royong membersihkan lingkungan dan bantuan bibit talas.'),
       h2('Penerapan dalam kehidupan sehari-hari'),
       p('Tri Hita Karana dapat dijalankan melalui hal yang sederhana: menjaga ibadah, bersikap baik kepada keluarga dan tetangga, serta merawat lingkungan tempat tinggal. Prinsip ini membantu umat menjaga keseimbangan kehidupan spiritual dan sosial di tengah arus modernisasi.'),
     ),

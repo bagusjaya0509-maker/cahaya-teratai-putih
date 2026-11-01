@@ -7,8 +7,15 @@
     <nav class="nav" id="nav-utama" aria-label="Menu utama">
       <ul class="nav-daftar">
         <li><a href="{{BASE}}tentang/" data-nav="tentang">Tentang</a></li>
-        <li><a href="{{BASE}}layanan/" data-nav="layanan">Layanan</a></li>
-        <li><a href="{{BASE}}testimoni/" data-nav="testimoni">Testimoni</a></li>
+        <li class="nav-turun">
+          <a href="{{BASE}}layanan/" data-nav="layanan">Layanan</a>
+          <button class="nav-turun-tombol" type="button" aria-expanded="false" aria-label="Buka submenu Layanan"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-chevron-down"/></svg></button>
+          <ul class="nav-sub">
+            <li><a href="{{BASE}}layanan/#program"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-hand-heart"/></svg><span><b>Program yayasan</b><small>Bidang keagamaan, sosial, dan kemanusiaan</small></span></a></li>
+            <li><a href="{{BASE}}booking/"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-calendar"/></svg><span><b>Booking konsultasi</b><small>Pengajuan jadwal konsultasi</small></span></a></li>
+            <li><a href="{{BASE}}testimoni/"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-message-circle"/></svg><span><b>Testimoni</b><small>Pengalaman peserta dan penerima layanan</small></span></a></li>
+          </ul>
+        </li>
         <li><a href="{{BASE}}kabar/" data-nav="kabar">Kabar</a></li>
         <li><a href="{{BASE}}kontak/" data-nav="kontak">Kontak</a></li>
       </ul>
