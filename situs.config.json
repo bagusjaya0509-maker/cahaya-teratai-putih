@@ -30,8 +30,8 @@
     "messagingSenderId": "",
     "appId": ""
   },
-  "adminUtama": ["y.cahayaterataiputih11@gmail.com"],
+  "adminUtama": ["y.cahayaterataiputih11@gmail.com", "cahayaterataiputih11@gmail.com"],
   "notifikasi": {
-    "emailBookingBaru": "y.cahayaterataiputih11@gmail.com"
+    "emailBookingBaru": "yayasan@cahayaterataiputih.org"
   }
 }

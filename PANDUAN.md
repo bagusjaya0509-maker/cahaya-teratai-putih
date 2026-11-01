@@ -51,17 +51,14 @@ Pemilih bahasa di kepala situs memakai widget Google Translate, gratis dan tanpa
 
 Google tidak lagi membuka widget ini untuk pendaftar baru, tetapi yang sudah ada masih berjalan. Bila suatu saat berhenti, situs tetap tampil normal dalam bahasa Indonesia.
 
-## Domain sendiri
+## Domain
 
-Kop surat yayasan mencantumkan `cahayaterataiputih.org`, tetapi domain ini belum terdaftar per 1 November 2026, sehingga email `Info@cahayaterataiputih.org` belum bisa menerima pesan.
+Situs tayang di `cahayaterataiputih.org`. Domain dan email dibeli di Hostinger dengan akun `cahayaterataiputih11@gmail.com`, dan berlaku sampai 1 November 2027.
 
-Sesudah membeli domain:
-
-1. GitHub → Settings → Pages → Custom domain, isi nama domainnya.
-2. Di penyedia domain, arahkan DNS sesuai panduan GitHub Pages, lalu aktifkan **Enforce HTTPS**.
-3. Ubah `situs.url` di `situs.config.json`.
-4. Tambahkan domain itu di Firebase **Authorized domains**.
-5. Bila email bisnis sudah aktif, ganti `kontak.email` dan `notifikasi.emailBookingBaru`.
+- DNS di Hostinger mengarah ke GitHub Pages: empat catatan A untuk `@` dan CNAME `www`.
+- Jangan menghapus catatan MX, SPF, DKIM, DMARC, dan `autodiscover`, karena dipakai email.
+- Jangan menghapus TXT `google-site-verification`, karena dipakai Google Search Console.
+- Bila domain berganti, sambungkan DNS lebih dulu, baru isi domainnya di GitHub → Settings → Pages. Sesudah itu tambahkan domainnya di Firebase **Authorized domains**.
 
 ## Pemberitahuan email
 

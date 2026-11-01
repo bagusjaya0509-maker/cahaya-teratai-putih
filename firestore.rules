@@ -21,7 +21,7 @@ service cloud.firestore {
     function adminUtama() {
       // SAMAKAN dengan "adminUtama" di situs.config.json
       return masuk() && request.auth.token.email_verified == true
-        && request.auth.token.email.lower() in ['y.cahayaterataiputih11@gmail.com'];
+        && request.auth.token.email.lower() in ['y.cahayaterataiputih11@gmail.com', 'cahayaterataiputih11@gmail.com'];
     }
     function pengurus() {
       return adminUtama() || (masuk() && exists(/databases/$(database)/documents/admin/$(saya())));
