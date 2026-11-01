@@ -23,12 +23,12 @@
   },
   "indexNow": "a1e8a92de79717f9e340c8247acd329a",
   "firebase": {
-    "apiKey": "",
-    "authDomain": "",
-    "projectId": "",
-    "storageBucket": "",
-    "messagingSenderId": "",
-    "appId": ""
+    "apiKey": "AIzaSyCh2bympmt1-F4ZVHhNzcS5Asy2O-FSJuc",
+    "authDomain": "cahaya-teratai-putih.firebaseapp.com",
+    "projectId": "cahaya-teratai-putih",
+    "storageBucket": "cahaya-teratai-putih.firebasestorage.app",
+    "messagingSenderId": "630448758088",
+    "appId": "1:630448758088:web:fecb78bef0b02148d1e77d"
   },
   "adminUtama": ["y.cahayaterataiputih11@gmail.com", "cahayaterataiputih11@gmail.com"],
   "notifikasi": {
