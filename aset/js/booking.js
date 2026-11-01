@@ -10,7 +10,7 @@ const KUNCI_DRAF = 'ctp.draf.booking';
 let atur = null;
 
 // ---------- pilihan ----------
-$('[data-layanan]').innerHTML = LAYANAN_BOOKING.map((l) => `<label class="pilihan"><input type="radio" name="layanan" value="${l.kunci}" required><span><b>${esc(l.nama)}</b><small>${esc(l.ringkas)}</small></span></label>`).join('');
+$('[data-layanan]').innerHTML = LAYANAN_BOOKING.map((l) => `<label class="pilihan"><input type="radio" name="layanan" value="${l.kunci}" required><span><b>${esc(l.nama)}${l.gratis ? ' <span class="lencana-gratis">Gratis</span>' : ''}</b><small>${esc(l.ringkas)}</small></span></label>`).join('');
 $('[data-cara]').innerHTML = CARA_BERTEMU.map((c, i) => `<label class="pilihan"><input type="radio" name="cara" value="${c.kunci}" ${i === 0 ? 'checked' : ''} required><span><b>${esc(c.nama)}</b><small>${esc(c.ket)}</small></span></label>`).join('');
 pasangKota();
 
@@ -68,9 +68,9 @@ function periksa() {
     sasaran?.setAttribute('aria-invalid', String(!ok));
     if (!ok) masalah.push({ el, pesan });
   };
-  cek(E.layanan, E.layanan.value, 'Pilih keperluan Anda.');
+  cek(E.layanan, E.layanan.value, 'Pilih keperluan konsultasi.');
   cek(E.tanggal, E.tanggal?.value, 'Pilih tanggal.');
-  cek(E.nama, E.nama.value.trim().length >= 2, 'Tulis nama Anda.');
+  cek(E.nama, E.nama.value.trim().length >= 2, 'Isi nama lengkap.');
   cek(E.wa, /^(\+?62|0)8\d{7,12}$/.test(E.wa.value.replace(/[\s-]/g, '')), 'Nomor WhatsApp diawali 08 atau +628, contoh 081234567890.');
   cek(E.setuju, E.setuju.checked, 'Centang persetujuan di bagian bawah.');
   return masalah;
@@ -96,9 +96,9 @@ function tampilHasil(d) {
       <p class="label">Booking terkirim</p>
       <h2>Simpan nomor booking Anda</h2>
       <p class="nomor-tiket" translate="no">${esc(d.nomor)}</p>
-      <p>Pengurus memeriksa jadwal lalu menghubungi WhatsApp <b translate="no">${esc(d.wa)}</b> untuk memastikan waktunya. Mau lebih cepat? Kirim juga lewat WhatsApp.</p>
+      <p>Pengurus akan memeriksa jadwal dan menghubungi nomor WhatsApp <b translate="no">${esc(d.wa)}</b> untuk memastikan waktu konsultasi. Anda juga dapat mengirim konfirmasi lewat WhatsApp.</p>
       <div class="aksi-formulir">
-        <a class="tombol tombol-utama" href="${esc(tautanPesan(d))}" target="_blank" rel="noopener">${ikon('whatsapp')}Kabari lewat WhatsApp</a>
+        <a class="tombol tombol-utama" href="${esc(tautanPesan(d))}" target="_blank" rel="noopener">${ikon('whatsapp')}Konfirmasi lewat WhatsApp</a>
         <a class="tombol tombol-garis" href="${BASE}akun/#booking/${esc(d.id)}">Lihat status booking</a>
         <button class="tombol-teks" type="button" data-salin>${ikon('copy')}Salin nomor</button>
       </div>

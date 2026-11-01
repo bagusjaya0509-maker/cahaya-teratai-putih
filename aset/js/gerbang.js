@@ -18,7 +18,7 @@ export function kartuMasuk(keperluan) {
   return `<div class="kartu kartu-gerbang">
     ${ikon('calendar', 'ikon ikon-besar')}
     <h2>Belum ada ${esc(keperluan)} di perangkat ini</h2>
-    <p>Booking yang Anda kirim dari perangkat ini akan muncul di sini. Kalau sudah punya akun, masuk untuk melihat riwayatnya.</p>
+    <p>Booking yang dikirim dari perangkat ini tercatat di halaman ini. Pemilik akun dapat masuk untuk melihat riwayatnya.</p>
     <div class="aksi-formulir">
       <a class="tombol tombol-utama" href="${BASE}booking/">Booking konsultasi</a>
       <a class="tombol tombol-garis" href="${BASE}masuk/?lanjut=${lanjut}">Masuk</a>

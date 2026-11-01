@@ -1,18 +1,18 @@
 // Daftar rujukan yang dipakai situs dan panel pengurus.
 
 export const LAYANAN_BOOKING = [
-  { kunci: 'konseling', nama: 'Konseling kehidupan', ikon: 'message-circle', ringkas: 'Masalah keluarga, tekanan batin, atau peristiwa berat yang sulit diceritakan.' },
-  { kunci: 'spiritual', nama: 'Konsultasi spiritual', ikon: 'sprout', ringkas: 'Bimbingan dharma dan kesadaran diri untuk keputusan hidup sehari-hari.' },
-  { kunci: 'pengobatan', nama: 'Pengobatan non-medis', ikon: 'hand-heart', ringkas: 'Pendampingan penyembuhan batin, sebagai pelengkap perawatan dokter.' },
-  { kunci: 'meditasi', nama: 'Meditasi dan yoga', ikon: 'flower-2', ringkas: 'Belajar dari awal atau memperdalam latihan bersama pembimbing.' },
-  { kunci: 'homma', nama: 'Upacara Homma Jnana', ikon: 'landmark', ringkas: 'Bertanya tentang upacara atau mendaftarkan diri dan keluarga.' },
-  { kunci: 'lainnya', nama: 'Keperluan lain', ikon: 'circle-help', ringkas: 'Belum yakin termasuk yang mana? Ceritakan di kolom catatan.' },
+  { kunci: 'konseling', nama: 'Konseling kehidupan', ikon: 'message-circle', ringkas: 'Pendampingan bagi perorangan atau keluarga yang menghadapi masalah kehidupan, termasuk trauma dan tekanan mental.' },
+  { kunci: 'spiritual', nama: 'Konsultasi spiritual', ikon: 'sprout', ringkas: 'Bimbingan nilai dharma, etika, dan kesadaran diri dalam kehidupan sehari-hari.' },
+  { kunci: 'pengobatan', nama: 'Pengobatan non-medis', ikon: 'hand-heart', gratis: true, ringkas: 'Pendampingan kesadaran spiritual sebagai pelengkap perawatan medis.' },
+  { kunci: 'meditasi', nama: 'Meditasi dan yoga', ikon: 'flower-2', gratis: true, ringkas: 'Bimbingan meditasi dan yoga untuk ketenangan batin dan kesadaran diri.' },
+  { kunci: 'homma', nama: 'Upacara Homma Jnana', ikon: 'landmark', ringkas: 'Informasi dan pendaftaran upacara suci Homma Jnana.' },
+  { kunci: 'lainnya', nama: 'Keperluan lain', ikon: 'circle-help', ringkas: 'Keperluan di luar pilihan di atas. Jelaskan pada kolom keterangan.' },
 ];
 
 export const CARA_BERTEMU = [
   { kunci: 'tatap-muka', nama: 'Datang ke yayasan', ket: 'Jl. Gora Gang Markisa No. 3, Cakranegara' },
-  { kunci: 'telepon', nama: 'Telepon WhatsApp', ket: 'Pengurus menelepon nomor Anda' },
-  { kunci: 'video', nama: 'Panggilan video', ket: 'Untuk yang tinggal di luar Mataram' },
+  { kunci: 'telepon', nama: 'Telepon WhatsApp', ket: 'Pengurus menghubungi nomor WhatsApp Anda' },
+  { kunci: 'video', nama: 'Panggilan video', ket: 'Bagi masyarakat di luar Kota Mataram' },
 ];
 
 export const STATUS_BOOKING = {

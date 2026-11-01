@@ -1,10 +1,10 @@
-<!--{"judul":"Testimoni","deskripsi":"Cerita pengalaman orang yang pernah mengikuti kegiatan dan layanan Yayasan Cahaya Teratai Putih.","path":"testimoni/","nav":"testimoni","skrip":["testimoni.js"],"prioritas":"0.8"}-->
+<!--{"judul":"Testimoni","deskripsi":"Testimoni peserta kegiatan dan penerima layanan Yayasan Cahaya Teratai Putih.","path":"testimoni/","nav":"testimoni","skrip":["testimoni.js"],"prioritas":"0.8"}-->
 <main id="isi">
   <header class="kepala-halaman">
     <div class="wadah">
       <nav class="remah" aria-label="Remah roti"><a href="{{BASE}}">Beranda</a><span aria-hidden="true">/</span><span>Testimoni</span></nav>
-      <h1>Cerita dari yang pernah datang</h1>
-      <p class="lead">Pengalaman dari mereka yang mengikuti kegiatan, memakai layanan, atau mencoba produk yayasan.</p>
+      <h1>Testimoni</h1>
+      <p class="lead">Pengalaman peserta kegiatan, penerima layanan, dan pengguna produk Yayasan Cahaya Teratai Putih.</p>
       <p style="margin:22px 0 0"><a class="tombol tombol-utama" href="#tulis">Tulis testimoni</a></p>
     </div>
   </header>
@@ -21,18 +21,18 @@
     <div class="wadah tata-tulis">
       <div>
         <p class="label">Tulis testimoni</p>
-        <h2 class="judul-bagian" id="judul-tulis">Bagaimana pengalaman Anda?</h2>
-        <p style="color:var(--tinta-2)">Ceritakan apa yang Anda alami dengan kata-kata sendiri. Tidak perlu membuat akun.</p>
+        <h2 class="judul-bagian" id="judul-tulis">Sampaikan pengalaman Anda</h2>
+        <p style="color:var(--tinta-2)">Testimoni dapat dikirim tanpa membuat akun.</p>
         <ul class="daftar-tenang">
-          <li>Pengurus membaca dulu sebelum menampilkannya.</li>
-          <li>Nomor WhatsApp tidak pernah ditampilkan.</li>
-          <li>Tulis pengalaman, bukan janji sembuh atau nama penyakit.</li>
+          <li>Setiap testimoni ditinjau pengurus sebelum ditampilkan.</li>
+          <li>Nomor WhatsApp tidak ditampilkan di situs.</li>
+          <li>Tulis pengalaman Anda, tanpa janji kesembuhan atau nama penyakit.</li>
         </ul>
       </div>
       <div data-tulis-wadah>
         <form class="formulir" data-tulis novalidate>
           <fieldset>
-            <legend>Cerita Anda</legend>
+            <legend>Isi testimoni</legend>
             <div class="medan"><label for="t-tentang">Tentang layanan atau produk apa? <span class="wajib">*</span></label><select id="t-tentang" name="tentang" data-tentang required><option value="">Pilih</option></select><input name="tentangLain" type="text" maxlength="80" placeholder="Tulis nama layanan atau produk" aria-label="Nama layanan atau produk" hidden style="margin-top:8px"></div>
             <div class="medan">
               <span class="medan-label" id="lbl-bintang">Nilai <span class="wajib">*</span></span>
@@ -44,9 +44,9 @@
                 <label><input type="radio" name="bintang" value="1"><span class="sr-only">1 bintang</span><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-star"/></svg></label>
               </div>
             </div>
-            <div class="medan"><label for="t-isi">Cerita Anda <span class="wajib">*</span></label><textarea id="t-isi" name="isi" rows="6" maxlength="1200" required></textarea><p class="medan-hitung" data-hitung>0 / 1.200</p><p class="pesan pesan-peringatan" data-saran hidden>Tulisan Anda menyebut pengobatan atau hasil tertentu. Pengurus mungkin meminta Anda mengubahnya, karena aturan melarang testimoni kesembuhan.</p></div>
+            <div class="medan"><label for="t-isi">Testimoni <span class="wajib">*</span></label><textarea id="t-isi" name="isi" rows="6" maxlength="1200" required></textarea><p class="medan-hitung" data-hitung>0 / 1.200</p><p class="pesan pesan-peringatan" data-saran hidden>Testimoni ini menyebut pengobatan atau hasil tertentu. Pengurus dapat meminta perubahan, karena aturan melarang testimoni kesembuhan.</p></div>
             <div class="medan">
-              <span class="medan-label">Foto (boleh dilewati)</span>
+              <span class="medan-label">Foto (tidak wajib)</span>
               <label class="unggah">
                 <input type="file" accept="image/*" hidden data-foto>
                 <div data-foto-pratinjau><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-image"/></svg><p><b>Pilih foto</b>, otomatis diperkecil</p></div>
@@ -54,13 +54,13 @@
             </div>
           </fieldset>
           <fieldset>
-            <legend>Data Anda</legend>
+            <legend>Data pengirim</legend>
             <div class="baris-medan">
-              <div class="medan"><label for="t-nama">Nama <span class="wajib">*</span></label><input id="t-nama" name="nama" type="text" autocomplete="name" maxlength="80" required></div>
+              <div class="medan"><label for="t-nama">Nama lengkap <span class="wajib">*</span></label><input id="t-nama" name="nama" type="text" autocomplete="name" maxlength="80" required></div>
               <div class="medan"><label for="t-kota">Kabupaten/kota</label><input id="t-kota" name="kota" type="text" maxlength="60"></div>
             </div>
-            <div class="medan"><label for="t-wa">Nomor WhatsApp</label><input id="t-wa" name="wa" type="tel" inputmode="tel" maxlength="20" placeholder="08xxxxxxxxxx" aria-describedby="p-wa"><p class="petunjuk" id="p-wa">Boleh dikosongkan. Dipakai bila pengurus perlu bertanya, tidak ditampilkan.</p></div>
-            <label class="centang"><input type="checkbox" name="tampilNama"><span>Tampilkan nama saya disingkat, misalnya Made S.</span></label>
+            <div class="medan"><label for="t-wa">Nomor WhatsApp</label><input id="t-wa" name="wa" type="tel" inputmode="tel" maxlength="20" placeholder="08xxxxxxxxxx" aria-describedby="p-wa"><p class="petunjuk" id="p-wa">Tidak wajib diisi. Dipakai bila pengurus perlu menghubungi Anda, dan tidak ditampilkan di situs.</p></div>
+            <label class="centang"><input type="checkbox" name="tampilNama"><span>Tampilkan nama saya dalam bentuk singkatan, misalnya Made S.</span></label>
           </fieldset>
           <div class="kartu" style="display:grid;gap:16px">
             <label class="centang"><input type="checkbox" name="setuju" required><span>Ini pengalaman saya sendiri, dan saya setuju testimoni ini ditampilkan di situs yayasan.</span></label>

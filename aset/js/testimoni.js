@@ -27,7 +27,7 @@ if (kisi) {
     const h = tentang ? semua.filter((t) => t.tentang === tentang) : semua;
     kisi.innerHTML = h.length
       ? h.map(kartuTestimoni).join('')
-      : `<div class="kosong" style="grid-column:1/-1"><h3>${semua.length ? 'Belum ada testimoni untuk pilihan ini' : 'Belum ada testimoni'}</h3><p>${semua.length ? 'Pilih yang lain, atau tulis pengalaman Anda.' : 'Pernah ikut kegiatan atau memakai produk yayasan? Jadilah yang pertama menulis.'}</p></div>`;
+      : `<div class="kosong" style="grid-column:1/-1"><h3>${semua.length ? 'Belum ada testimoni untuk pilihan ini' : 'Belum ada testimoni'}</h3><p>${semua.length ? 'Pilih layanan atau produk lain.' : 'Testimoni yang telah ditinjau pengurus akan tampil di sini.'}</p></div>`;
     const pilihan = ['', ...new Set(semua.map((t) => t.tentang))];
     saringan.hidden = pilihan.length < 3;
     saringan.innerHTML = pilihan.map((p) => `<button class="chip" type="button" data-pilih="${esc(p)}" aria-pressed="${p === tentang}">${esc(p || 'Semua')}</button>`).join('');
@@ -89,10 +89,10 @@ if (kisi) {
       const t = E.tentang.value === '__lain__' ? E.tentangLain.value.trim() : E.tentang.value;
       const wa = E.wa.value.replace(/[\s-]/g, '');
       const masalah = [
-        E.nama.value.trim().length < 2 && 'Tulis nama Anda.',
+        E.nama.value.trim().length < 2 && 'Isi nama lengkap.',
         t.length < 2 && 'Pilih layanan atau produk yang Anda ceritakan.',
         !E.bintang.value && 'Beri nilai bintang.',
-        E.isi.value.trim().length < 20 && 'Ceritakan minimal 20 huruf.',
+        E.isi.value.trim().length < 20 && 'Isi testimoni minimal 20 karakter.',
         wa && !/^(\+?62|0)8\d{7,12}$/.test(wa) && 'Nomor WhatsApp diawali 08 atau +628.',
         !E.setuju.checked && 'Centang persetujuan di bagian bawah.',
       ].filter(Boolean);
@@ -108,7 +108,7 @@ if (kisi) {
             nama: E.nama.value.trim(), wa, kota: E.kota.value.trim(), tentang: t.slice(0, 80), bintang: Number(E.bintang.value),
             isi: E.isi.value.trim(), foto, tampilNama: E.tampilNama.checked ? 'inisial' : 'lengkap',
           });
-          $('[data-tulis-wadah]').innerHTML = `<div class="kartu hasil-kirim"><span class="hasil-ikon">${ikon('circle-check')}</span><h2>Terima kasih sudah bercerita</h2><p>Testimoni Anda sudah kami terima. Pengurus membacanya lebih dulu, lalu menampilkannya di halaman ini.</p><a class="tombol tombol-garis" href="${BASE}testimoni/">Kembali ke testimoni</a></div>`;
+          $('[data-tulis-wadah]').innerHTML = `<div class="kartu hasil-kirim"><span class="hasil-ikon">${ikon('circle-check')}</span><h2>Testimoni terkirim</h2><p>Terima kasih. Pengurus akan meninjau testimoni Anda sebelum ditampilkan di halaman ini.</p><a class="tombol tombol-garis" href="${BASE}testimoni/">Kembali ke testimoni</a></div>`;
         } catch (err) {
           console.error(err);
           galat.textContent = pesanGalat(err);

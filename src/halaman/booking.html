@@ -1,10 +1,10 @@
-<!--{"judul":"Booking Konsultasi","deskripsi":"Pilih keperluan dan waktu yang Anda inginkan. Pengurus Yayasan Cahaya Teratai Putih memastikan jadwalnya lewat WhatsApp.","path":"booking/","nav":"booking","skrip":["booking.js"],"prioritas":"0.9"}-->
+<!--{"judul":"Booking Konsultasi","deskripsi":"Pesan waktu konsultasi dengan pengurus Yayasan Cahaya Teratai Putih. Jadwal dipastikan pengurus melalui WhatsApp.","path":"booking/","nav":"booking","skrip":["booking.js"],"prioritas":"0.9"}-->
 <main id="isi">
   <header class="kepala-halaman">
     <div class="wadah">
       <nav class="remah" aria-label="Remah roti"><a href="{{BASE}}">Beranda</a><span aria-hidden="true">/</span><span>Booking konsultasi</span></nav>
       <h1>Booking konsultasi</h1>
-      <p class="lead">Pilih keperluan dan waktu yang Anda inginkan. Tidak perlu membuat akun. Pengurus memastikan jadwalnya lewat WhatsApp.</p>
+      <p class="lead">Pesan waktu konsultasi dengan pengurus Yayasan Cahaya Teratai Putih. Booking tidak memerlukan akun, dan jadwal dipastikan pengurus melalui WhatsApp.</p>
     </div>
   </header>
   <section class="bagian">
@@ -13,12 +13,12 @@
         <div data-hasil hidden></div>
         <form class="formulir" data-booking novalidate>
           <fieldset>
-            <legend>Apa keperluan Anda?</legend>
+            <legend>Keperluan konsultasi</legend>
             <div class="pilihan-kisi" role="radiogroup" aria-label="Keperluan" data-layanan></div>
           </fieldset>
 
           <fieldset>
-            <legend>Kapan Anda bisa?</legend>
+            <legend>Waktu yang diinginkan</legend>
             <div class="medan">
               <span class="medan-label" id="lbl-tanggal">Tanggal</span>
               <div class="pita-tanggal" role="radiogroup" aria-labelledby="lbl-tanggal" data-tanggal><div class="kerangka" style="height:88px;width:100%"></div></div>
@@ -34,13 +34,13 @@
           </fieldset>
 
           <fieldset>
-            <legend>Data Anda</legend>
+            <legend>Data pemesan</legend>
             <div class="baris-medan">
-              <div class="medan"><label for="b-nama">Nama <span class="wajib">*</span></label><input id="b-nama" name="nama" type="text" autocomplete="name" maxlength="80" required></div>
+              <div class="medan"><label for="b-nama">Nama lengkap <span class="wajib">*</span></label><input id="b-nama" name="nama" type="text" autocomplete="name" maxlength="80" required></div>
               <div class="medan"><label for="b-wa">Nomor WhatsApp <span class="wajib">*</span></label><input id="b-wa" name="wa" type="tel" autocomplete="tel" inputmode="tel" maxlength="20" placeholder="08xxxxxxxxxx" required></div>
             </div>
             <div class="medan"><label for="b-kota">Kabupaten/kota</label><input id="b-kota" name="kota" type="text" maxlength="60"></div>
-            <div class="medan"><label for="b-catatan">Ceritakan singkat</label><textarea id="b-catatan" name="catatan" rows="5" maxlength="3000" aria-describedby="p-catatan"></textarea><p class="petunjuk" id="p-catatan">Boleh dikosongkan. Hanya dibaca pengurus yang menangani.</p></div>
+            <div class="medan"><label for="b-catatan">Keterangan singkat</label><textarea id="b-catatan" name="catatan" rows="5" maxlength="3000" aria-describedby="p-catatan"></textarea><p class="petunjuk" id="p-catatan">Tidak wajib diisi. Keterangan hanya dibaca pengurus yang menangani.</p></div>
           </fieldset>
 
           <div class="kartu" style="display:grid;gap:16px">
@@ -52,21 +52,21 @@
       </div>
       <aside class="samping">
         <div class="kartu">
-          <h3>Sesudah Anda kirim</h3>
+          <h3>Alur booking</h3>
           <ol class="alur-pendek">
-            <li>Anda mendapat nomor booking.</li>
-            <li>Pengurus memeriksa jadwal dan menghubungi WhatsApp Anda.</li>
-            <li>Kita bertemu pada waktu yang disepakati.</li>
+            <li>Nomor booking langsung terbit.</li>
+            <li>Pengurus memeriksa jadwal dan menghubungi nomor WhatsApp Anda.</li>
+            <li>Konsultasi berlangsung pada waktu yang disepakati.</li>
           </ol>
         </div>
         <div class="kartu" hidden><h3>Catatan pengurus</h3><p data-catatan-booking style="margin:0;font-size:.97rem;color:var(--tinta-2)"></p></div>
         <div class="kartu">
           <h3>Kerahasiaan</h3>
-          <p style="margin:0;font-size:.97rem;color:var(--tinta-2)">Cerita Anda hanya dibaca pengurus yang menangani dan tidak pernah tampil di situs.</p>
+          <p style="margin:0;font-size:.97rem;color:var(--tinta-2)">Keterangan yang Anda kirim hanya dibaca pengurus yang menangani dan tidak pernah ditampilkan di situs.</p>
         </div>
         <div class="pesan pesan-peringatan">
           <svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-triangle-alert"/></svg>
-          <p><b>Dalam keadaan darurat?</b> Bila Anda atau orang terdekat dalam bahaya, atau butuh pertolongan medis segera, hubungi 119 atau IGD terdekat.</p>
+          <p><b>Keselamatan terancam atau butuh pertolongan medis segera?</b> Hubungi 119 atau IGD rumah sakit terdekat lebih dulu.</p>
         </div>
       </aside>
     </div>
