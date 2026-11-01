@@ -896,3 +896,35 @@ body { top: 0 !important; }
   .nilai-daftar li { grid-template-columns: 1fr; gap: 2px; }
   .galeri-tiga { grid-template-columns: 1fr; }
 }
+
+/* ---------- gerak: cahaya dan riak telaga di pembuka, bagian muncul saat digulir ---------- */
+.riak { position: absolute; left: 50%; top: 46%; width: min(86vw, 660px); aspect-ratio: 1; border: 1px solid var(--l-teks); border-radius: 50%; translate: -50% -50%; opacity: 0; z-index: -1; pointer-events: none; }
+@keyframes naik { from { opacity: 0; translate: 0 20px; } to { opacity: 1; translate: 0 0; } }
+@keyframes cahaya { from { opacity: 0.7; scale: 0.9; translate: -3% 2%; } to { opacity: 1; scale: 1.14; translate: 3% -2%; } }
+@keyframes riak { 0% { opacity: 0; scale: 0.3; } 16% { opacity: 0.2; } 100% { opacity: 0; scale: 2; } }
+.m { opacity: 0; translate: 0 22px; transition: opacity 0.75s cubic-bezier(0.2, 0.7, 0.1, 1) var(--tunda, 0ms), translate 0.75s cubic-bezier(0.2, 0.7, 0.1, 1) var(--tunda, 0ms); }
+.m.tampak { opacity: 1; translate: 0 0; }
+.tombol-utama, .tombol-telaga { transition: background-color 0.18s, color 0.18s, border-color 0.18s, transform 0.2s, box-shadow 0.2s; }
+.bidang, .kartu-testimoni, .pengurus { transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s; }
+.galeri img, .profil-foto img { transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.1, 1); }
+@media (hover: hover) {
+  .tombol-utama:hover, .tombol-telaga:hover { transform: translateY(-2px); box-shadow: 0 10px 22px -12px rgb(15 52 55 / 0.55); }
+  .bidang:hover, .kartu-testimoni:hover, .pengurus:hover { transform: translateY(-3px); box-shadow: var(--bayang); border-color: var(--garis-2); }
+  .galeri figure:hover img, .profil-foto:hover img { transform: scale(1.015); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .langit::before { animation: cahaya 16s ease-in-out infinite alternate; }
+  .riak { animation: riak 15s linear infinite; }
+  .riak:nth-of-type(2) { animation-delay: 5s; }
+  .riak:nth-of-type(3) { animation-delay: 10s; }
+  .langit-isi > *, .kepala-halaman .wadah > * { animation: naik 0.9s cubic-bezier(0.2, 0.7, 0.1, 1) both; }
+  .langit-isi > :nth-child(2), .kepala-halaman .wadah > :nth-child(2) { animation-delay: 0.1s; }
+  .langit-isi > :nth-child(3), .kepala-halaman .wadah > :nth-child(3) { animation-delay: 0.2s; }
+  .langit-isi > :nth-child(4), .kepala-halaman .wadah > :nth-child(4) { animation-delay: 0.3s; }
+  .langit-isi > :nth-child(5) { animation-delay: 0.4s; }
+}
+@media print {
+  .m { opacity: 1 !important; translate: none !important; }
+  .riak { display: none; }
+}
+#tentang-yayasan { scroll-margin-top: 40px; }
