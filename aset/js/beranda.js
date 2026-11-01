@@ -36,14 +36,12 @@ if (tWadah && MODE !== 'mati') {
 
 // Pilihan ajaran di bagian pengenalan: satu panel terbuka, panel lain menyempit.
 const panel = $$('[data-pilih] .pilih-butir');
-const ketPanel = $('[data-pilih-ket]');
 panel.forEach((butir) => {
   butir.addEventListener('click', () => {
     panel.forEach((p) => {
       p.classList.toggle('aktif', p === butir);
       p.setAttribute('aria-pressed', String(p === butir));
     });
-    ketPanel.textContent = $('small', butir).textContent;
   });
 });
 
