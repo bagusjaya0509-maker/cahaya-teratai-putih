@@ -1,0 +1,172 @@
+rules_version = '2';
+
+// Aturan akses Cloud Firestore: situs Yayasan Cahaya Teratai Putih.
+// Salin seluruh isi berkas ini ke Firebase Console > Firestore Database > Rules, lalu Publish.
+//
+// Prinsip:
+//  - Kabar, testimoni yang sudah ditinjau, dan jadwal boleh dibaca siapa saja;
+//    hanya pengurus yang bisa menulis.
+//  - Booking dan testimoni mentah hanya terbaca oleh pemiliknya dan pengurus.
+//    Tamu tanpa akun memakai sesi Anonymous, jadi tetap punya uid sebagai pemilik.
+//  - Salinan testimoni di testimoniPublik tidak memuat nomor WhatsApp.
+//  - Pengurus = email di daftar adminUtama (harus terverifikasi) ATAU punya
+//    dokumen di koleksi admin/{uid} yang ditambahkan pengurus lain.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- fungsi bantu ----------
+    function masuk() { return request.auth != null; }
+    function saya() { return request.auth.uid; }
+    function adminUtama() {
+      // SAMAKAN dengan "adminUtama" di situs.config.json
+      return masuk() && request.auth.token.email_verified == true
+        && request.auth.token.email.lower() in ['y.cahayaterataiputih11@gmail.com'];
+    }
+    function pengurus() {
+      return adminUtama() || (masuk() && exists(/databases/$(database)/documents/admin/$(saya())));
+    }
+    function tidakDiblokir() { return !exists(/databases/$(database)/documents/blokir/$(saya())); }
+    function teks(v, maks) { return v is string && v.size() <= maks; }
+    function teksWajib(v, min, maks) { return v is string && v.size() >= min && v.size() <= maks; }
+    function hanyaKunci(d, daftar) { return d.keys().hasOnly(daftar); }
+    function yangBerubah() { return request.resource.data.diff(resource.data).affectedKeys(); }
+    function bookingMilikSaya(id) {
+      return get(/databases/$(database)/documents/booking/$(id)).data.uid == saya();
+    }
+
+    // ---------- kabar ----------
+    match /kabar/{slug} {
+      allow read: if true;
+      allow write: if pengurus() && slug.matches('^[a-z0-9-]{1,90}$');
+    }
+    match /kabarIsi/{slug} {
+      allow read: if true;
+      allow write: if pengurus() && slug.matches('^[a-z0-9-]{1,90}$');
+    }
+    match /draf/{slug} {
+      allow read, write: if pengurus();
+    }
+
+    // ---------- jadwal & daftar produk ----------
+    match /pengaturan/{id} {
+      allow read: if true;
+      allow write: if pengurus();
+    }
+
+    // ---------- profil pengguna ----------
+    function profilSah(d) {
+      return teksWajib(d.nama, 1, 80) && teks(d.wa, 20) && teks(d.kota, 60);
+    }
+    match /pengguna/{id} {
+      allow get: if masuk() && (saya() == id || pengurus());
+      allow list: if pengurus();
+      allow create: if masuk() && saya() == id
+        && hanyaKunci(request.resource.data, ['nama', 'email', 'wa', 'kota', 'dibuat', 'diubah'])
+        && profilSah(request.resource.data)
+        && request.resource.data.email == request.auth.token.email.lower()
+        && request.resource.data.dibuat == request.time;
+      allow update: if masuk() && saya() == id
+        && yangBerubah().hasOnly(['nama', 'wa', 'kota', 'diubah'])
+        && profilSah(request.resource.data);
+      allow delete: if false;
+    }
+
+    // ---------- pengurus & blokir ----------
+    match /admin/{id} {
+      allow get: if masuk() && (saya() == id || pengurus());
+      allow list, write: if pengurus();
+    }
+    match /blokir/{id} {
+      allow get: if masuk() && (saya() == id || pengurus());
+      allow list, write: if pengurus();
+    }
+
+    // ---------- booking konsultasi ----------
+    function bookingSah(d) {
+      return hanyaKunci(d, ['nama', 'wa', 'kota', 'layanan', 'cara', 'tanggal', 'sesi', 'catatan',
+          'nomor', 'uid', 'email', 'status', 'jadwalTanggal', 'jadwalJam', 'dibuat', 'diubah', 'balasanTamu', 'dibacaAdmin'])
+        && teksWajib(d.nama, 2, 80) && teksWajib(d.wa, 9, 20) && teks(d.kota, 60)
+        && d.layanan in ['konseling', 'spiritual', 'pengobatan', 'meditasi', 'homma', 'lainnya']
+        && d.cara in ['tatap-muka', 'telepon', 'video']
+        && d.tanggal is string && d.tanggal.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+        && teksWajib(d.sesi, 1, 20) && teks(d.catatan, 3000)
+        && teksWajib(d.nomor, 8, 20) && teks(d.email, 120);
+    }
+
+    match /booking/{id} {
+      allow get: if masuk() && (resource.data.uid == saya() || pengurus());
+      allow list: if pengurus() || (masuk() && resource.data.uid == saya());
+      allow create: if masuk() && tidakDiblokir()
+        && bookingSah(request.resource.data)
+        && request.resource.data.uid == saya()
+        && request.resource.data.status == 'baru'
+        && request.resource.data.jadwalTanggal == ''
+        && request.resource.data.jadwalJam == ''
+        && request.resource.data.dibuat == request.time
+        && request.resource.data.diubah == request.time
+        && request.resource.data.balasanTamu == null
+        && request.resource.data.dibacaAdmin == null;
+      allow update: if
+        (pengurus()
+          && request.resource.data.status in ['baru', 'terjadwal', 'selesai', 'batal']
+          && yangBerubah().hasOnly(['status', 'jadwalTanggal', 'jadwalJam', 'diubah', 'dibacaAdmin', 'ditangani']))
+        || (masuk() && resource.data.uid == saya()
+          && yangBerubah().hasOnly(['balasanTamu'])
+          && request.resource.data.balasanTamu == request.time)
+        || (masuk() && resource.data.uid == saya()
+          && resource.data.status in ['baru', 'terjadwal']
+          && request.resource.data.status == 'batal'
+          && yangBerubah().hasOnly(['status', 'diubah']));
+      allow delete: if false;
+
+      match /tanggapan/{tid} {
+        allow read: if masuk() && (pengurus() || bookingMilikSaya(id));
+        allow create: if masuk()
+          && hanyaKunci(request.resource.data, ['oleh', 'uid', 'nama', 'pesan', 'dibuat'])
+          && request.resource.data.uid == saya()
+          && teksWajib(request.resource.data.pesan, 1, 3000)
+          && teks(request.resource.data.nama, 120)
+          && request.resource.data.dibuat == request.time
+          && ((request.resource.data.oleh == 'admin' && pengurus())
+            || (request.resource.data.oleh == 'tamu' && bookingMilikSaya(id)));
+        allow update, delete: if false;
+      }
+
+      match /internal/{nid} {
+        allow read, create: if pengurus();
+        allow update, delete: if false;
+      }
+    }
+
+    // ---------- testimoni ----------
+    function testimoniSah(d) {
+      return hanyaKunci(d, ['nama', 'wa', 'kota', 'tentang', 'bintang', 'isi', 'foto', 'tampilNama', 'uid', 'status', 'dibuat'])
+        && teksWajib(d.nama, 2, 80) && teks(d.wa, 20) && teks(d.kota, 60)
+        && teksWajib(d.tentang, 2, 80)
+        && d.bintang is int && d.bintang >= 1 && d.bintang <= 5
+        && teksWajib(d.isi, 20, 1200)
+        && d.foto is string && d.foto.size() < 400000
+        && d.tampilNama in ['lengkap', 'inisial'];
+    }
+
+    match /testimoni/{id} {
+      allow get: if masuk() && (resource.data.uid == saya() || pengurus());
+      allow list: if pengurus();
+      allow create: if masuk() && tidakDiblokir()
+        && testimoniSah(request.resource.data)
+        && request.resource.data.uid == saya()
+        && request.resource.data.status == 'menunggu'
+        && request.resource.data.dibuat == request.time;
+      allow update: if pengurus()
+        && request.resource.data.status in ['menunggu', 'tampil', 'ditolak']
+        && yangBerubah().hasOnly(['status', 'isi', 'diputuskan', 'oleh']);
+      allow delete: if pengurus();
+    }
+
+    match /testimoniPublik/{id} {
+      allow read: if true;
+      allow write: if pengurus();
+    }
+  }
+}

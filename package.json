@@ -1,0 +1,12 @@
+{
+  "name": "cahaya-teratai-putih",
+  "private": true,
+  "type": "module",
+  "description": "Situs Yayasan Cahaya Teratai Putih: statis di GitHub Pages, layanan lewat Firebase.",
+  "scripts": {
+    "bangun": "node skrip/bangun.mjs",
+    "sajikan": "node skrip/sajikan.mjs",
+    "pratinjau": "node skrip/bangun.mjs && node skrip/sajikan.mjs"
+  },
+  "engines": { "node": ">=20" }
+}

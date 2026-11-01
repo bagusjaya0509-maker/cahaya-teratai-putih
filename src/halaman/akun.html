@@ -1,0 +1,42 @@
+<!--{"judul":"Booking Saya","deskripsi":"Pantau status booking konsultasi Anda.","path":"akun/","nav":"","skrip":["akun.js"],"peta":false,"robots":"noindex"}-->
+<main id="isi">
+  <header class="kepala-halaman">
+    <svg class="kepala-halaman-surya" viewBox="0 0 1254 1254" aria-hidden="true"><use href="{{BASE}}aset/img/lambang-sprite.svg#i-surya"/></svg>
+    <div class="wadah">
+      <div class="akun-kepala" data-akun-kepala>
+        <div class="akun-identitas"><span class="inisial-besar" aria-hidden="true">·</span><div><h1>Booking saya</h1><p>Status booking konsultasi Anda.</p></div></div>
+      </div>
+    </div>
+  </header>
+  <section class="bagian" style="padding-top:40px">
+    <div class="wadah">
+      <div data-pesan-gerbang></div>
+      <div data-akun hidden>
+        <div data-verifikasi></div>
+        <div class="pesan" data-catatan-tamu hidden style="margin-bottom:24px"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-info"/></svg><p>Booking ini tersimpan di perangkat dan peramban ini. Simpan nomor booking Anda, atau <a href="{{BASE}}masuk/?tab=daftar">buat akun</a> untuk booking berikutnya.</p></div>
+        <div class="tab-akun" role="tablist" aria-label="Bagian akun">
+          <button type="button" role="tab" data-tab="booking" aria-selected="true">Booking<span class="hitung" data-hitung-booking>0</span></button>
+          <button type="button" role="tab" data-tab="profil" aria-selected="false">Profil</button>
+        </div>
+        <div role="tabpanel" data-panel="booking"></div>
+        <div role="tabpanel" data-panel="profil" hidden>
+          <form class="formulir" data-form-profil novalidate style="max-width:640px">
+            <fieldset>
+              <legend>Data akun</legend>
+              <div class="medan"><label for="p-email">Email</label><input id="p-email" name="email" type="email" readonly></div>
+              <div class="medan"><label for="p-nama">Nama lengkap</label><input id="p-nama" name="nama" type="text" maxlength="80" required autocomplete="name"></div>
+              <div class="medan"><label for="p-wa">Nomor WhatsApp</label><input id="p-wa" name="wa" type="tel" inputmode="tel" maxlength="20" placeholder="08xxxxxxxxxx"></div>
+              <div class="medan"><label for="p-kota">Kabupaten/kota</label><input id="p-kota" name="kota" type="text" maxlength="60"></div>
+              <p class="medan-galat" data-galat hidden></p>
+              <div class="aksi-formulir"><button class="tombol tombol-utama" type="submit">Simpan perubahan</button></div>
+            </fieldset>
+          </form>
+          <div class="kartu" style="max-width:640px;margin-top:24px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+            <div><h3 style="font-size:1.1rem">Keluar dari akun</h3><p style="margin:0;color:var(--tinta-2);font-size:.93rem">Lakukan ini bila Anda memakai perangkat bersama.</p></div>
+            <button class="tombol tombol-hapus" type="button" data-keluar><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-log-out"/></svg>Keluar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

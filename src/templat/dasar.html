@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="id" data-base="{{BASE}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{judul_lengkap}}</title>
+<meta name="description" content="{{deskripsi}}">
+<meta name="robots" content="{{robots}}">
+{{kanonik}}
+<meta property="og:type" content="{{og_jenis}}">
+<meta property="og:site_name" content="Yayasan Cahaya Teratai Putih">
+<meta property="og:title" content="{{judul_lengkap}}">
+<meta property="og:description" content="{{deskripsi}}">
+<meta property="og:image" content="{{og_gambar}}">
+<meta property="og:locale" content="id_ID">
+<meta name="twitter:card" content="summary_large_image">
+{{meta_tambahan}}
+<meta name="theme-color" content="#0F3437">
+<link rel="icon" href="{{BASE}}aset/img/lambang.svg" type="image/svg+xml">
+<link rel="icon" href="{{BASE}}aset/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="{{BASE}}aset/img/lambang-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spectral:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap">
+<script>
+// Warna langit mengikuti jam di Mataram (WITA); dipasang sebelum halaman digambar.
+(function () {
+  var d = new Date(), j = (d.getUTCHours() + 8) % 24 + d.getUTCMinutes() / 60;
+  var uji = new URLSearchParams(location.search).get('langit');
+  document.documentElement.dataset.langit = uji || (j < 5 ? 'malam' : j < 6.75 ? 'subuh' : j < 11 ? 'pagi' : j < 16 ? 'siang' : j < 18.75 ? 'senja' : 'malam');
+})();
+</script>
+<link rel="stylesheet" href="{{BASE}}aset/css/situs.css?v={{V}}">
+{{json_ld}}
+</head>
+<body class="{{kelas_body}}" data-halaman="{{halaman}}">
+<a class="lompat" href="#isi">Langsung ke isi</a>
+{{kepala}}
+{{isi}}
+{{kaki}}
+<script type="module" src="{{BASE}}aset/js/inti.js?v={{V}}"></script>
+{{skrip}}
+</body>
+</html>

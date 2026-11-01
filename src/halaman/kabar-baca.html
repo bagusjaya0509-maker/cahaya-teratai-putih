@@ -1,0 +1,24 @@
+<!--{"judul":"Kabar","path":"kabar/","nav":"kabar","skrip":["baca.js"],"peta":false}-->
+<main id="isi" class="baca" data-slug="{{slug}}" data-prerender="{{prerender}}">
+  <div class="wadah baca-wadah">
+    <article id="artikel">@@ARTIKEL@@</article>
+    <div id="tak-ditemukan" class="tak-ditemukan" hidden>
+      <p class="kode-404">404</p>
+      <h1 class="baca-judul" style="margin-top:12px">Halaman ini tidak ditemukan</h1>
+      <p class="baca-ringkasan" style="margin-inline:auto">Alamatnya mungkin salah ketik, atau kabarnya sudah ditarik oleh pengurus.</p>
+      <p class="pintu-aksi">
+        <a class="tombol tombol-utama" href="{{BASE}}">Kembali ke beranda</a>
+        <a class="tombol tombol-garis" href="{{BASE}}kabar/">Lihat semua kabar</a>
+      </p>
+    </div>
+  </div>
+  <section class="bagian bagian-putih" id="kabar-lain" hidden aria-labelledby="judul-kabar-lain">
+    <div class="wadah">
+      <div class="bagian-kepala">
+        <div><p class="label">Kabar lainnya</p><h2 class="judul-bagian" id="judul-kabar-lain">Baca juga</h2></div>
+        <a class="tombol-teks" href="{{BASE}}kabar/">Semua kabar <svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-arrow-right"/></svg></a>
+      </div>
+      <div class="kisi-kabar" data-kabar-lain></div>
+    </div>
+  </section>
+</main>

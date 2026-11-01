@@ -1,0 +1,45 @@
+<!--{"judul":"Panel Pengurus","path":"admin/","templat":"admin","nav":"admin","skrip":["admin.js"],"peta":false,"robots":"noindex"}-->
+<div class="adm-gerbang" data-adm-gerbang>
+  <div class="kartu kartu-gerbang" style="max-width:520px">
+    <svg class="ikon ikon-besar berputar" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-loader-circle"/></svg>
+    <p>Memeriksa akses pengurus…</p>
+  </div>
+</div>
+
+<div class="adm" data-adm hidden>
+  <aside class="adm-sisi" data-adm-sisi>
+    <a class="adm-merek" href="{{BASE}}">
+      <svg viewBox="0 0 1254 1254" aria-hidden="true"><use href="{{BASE}}aset/img/lambang-sprite.svg#i-lambang"/></svg>
+      <span><b>Cahaya Teratai Putih</b><small>Panel pengurus</small></span>
+    </a>
+    <nav class="adm-nav" aria-label="Menu panel">
+      <a href="#ringkasan" data-rute="ringkasan"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-layout-dashboard"/></svg>Ringkasan</a>
+      <a href="#booking" data-rute="booking"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-calendar"/></svg>Booking<span class="adm-lencana" data-lencana="booking" hidden></span></a>
+      <a href="#testimoni" data-rute="testimoni"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-star"/></svg>Testimoni<span class="adm-lencana" data-lencana="testimoni" hidden></span></a>
+      <a href="#kabar" data-rute="kabar"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-newspaper"/></svg>Kabar</a>
+      <a href="#jadwal" data-rute="jadwal"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-clock"/></svg>Jadwal &amp; produk</a>
+      <a href="#pengguna" data-rute="pengguna"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-users"/></svg>Pengguna &amp; pengurus</a>
+      <a href="#sistem" data-rute="sistem"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-settings"/></svg>Sistem</a>
+    </nav>
+    <div class="adm-sisi-kaki">
+      <p data-adm-nama></p>
+      <a href="{{BASE}}" target="_blank" rel="noopener"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-external-link"/></svg>Lihat situs</a>
+      <button type="button" data-adm-keluar><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-log-out"/></svg>Keluar</button>
+    </div>
+  </aside>
+  <div class="adm-latar" data-adm-latar hidden></div>
+  <div class="adm-utama">
+    <header class="adm-atas">
+      <button class="tombol-ikon adm-tombol-menu" type="button" data-adm-menu aria-label="Buka menu panel"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-menu"/></svg></button>
+      <h1 data-adm-judul>Ringkasan</h1>
+      <div class="adm-atas-aksi" data-adm-aksi></div>
+    </header>
+    <div class="adm-isi" data-adm-isi tabindex="-1"></div>
+  </div>
+</div>
+
+<dialog class="modal" data-modal>
+  <div class="modal-kepala"><h2 data-modal-judul></h2><button class="tombol-ikon" type="button" data-modal-tutup aria-label="Tutup"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-x"/></svg></button></div>
+  <div class="modal-isi" data-modal-isi></div>
+  <div class="modal-kaki" data-modal-kaki></div>
+</dialog>

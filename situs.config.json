@@ -1,0 +1,35 @@
+{
+  "situs": {
+    "nama": "Cahaya Teratai Putih",
+    "namaLengkap": "Yayasan Cahaya Teratai Putih",
+    "namaBadanHukum": "Yayasan Cahaya Teratai Putih",
+    "url": "https://bagusjaya0509-maker.github.io/cahaya-teratai-putih/",
+    "deskripsi": "Yayasan keagamaan, sosial, dan kemanusiaan di Kota Mataram. Booking konsultasi, meditasi, upacara Homma Jnana, dan kegiatan sosial berlandaskan ajaran leluhur Hindu Bali.",
+    "wilayah": "Kota Mataram, Nusa Tenggara Barat"
+  },
+  "kontak": {
+    "alamat": "Jl. Gora Gang Markisa No. 3, Saksari, Cakranegara Utara, Kota Mataram, Nusa Tenggara Barat 83238",
+    "alamatPendek": "Cakranegara, Kota Mataram",
+    "telepon": "0813-3956-7110",
+    "whatsapp": "6281339567110",
+    "email": "y.cahayaterataiputih11@gmail.com",
+    "peta": "https://www.google.com/maps/search/?api=1&query=Jl.+Gora+Gang+Markisa+No.3+Cakranegara+Utara+Mataram"
+  },
+  "sosial": {
+    "instagram": "",
+    "facebook": "",
+    "youtube": ""
+  },
+  "firebase": {
+    "apiKey": "",
+    "authDomain": "",
+    "projectId": "",
+    "storageBucket": "",
+    "messagingSenderId": "",
+    "appId": ""
+  },
+  "adminUtama": ["y.cahayaterataiputih11@gmail.com"],
+  "notifikasi": {
+    "emailBookingBaru": "y.cahayaterataiputih11@gmail.com"
+  }
+}

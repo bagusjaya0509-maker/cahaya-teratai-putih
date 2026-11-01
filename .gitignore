@@ -1,0 +1,6 @@
+_site/
+.claude/
+node_modules/
+*.log
+.env
+administrasi/

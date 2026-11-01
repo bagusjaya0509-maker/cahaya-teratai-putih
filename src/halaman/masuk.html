@@ -1,0 +1,58 @@
+<!--{"judul":"Masuk atau Daftar","deskripsi":"Masuk ke akun Yayasan Cahaya Teratai Putih.","path":"masuk/","nav":"","skrip":["masuk.js"],"peta":false,"robots":"noindex"}-->
+<main id="isi" class="masuk-tata">
+  <aside class="masuk-panel">
+    <svg class="masuk-surya" viewBox="0 0 1254 1254" aria-hidden="true"><use href="{{BASE}}aset/img/lambang-sprite.svg#i-lambang"/></svg>
+    <h1>Akun bersifat pilihan</h1>
+    <ul>
+      <li>Booking dan testimoni bisa dikirim tanpa akun.</li>
+      <li>Dengan akun, riwayat booking bisa dibuka dari perangkat mana pun.</li>
+      <li>Pengurus yayasan masuk di sini untuk membuka panel.</li>
+    </ul>
+  </aside>
+  <section class="masuk-form">
+    <div class="masuk-kotak">
+      <div data-pesan-masuk></div>
+      <div data-blok-akun>
+        <div class="tab-daftar" role="tablist" aria-label="Masuk atau daftar">
+          <button type="button" role="tab" id="tab-masuk" aria-controls="panel-masuk" aria-selected="true" data-tab="masuk">Masuk</button>
+          <button type="button" role="tab" id="tab-daftar" aria-controls="panel-daftar" aria-selected="false" data-tab="daftar">Daftar</button>
+        </div>
+
+        <button class="tombol tombol-google lebar" type="button" data-google><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-google"/></svg>Lanjutkan dengan Google</button>
+        <p class="pemisah">atau dengan email</p>
+
+        <form id="panel-masuk" role="tabpanel" aria-labelledby="tab-masuk" class="formulir" style="gap:18px" novalidate data-form="masuk">
+          <div class="medan"><label for="m-email">Email</label><input id="m-email" name="email" type="email" autocomplete="email" required></div>
+          <div class="medan"><label for="m-sandi">Kata sandi</label><div class="sandi-medan"><input id="m-sandi" name="sandi" type="password" autocomplete="current-password" required><button class="tombol-ikon" type="button" data-lihat aria-label="Tampilkan kata sandi"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-eye"/></svg></button></div></div>
+          <p class="medan-galat" data-galat hidden></p>
+          <button class="tombol tombol-utama lebar" type="submit">Masuk</button>
+          <p style="text-align:center;margin:0"><button class="tombol-teks" type="button" data-ke-lupa>Lupa kata sandi?</button></p>
+        </form>
+
+        <form id="panel-daftar" role="tabpanel" aria-labelledby="tab-daftar" class="formulir" style="gap:18px" novalidate data-form="daftar" hidden>
+          <div class="medan"><label for="d-nama">Nama lengkap <span class="wajib">*</span></label><input id="d-nama" name="nama" type="text" autocomplete="name" required maxlength="80"></div>
+          <div class="medan"><label for="d-email">Email <span class="wajib">*</span></label><input id="d-email" name="email" type="email" autocomplete="email" required></div>
+          <div class="medan"><label for="d-wa">Nomor WhatsApp</label><input id="d-wa" name="wa" type="tel" autocomplete="tel" inputmode="tel" placeholder="08xxxxxxxxxx" maxlength="20"><p class="petunjuk">Dipakai pengurus untuk mengatur jadwal.</p></div>
+          <div class="medan"><label for="d-kota">Kabupaten/kota</label><input id="d-kota" name="kota" type="text" maxlength="60"></div>
+          <div class="medan"><label for="d-sandi">Kata sandi <span class="wajib">*</span></label><div class="sandi-medan"><input id="d-sandi" name="sandi" type="password" autocomplete="new-password" required minlength="8"><button class="tombol-ikon" type="button" data-lihat aria-label="Tampilkan kata sandi"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-eye"/></svg></button></div><p class="petunjuk">Minimal 8 karakter.</p></div>
+          <label class="centang"><input type="checkbox" name="setuju" required><span>Saya sudah membaca <a href="{{BASE}}privasi/" target="_blank">kebijakan privasi</a>.</span></label>
+          <p class="medan-galat" data-galat hidden></p>
+          <button class="tombol tombol-utama lebar" type="submit">Buat akun</button>
+        </form>
+
+        <form class="formulir" style="gap:18px" novalidate data-form="lupa" hidden>
+          <h2 style="font-size:1.5rem">Atur ulang kata sandi</h2>
+          <p style="margin:0;color:var(--tinta-2)">Masukkan email akun Anda. Kami kirimkan tautan untuk membuat kata sandi baru.</p>
+          <div class="medan"><label for="l-email">Email</label><input id="l-email" name="email" type="email" autocomplete="email" required></div>
+          <p class="medan-galat" data-galat hidden></p>
+          <button class="tombol tombol-utama lebar" type="submit">Kirim tautan</button>
+          <p style="text-align:center;margin:0"><button class="tombol-teks" type="button" data-ke-masuk>Kembali ke halaman masuk</button></p>
+        </form>
+
+        <div data-demo hidden style="margin-top:28px">
+          <div class="pesan pesan-peringatan"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-info"/></svg><div><p><b>Mode demo:</b> coba panel pengurus tanpa membuat akun.</p><p style="margin-top:8px"><button class="tombol tombol-garis kecil" type="button" data-pengurus-demo>Masuk sebagai pengurus (demo)</button></p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

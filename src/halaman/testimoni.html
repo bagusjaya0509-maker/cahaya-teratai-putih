@@ -1,0 +1,75 @@
+<!--{"judul":"Testimoni","deskripsi":"Cerita pengalaman orang yang pernah mengikuti kegiatan dan layanan Yayasan Cahaya Teratai Putih.","path":"testimoni/","nav":"testimoni","skrip":["testimoni.js"],"prioritas":"0.8"}-->
+<main id="isi">
+  <header class="kepala-halaman">
+    <svg class="kepala-halaman-surya" viewBox="0 0 1254 1254" aria-hidden="true"><use href="{{BASE}}aset/img/lambang-sprite.svg#i-surya"/></svg>
+    <div class="wadah">
+      <nav class="remah" aria-label="Remah roti"><a href="{{BASE}}">Beranda</a><span aria-hidden="true">/</span><span>Testimoni</span></nav>
+      <h1>Cerita dari yang pernah datang</h1>
+      <p class="lead">Pengalaman dari mereka yang mengikuti kegiatan, memakai layanan, atau mencoba produk yayasan.</p>
+      <p style="margin:22px 0 0"><a class="tombol tombol-utama" href="#tulis">Tulis testimoni</a></p>
+    </div>
+  </header>
+  <section class="bagian">
+    <div class="wadah">
+      <div class="chip-grup" data-saring-testimoni hidden style="margin-bottom:28px"></div>
+      <div class="kisi-testimoni" data-testimoni>
+        <div class="kerangka" style="height:200px"></div><div class="kerangka" style="height:200px"></div><div class="kerangka" style="height:200px"></div>
+      </div>
+      <p class="catatan-kecil" style="margin-top:28px">Testimoni adalah pengalaman pribadi, hasilnya bisa berbeda pada tiap orang. Testimoni bukan jaminan hasil dan tidak menggantikan pemeriksaan dokter.</p>
+    </div>
+  </section>
+  <section class="bagian bagian-embun" id="tulis" aria-labelledby="judul-tulis">
+    <div class="wadah tata-tulis">
+      <div>
+        <p class="label">Tulis testimoni</p>
+        <h2 class="judul-bagian" id="judul-tulis">Bagaimana pengalaman Anda?</h2>
+        <p style="color:var(--tinta-2)">Ceritakan apa yang Anda alami dengan kata-kata sendiri. Tidak perlu membuat akun.</p>
+        <ul class="daftar-tenang">
+          <li>Pengurus membaca dulu sebelum menampilkannya.</li>
+          <li>Nomor WhatsApp tidak pernah ditampilkan.</li>
+          <li>Tulis pengalaman, bukan janji sembuh atau nama penyakit.</li>
+        </ul>
+      </div>
+      <div data-tulis-wadah>
+        <form class="formulir" data-tulis novalidate>
+          <fieldset>
+            <legend>Cerita Anda</legend>
+            <div class="medan"><label for="t-tentang">Tentang layanan atau produk apa? <span class="wajib">*</span></label><select id="t-tentang" name="tentang" data-tentang required><option value="">Pilih</option></select><input name="tentangLain" type="text" maxlength="80" placeholder="Tulis nama layanan atau produk" aria-label="Nama layanan atau produk" hidden style="margin-top:8px"></div>
+            <div class="medan">
+              <span class="medan-label" id="lbl-bintang">Nilai <span class="wajib">*</span></span>
+              <div class="pilih-bintang" role="radiogroup" aria-labelledby="lbl-bintang">
+                <label><input type="radio" name="bintang" value="5"><span class="sr-only">5 bintang</span><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-star"/></svg></label>
+                <label><input type="radio" name="bintang" value="4"><span class="sr-only">4 bintang</span><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-star"/></svg></label>
+                <label><input type="radio" name="bintang" value="3"><span class="sr-only">3 bintang</span><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-star"/></svg></label>
+                <label><input type="radio" name="bintang" value="2"><span class="sr-only">2 bintang</span><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-star"/></svg></label>
+                <label><input type="radio" name="bintang" value="1"><span class="sr-only">1 bintang</span><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-star"/></svg></label>
+              </div>
+            </div>
+            <div class="medan"><label for="t-isi">Cerita Anda <span class="wajib">*</span></label><textarea id="t-isi" name="isi" rows="6" maxlength="1200" required></textarea><p class="medan-hitung" data-hitung>0 / 1.200</p><p class="pesan pesan-peringatan" data-saran hidden>Tulisan Anda menyebut pengobatan atau hasil tertentu. Pengurus mungkin meminta Anda mengubahnya, karena aturan melarang testimoni kesembuhan.</p></div>
+            <div class="medan">
+              <span class="medan-label">Foto (boleh dilewati)</span>
+              <label class="unggah">
+                <input type="file" accept="image/*" hidden data-foto>
+                <div data-foto-pratinjau><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-image"/></svg><p><b>Pilih foto</b>, otomatis diperkecil</p></div>
+              </label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Data Anda</legend>
+            <div class="baris-medan">
+              <div class="medan"><label for="t-nama">Nama <span class="wajib">*</span></label><input id="t-nama" name="nama" type="text" autocomplete="name" maxlength="80" required></div>
+              <div class="medan"><label for="t-kota">Kabupaten/kota</label><input id="t-kota" name="kota" type="text" maxlength="60"></div>
+            </div>
+            <div class="medan"><label for="t-wa">Nomor WhatsApp</label><input id="t-wa" name="wa" type="tel" inputmode="tel" maxlength="20" placeholder="08xxxxxxxxxx" aria-describedby="p-wa"><p class="petunjuk" id="p-wa">Boleh dikosongkan. Dipakai bila pengurus perlu bertanya, tidak ditampilkan.</p></div>
+            <label class="centang"><input type="checkbox" name="tampilNama"><span>Tampilkan nama saya disingkat, misalnya Made S.</span></label>
+          </fieldset>
+          <div class="kartu" style="display:grid;gap:16px">
+            <label class="centang"><input type="checkbox" name="setuju" required><span>Ini pengalaman saya sendiri, dan saya setuju testimoni ini ditampilkan di situs yayasan.</span></label>
+            <p class="medan-galat" data-galat hidden></p>
+            <div class="aksi-formulir"><button class="tombol tombol-utama besar" type="submit">Kirim testimoni</button></div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>

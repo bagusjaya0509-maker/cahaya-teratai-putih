@@ -1,0 +1,19 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "kabar",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "kategori",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "terbitPada",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
