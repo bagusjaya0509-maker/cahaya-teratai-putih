@@ -857,7 +857,7 @@ body { top: 0 !important; }
 
 /* ---------- pengenalan yayasan di beranda ---------- */
 .profil-kisi { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr); gap: clamp(20px, 5vw, 64px); align-items: start; }
-.profil-teks p:not(.label) { color: var(--tinta-2); margin: 14px 0 0; }
+.profil-judul p:not(.label), .profil-teks p { color: var(--tinta-2); margin: 14px 0 0; }
 .profil-teks p:first-child { margin-top: 0; }
 .profil-teks .tombol-teks { margin-top: 18px; }
 .fakta { margin: clamp(32px, 4vw, 48px) 0 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-block: 1px solid var(--garis); }
@@ -879,6 +879,7 @@ body { top: 0 !important; }
 .bidang ul li::marker { color: var(--sari-tua); }
 @media (max-width: 980px) {
   .profil-kisi, .visi-kisi, .kisi-bidang { grid-template-columns: 1fr; }
+  .profil-kisi { row-gap: 14px; }
   .fakta { grid-template-columns: 1fr 1fr; }
   .fakta > div { border-left: 0; padding-left: 0; }
 }
