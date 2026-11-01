@@ -1,6 +1,6 @@
 <header class="kepala" data-kepala>
   <div class="wadah kepala-isi">
-    <a class="merek" href="{{BASE}}" aria-label="Yayasan Cahaya Teratai Putih, ke beranda">
+    <a class="merek" href="{{BASE}}" aria-label="Yayasan Cahaya Teratai Putih, ke beranda" translate="no">
       <svg class="merek-lambang" viewBox="0 0 1254 1254" aria-hidden="true"><use href="{{BASE}}aset/img/lambang-sprite.svg#i-lambang"/></svg>
       <span class="merek-teks"><span class="merek-sub">Yayasan</span><span class="merek-nama">Cahaya Teratai Putih</span></span>
     </a>
@@ -13,12 +13,14 @@
         <li><a href="{{BASE}}kontak/" data-nav="kontak">Kontak</a></li>
       </ul>
       <div class="nav-seluler-aksi">
+        <label class="pilih-bahasa bahasa-seluler" translate="no" data-bahasa hidden><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-globe"/></svg><span class="sr-only">Pilih bahasa</span><select aria-label="Pilih bahasa"></select></label>
         <a class="tombol tombol-utama lebar" href="{{BASE}}booking/">Booking konsultasi</a>
         <a class="tombol tombol-garis lebar" href="{{wa_url}}" target="_blank" rel="noopener">WhatsApp {{wa_teks}}</a>
         <a class="tombol tombol-garis lebar" href="{{BASE}}masuk/" data-tautan-akun>Masuk</a>
       </div>
     </nav>
     <div class="kepala-aksi">
+      <label class="pilih-bahasa bahasa-lebar" translate="no" data-bahasa hidden><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-globe"/></svg><span class="sr-only">Pilih bahasa</span><select aria-label="Pilih bahasa"></select></label>
       <a class="tautan-akun" href="{{BASE}}masuk/" data-tautan-akun><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-user-round"/></svg><span>Masuk</span></a>
       <a class="tombol tombol-utama sembunyi-hp" href="{{BASE}}booking/">Booking konsultasi</a>
       <button class="tombol-menu" type="button" aria-expanded="false" aria-controls="nav-utama" aria-label="Buka menu"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-menu"/></svg></button>

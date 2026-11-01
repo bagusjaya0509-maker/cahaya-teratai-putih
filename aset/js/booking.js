@@ -95,8 +95,8 @@ function tampilHasil(d) {
       <span class="hasil-ikon">${ikon('circle-check')}</span>
       <p class="label">Booking terkirim</p>
       <h2>Simpan nomor booking Anda</h2>
-      <p class="nomor-tiket">${esc(d.nomor)}</p>
-      <p>Pengurus memeriksa jadwal lalu menghubungi WhatsApp <b>${esc(d.wa)}</b> untuk memastikan waktunya. Mau lebih cepat? Kirim juga lewat WhatsApp.</p>
+      <p class="nomor-tiket" translate="no">${esc(d.nomor)}</p>
+      <p>Pengurus memeriksa jadwal lalu menghubungi WhatsApp <b translate="no">${esc(d.wa)}</b> untuk memastikan waktunya. Mau lebih cepat? Kirim juga lewat WhatsApp.</p>
       <div class="aksi-formulir">
         <a class="tombol tombol-utama" href="${esc(tautanPesan(d))}" target="_blank" rel="noopener">${ikon('whatsapp')}Kabari lewat WhatsApp</a>
         <a class="tombol tombol-garis" href="${BASE}akun/#booking/${esc(d.id)}">Lihat status booking</a>

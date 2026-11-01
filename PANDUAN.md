@@ -45,6 +45,12 @@ Permenkes 1787/2010 melarang testimoni dalam iklan layanan kesehatan. BPOM melar
 
 Peraturan ini bisa berubah. Tanyakan ke dinas kesehatan atau BPOM setempat bila ragu.
 
+## Terjemahan otomatis
+
+Pemilih bahasa di kepala situs memakai widget Google Translate, gratis dan tanpa kunci. Skripnya hanya dimuat bila bahasanya bukan Indonesia. Tamu dari luar Indonesia diterjemahkan otomatis sesuai bahasa perambannya, sedangkan pengunjung di zona waktu Indonesia tetap berbahasa Indonesia kecuali memilih sendiri. Halaman akun, masuk, dan panel tidak diterjemahkan. Tambah `translate="no"` pada teks yang tidak boleh ikut diterjemahkan.
+
+Google tidak lagi membuka widget ini untuk pendaftar baru, tetapi yang sudah ada masih berjalan. Bila suatu saat berhenti, situs tetap tampil normal dalam bahasa Indonesia.
+
 ## Domain sendiri
 
 Kop surat yayasan mencantumkan `cahayaterataiputih.org`, tetapi domain ini belum terdaftar per 1 November 2026, sehingga email `Info@cahayaterataiputih.org` belum bisa menerima pesan.

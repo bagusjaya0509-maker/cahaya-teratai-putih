@@ -836,3 +836,21 @@ body.beranda .kepala:not(.tergulir):not(:has(.nav.terbuka)) { background: transp
   .pita-tanggal { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .daftar-layanan b { font-size: 1.45rem; }
 }
+
+/* ---------- pemilih bahasa & terjemahan Google ---------- */
+.pilih-bahasa { display: inline-flex; align-items: center; gap: 6px; color: inherit; font-size: 1rem; font-weight: 500; }
+.pilih-bahasa select { appearance: none; -webkit-appearance: none; border: 0; background: transparent; color: inherit; font: inherit; padding: 6px 2px; max-width: 96px; cursor: pointer; }
+.pilih-bahasa select:focus-visible { outline: 3px solid var(--sari); outline-offset: 2px; border-radius: 4px; }
+.pilih-bahasa option { color: var(--tinta); background: #fff; }
+.bahasa-seluler { min-height: 46px; justify-content: center; border: 1.5px solid var(--garis-2); border-radius: 999px; }
+.bahasa-seluler select { max-width: none; }
+#terjemah-wadah { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+iframe.skiptranslate, .goog-te-banner-frame, #goog-gt-tt, .goog-te-balloon-frame, .VIpgJd-ZVi9od-ORHb-OEVmcd, .VIpgJd-ZVi9od-aZ2wEe-wOHMyf { display: none !important; }
+body { top: 0 !important; }
+.goog-text-highlight { background: none !important; box-shadow: none !important; }
+@media (max-width: 1100px) {
+  .bahasa-lebar { display: none; }
+}
+@media (min-width: 1101px) and (max-width: 1240px) {
+  .tautan-akun span { display: none; }
+}
