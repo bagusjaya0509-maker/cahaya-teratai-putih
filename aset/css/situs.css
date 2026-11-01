@@ -830,8 +830,8 @@ body.beranda .kepala:not(.tergulir):not(:has(.nav.terbuka)) { background: transp
   body { font-size: 1.0625rem; }
   .merek-lambang { width: 42px; height: 42px; }
   .merek-nama { font-size: 1.1rem; }
-  .langit { min-height: 0; padding-top: calc(var(--tinggi-kepala) + 64px); padding-bottom: 72px; }
-  .langit-waktu { left: 0; right: 0; bottom: auto; top: calc(var(--tinggi-kepala) + 14px); text-align: center; font-size: 0.86rem; }
+  .langit { min-height: 0; padding-top: calc(var(--tinggi-kepala) + 36px); padding-bottom: 64px; }
+  .langit-waktu { left: 0; right: 0; bottom: 18px; text-align: center; font-size: 0.86rem; }
   .langit h1 { font-size: clamp(2.3rem, 11vw, 3rem); }
   .langit-teks { font-size: 1.05rem; }
   .tombol.besar { width: 100%; }
