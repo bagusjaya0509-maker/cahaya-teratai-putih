@@ -95,7 +95,7 @@ const templat = {
 };
 
 // Nama akun ditampilkan di samping ikon, lebih mudah dicari daripada ikon saja.
-const NAMA_SOSIAL = { instagram: 'Instagram', facebook: 'Facebook', youtube: 'YouTube' };
+const NAMA_SOSIAL = { instagram: 'Instagram', facebook: 'Facebook', youtube: 'YouTube', tiktok: 'TikTok' };
 function akunSosial(nama, url) {
   const bagian = new URL(url).pathname.split('/').filter(Boolean);
   const akun = (bagian[bagian.length - 1] || '').replace(/^@/, '');
