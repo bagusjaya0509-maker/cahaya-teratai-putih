@@ -928,3 +928,4 @@ body { top: 0 !important; }
   .riak { display: none; }
 }
 #tentang-yayasan { scroll-margin-top: 40px; }
+.baca-sampul.sampul-kosong { position: relative; display: block; aspect-ratio: 16 / 9; border-radius: var(--radius); overflow: hidden; }

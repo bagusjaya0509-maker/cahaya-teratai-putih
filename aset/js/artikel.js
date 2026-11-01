@@ -5,7 +5,9 @@ import { esc, deltaKeHtml, lamaBaca, tanggalPanjang } from './isi.js';
 export function susunArtikel({ kabar, isi, base, urlHalaman = '', gantiGambar, sampul, sprite = `${base}aset/img/ikon.svg` }) {
   const kat = kabar.kategori || 'Kabar';
   const iso = kabar.terbitPada ? new Date(kabar.terbitPada).toISOString() : '';
-  const gambarSampul = sampul ?? isi?.sampul ?? '';
+  // Kabar awal memakai nama foto kegiatan; kabar tanpa foto mendapat sampul polos.
+  const sumberSampul = sampul || isi?.sampul || kabar.sampulKecil || '';
+  const gambarSampul = /^[a-z]+$/.test(sumberSampul) ? `${base}aset/img/kegiatan/${sumberSampul}.webp` : sumberSampul;
   const badan = deltaKeHtml(isi?.delta || '[]', { gantiGambar });
   const bagikan = encodeURIComponent(urlHalaman);
   const teksBagikan = encodeURIComponent(kabar.judul || '');
@@ -24,7 +26,7 @@ export function susunArtikel({ kabar, isi, base, urlHalaman = '', gantiGambar, s
     <span>${lamaBaca(isi?.delta || '[]')} menit baca</span>
   </div>
 </header>
-${gambarSampul ? `<figure class="baca-sampul"><img src="${esc(gambarSampul)}" alt="${esc(isi?.keteranganSampul || kabar.judul)}" width="1200" height="675" fetchpriority="high">${isi?.keteranganSampul ? `<figcaption>${esc(isi.keteranganSampul)}</figcaption>` : ''}</figure>` : ''}
+${gambarSampul ? `<figure class="baca-sampul"><img src="${esc(gambarSampul)}" alt="${esc(isi?.keteranganSampul || kabar.judul)}" width="1200" height="675" fetchpriority="high">${isi?.keteranganSampul ? `<figcaption>${esc(isi.keteranganSampul)}</figcaption>` : ''}</figure>` : `<div class="baca-sampul sampul-kosong" aria-hidden="true"><span class="sampul-kat">${esc(kat)}</span></div>`}
 <div class="prosa">
 ${badan || '<p>Isi kabar ini belum tersedia.</p>'}
 </div>
