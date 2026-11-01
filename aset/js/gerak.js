@@ -1,7 +1,7 @@
 // Bagian halaman muncul halus saat digulir. Yang sudah terlihat ketika halaman dibuka
 // tidak disembunyikan, dan bila pemantau gulir tidak berjalan semuanya tetap tampil.
 const PILIHAN = [
-  '.bagian-kepala', '.profil-teks', '.profil-foto', '.fakta > div', '.visi-kisi > div', '.nilai-daftar li',
+  '.bagian-kepala', '.profil-judul', '.profil-teks', '.pilih', '.fakta > div', '.visi-kisi > div', '.nilai-daftar li',
   '.kisi-bidang > .bidang', '.lajur-kiri', '.daftar-layanan li', '.geser', '.purnama-isi', '.ajakan-testimoni',
   '.pita-kain-isi > *', '.legal-kisi > div', '.blok', '.kisi-tiga > .kartu', '.kisi-dua > .kartu', '.pengurus', '.tanya-jawab details',
 ].join(',');

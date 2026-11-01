@@ -1,4 +1,4 @@
-import { $, BASE, MODE } from './inti.js';
+import { $, $$, BASE, MODE } from './inti.js';
 import { daftarKabar, daftarTestimoni } from './publik.js';
 import { utamaKabar, barisKabar } from './kartu.js';
 import { kartuTestimoni } from './testimoni.js';
@@ -33,6 +33,17 @@ if (tWadah && MODE !== 'mati') {
     tWadah.classList.add('kisi-testimoni');
   }).catch((e) => console.warn(e));
 }
+
+// Pilihan ajaran di bagian pengenalan: satu panel terbuka, panel lain menyempit.
+const panel = $$('[data-pilih] .pilih-butir');
+panel.forEach((butir) => {
+  butir.addEventListener('click', () => {
+    panel.forEach((p) => {
+      p.classList.toggle('aktif', p === butir);
+      p.setAttribute('aria-pressed', String(p === butir));
+    });
+  });
+});
 
 // Dokumentasi kegiatan: layar sentuh menggeser sendiri, tombol untuk tetikus dan papan ketik.
 const jalur = $('[data-geser-jalur]');
