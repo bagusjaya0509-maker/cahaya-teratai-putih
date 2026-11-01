@@ -26,7 +26,6 @@ const PETA_ESC = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '
 export const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => PETA_ESC[c]);
 export const tautan = (p = '') => BASE + String(p).replace(/^\//, '');
 export const SPRITE = `${BASE}aset/img/ikon.svg?v=${KONFIG.versi || ''}`;
-export const LAMBANG = `${BASE}aset/img/lambang-sprite.svg?v=${KONFIG.versi || ''}`;
 export const ikon = (nama, kelas = 'ikon') => `<svg class="${kelas}" aria-hidden="true"><use href="${SPRITE}#i-${nama}"/></svg>`;
 export const param = (k) => new URLSearchParams(location.search).get(k);
 

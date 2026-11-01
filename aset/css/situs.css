@@ -31,7 +31,7 @@
   --biru-bg: #e6eef6;
 
   /* langit pagi sebagai cadangan tanpa JavaScript */
-  --l-atas: #a9dbe2; --l-tengah: #dff1ea; --l-bawah: #fff0c2; --l-teks: #0f3437; --l-teks-2: #27505a; --l-sinar: #eda90070; --l-teratai: #0f3437;
+  --l-atas: #a9dbe2; --l-tengah: #dff1ea; --l-bawah: #fff0c2; --l-teks: #0f3437; --l-teks-2: #27505a; --l-cahaya: #fffdf0cc;
 
   --f-judul: 'Spectral', 'Georgia', serif;
   --f-badan: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -586,11 +586,11 @@ a:hover .sampul img { transform: scale(1.03); }
    Hindu Bali, dan nama yayasan sendiri berarti cahaya.
    ========================================================= */
 
-:root[data-langit='subuh'] { --l-atas: #1c2b52; --l-tengah: #5d5288; --l-bawah: #e9a78e; --l-teks: #fff; --l-teks-2: #ece4ee; --l-sinar: #ffd36bb0; --l-teratai: #231f4a; }
-:root[data-langit='pagi'] { --l-atas: #a9dbe2; --l-tengah: #dff1ea; --l-bawah: #fff0c2; --l-teks: #0f3437; --l-teks-2: #27505a; --l-sinar: #eda90070; --l-teratai: #0f3437; }
-:root[data-langit='siang'] { --l-atas: #6cc3d1; --l-tengah: #c5e9e3; --l-bawah: #f3faf3; --l-teks: #0f3437; --l-teks-2: #1f4a50; --l-sinar: #f2b20075; --l-teratai: #0f3437; }
-:root[data-langit='senja'] { --l-atas: #232c5c; --l-tengah: #8e3f6b; --l-bawah: #ec8a47; --l-teks: #fff; --l-teks-2: #fbe9df; --l-sinar: #ffd36b99; --l-teratai: #2b1638; }
-:root[data-langit='malam'] { --l-atas: #071a24; --l-tengah: #0e3038; --l-bawah: #16504f; --l-teks: #fbfcf9; --l-teks-2: #cfe0da; --l-sinar: #f3c64a70; --l-teratai: #fbfcf9; }
+:root[data-langit='subuh'] { --l-cahaya: #ffd9b444; --l-atas: #1c2b52; --l-tengah: #5d5288; --l-bawah: #e9a78e; --l-teks: #fff; --l-teks-2: #ece4ee; }
+:root[data-langit='pagi'] { --l-cahaya: #fffdf0cc; --l-atas: #a9dbe2; --l-tengah: #dff1ea; --l-bawah: #fff0c2; --l-teks: #0f3437; --l-teks-2: #27505a; }
+:root[data-langit='siang'] { --l-cahaya: #ffffffb0; --l-atas: #6cc3d1; --l-tengah: #c5e9e3; --l-bawah: #f3faf3; --l-teks: #0f3437; --l-teks-2: #1f4a50; }
+:root[data-langit='senja'] { --l-cahaya: #ffc59a40; --l-atas: #232c5c; --l-tengah: #8e3f6b; --l-bawah: #ec8a47; --l-teks: #fff; --l-teks-2: #fbe9df; }
+:root[data-langit='malam'] { --l-cahaya: #2a6a6866; --l-atas: #071a24; --l-tengah: #0e3038; --l-bawah: #16504f; --l-teks: #fbfcf9; --l-teks-2: #cfe0da; }
 
 /* ---------- tombol ---------- */
 .tombol { border-radius: 999px; font-weight: 600; font-size: 1rem; }
@@ -630,38 +630,28 @@ body.beranda .kepala:not(.tergulir):not(:has(.nav.terbuka)) { background: transp
 
 /* ---------- langit (pembuka beranda) ---------- */
 .langit {
-  --cincin: clamp(640px, 132vmin, 1420px);
-  --teratai: clamp(340px, 40vw, 600px);
   position: relative; isolation: isolate; overflow: hidden;
   margin-top: calc(-1 * var(--tinggi-kepala));
-  min-height: max(700px, 100svh);
-  padding: calc(var(--tinggi-kepala) + 32px) var(--tepi) calc(var(--teratai) * 0.5 + 24px);
+  min-height: max(620px, 86svh);
+  padding: calc(var(--tinggi-kepala) + 48px) var(--tepi) 96px;
   display: grid; place-items: center; text-align: center;
   color: var(--l-teks);
   background: linear-gradient(180deg, var(--l-atas) 0%, var(--l-tengah) 54%, var(--l-bawah) 100%);
 }
-.langit-surya { position: absolute; left: 50%; top: 45%; width: var(--cincin); height: var(--cincin); max-width: none; translate: -50% -52%; color: var(--l-sinar); z-index: -1; }
+.langit::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(70% 62% at 50% 44%, var(--l-cahaya), transparent 72%); }
 .langit-isi { max-width: 880px; }
 .langit-label { margin: 0 0 16px; font-size: 0.98rem; color: var(--l-teks-2); }
 .langit h1 { font-size: clamp(2.9rem, 6.2vw, 5.6rem); font-weight: 300; line-height: 1.02; letter-spacing: -0.022em; }
 .langit h1 em { display: block; font-style: italic; }
 .langit-teks { margin: 22px auto 0; max-width: 52ch; font-size: 1.14rem; color: var(--l-teks-2); }
 .langit-aksi { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
-.langit-teratai { position: absolute; left: 50%; bottom: calc(var(--teratai) * -0.07); translate: -50% 0; width: var(--teratai); max-width: none; height: auto; aspect-ratio: 915 / 500; color: var(--l-teratai); z-index: -1; }
 .langit-waktu { position: absolute; left: var(--tepi); bottom: 18px; margin: 0; font-size: 0.92rem; color: var(--l-teks-2); }
-@media (prefers-reduced-motion: no-preference) {
-  .langit-surya { animation: sinar 1.5s cubic-bezier(0.2, 0.7, 0.1, 1) both; }
-  .langit-teratai { animation: mekar 1.3s 0.15s cubic-bezier(0.2, 0.7, 0.1, 1) both; }
-}
-@keyframes sinar { from { opacity: 0; scale: 0.82; } to { opacity: 1; scale: 1; } }
-@keyframes mekar { from { opacity: 0; translate: -50% 26px; } to { opacity: 1; translate: -50% 0; } }
 
 /* ---------- kepala halaman dalam ---------- */
 .kepala-halaman { position: relative; overflow: hidden; isolation: isolate; color: var(--l-teks); padding: clamp(40px, 6vw, 72px) 0 clamp(40px, 5vw, 60px); background: linear-gradient(180deg, var(--l-atas), var(--l-tengah) 120%); }
 .kepala-halaman h1 { color: inherit; font-size: clamp(2.3rem, 4.6vw, 3.6rem); font-weight: 300; letter-spacing: -0.018em; max-width: 20ch; }
 .kepala-halaman p.lead { margin: 16px 0 0; font-size: 1.15rem; max-width: 60ch; color: var(--l-teks-2); }
 .kepala-halaman .remah, .kepala-halaman .remah a { color: var(--l-teks-2); }
-.kepala-halaman-surya { position: absolute; right: max(-160px, calc(50% - 780px)); top: 50%; width: 560px; height: 560px; max-width: none; translate: 0 -50%; color: var(--l-sinar); z-index: -1; }
 
 /* ---------- bagian ---------- */
 .label { display: block; font-family: var(--f-judul); font-style: italic; font-weight: 400; font-size: 1.14rem; letter-spacing: 0; text-transform: none; color: var(--daun-tua); margin: 0 0 8px; }
@@ -810,7 +800,6 @@ body.beranda .kepala:not(.tergulir):not(:has(.nav.terbuka)) { background: transp
 .langkah-status li.lewat { border-top-color: var(--sari); }
 .langkah-status li.kini { border-top-color: var(--daun-tua); }
 .sampul-kosong { background: var(--telaga); color: var(--sari-muda); }
-.sampul-kosong svg { width: 62%; height: auto; opacity: 0.8; }
 .sampul-kosong .sampul-kat { color: var(--sari-muda); letter-spacing: 0; text-transform: none; font-family: var(--f-judul); font-style: italic; font-size: 0.98rem; font-weight: 400; }
 .kat { font-size: 0.9rem; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--daun-tua); }
 .nomor-tiket { color: var(--telaga); font-family: var(--f-badan); font-weight: 600; font-variant-numeric: tabular-nums; }
@@ -833,15 +822,13 @@ body.beranda .kepala:not(.tergulir):not(:has(.nav.terbuka)) { background: transp
   .galeri figure:nth-child(2), .galeri figure:nth-child(3), .galeri figure:nth-child(4) { grid-column: auto; grid-row: auto; }
   .galeri figure:nth-child(2) { grid-column: 1 / -1; }
   .galeri figure:nth-child(4) img { aspect-ratio: 2 / 1; }
-  .kepala-halaman-surya { right: -240px; }
 }
 @media (max-width: 640px) {
   :root { --tinggi-kepala: 68px; }
   body { font-size: 1.0625rem; }
   .merek-lambang { width: 42px; height: 42px; }
   .merek-nama { font-size: 1.1rem; }
-  .langit { --cincin: max(620px, 165vw); --teratai: min(92vw, 400px); min-height: 0; padding-top: calc(var(--tinggi-kepala) + 56px); }
-  .langit-surya { top: 40%; }
+  .langit { min-height: 0; padding-top: calc(var(--tinggi-kepala) + 64px); padding-bottom: 72px; }
   .langit-waktu { left: 0; right: 0; bottom: auto; top: calc(var(--tinggi-kepala) + 14px); text-align: center; font-size: 0.86rem; }
   .langit h1 { font-size: clamp(2.5rem, 12vw, 3.2rem); }
   .langit-teks { font-size: 1.05rem; }
