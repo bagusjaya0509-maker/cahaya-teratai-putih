@@ -16,7 +16,7 @@
 3. **Firestore Database → Create database**, pilih lokasi `asia-southeast2` (Jakarta) dan mode produksi. Lokasi tidak bisa diubah sesudahnya.
 4. **Firestore → Rules**, salin seluruh isi `firestore.rules`, lalu **Publish**.
 5. **Project settings → Your apps → Web**, daftarkan aplikasi lalu salin nilai `firebaseConfig` ke bagian `firebase` di `situs.config.json`.
-6. **Authentication → Settings → Authorized domains**, tambahkan `bagusjaya0509-maker.github.io`.
+6. **Authentication → Settings → Authorized domains**, tambahkan `cahayaterataiputih.org`.
 7. Push ke `main`. Situs otomatis beralih ke mode Firebase.
 8. Buka situs, tekan **Masuk**, lalu daftar atau masuk dengan email pengurus utama. Verifikasi email bila diminta, kemudian buka **Panel pengurus**.
 
