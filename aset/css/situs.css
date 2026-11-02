@@ -791,11 +791,19 @@ body.beranda .kepala:not(.tergulir):not(:has(.nav.terbuka)) { background: transp
 
 /* ---------- masuk ---------- */
 .masuk-panel { background: linear-gradient(180deg, var(--l-atas), var(--l-tengah) 70%, var(--l-bawah)); color: var(--l-teks); justify-content: flex-end; gap: 12px; }
-.masuk-panel::before { content: none; }
+.masuk-panel::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none; background: currentColor; opacity: 0.14;
+  -webkit-mask: url('../img/motif-batik.webp') center / cover no-repeat; mask: url('../img/motif-batik.webp') center / cover no-repeat;
+}
 .masuk-panel h1 { color: inherit; font-weight: 300; }
 .masuk-panel li::marker { color: currentColor; }
 .masuk-surya { width: min(260px, 60%); height: auto; aspect-ratio: 1; margin-bottom: auto; color: inherit; }
-.masuk-form { background: var(--kelopak); }
+.masuk-form { position: relative; background: var(--kelopak); }
+.masuk-form::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none; background: var(--telaga); opacity: 0.05;
+  -webkit-mask: url('../img/motif-batik.webp') center / cover no-repeat; mask: url('../img/motif-batik.webp') center / cover no-repeat;
+}
+.masuk-kotak { position: relative; }
 
 /* ---------- akun ---------- */
 .akun-identitas h1 { color: inherit; font-weight: 300; }
