@@ -82,6 +82,21 @@ service cloud.firestore {
       allow list, write: if pengurus();
     }
 
+    // ---------- trafik: angka kunjungan per hari, tanpa data pribadi ----------
+    function trafikSah(d) {
+      return hanyaKunci(d, ['tayangan', 'kunjungan', 'h_beranda', 'h_tentang', 'h_layanan', 'h_kabar',
+          'h_donasi', 'h_kontak', 'h_booking', 'h_testimoni', 'h_privasi'])
+        && d.tayangan is int;
+    }
+    match /trafik/{hari} {
+      allow read: if pengurus();
+      allow create: if hari.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+        && trafikSah(request.resource.data) && request.resource.data.tayangan == 1;
+      allow update: if trafikSah(request.resource.data)
+        && request.resource.data.tayangan == resource.data.tayangan + 1;
+      allow delete: if false;
+    }
+
     // ---------- booking konsultasi ----------
     function bookingSah(d) {
       return hanyaKunci(d, ['nama', 'wa', 'kota', 'layanan', 'cara', 'tanggal', 'sesi', 'catatan',

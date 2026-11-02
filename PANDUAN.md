@@ -32,6 +32,8 @@ Indeks untuk saring kabar per kategori tercantum di `firestore.indexes.json`. Bi
 - **Booking:** baca permintaan, tetapkan tanggal dan jam, lalu tekan tombol WhatsApp yang sudah berisi pesan konfirmasi. Rekap bisa diunduh sebagai Excel.
 - **Testimoni:** tidak ada yang tampil sebelum ditinjau. Lihat aturan di bawah.
 - **Kabar:** tulis kegiatan beserta foto. Foto otomatis diperkecil.
+- **Kegiatan:** tulis kabar berkategori **Kegiatan** beserta foto sampul, lalu isi keterangan dan hasil kegiatannya. Kabar ini otomatis tampil di slide Dokumentasi kegiatan di beranda dan bisa diklik.
+- **Trafik:** melihat jumlah pengunjung per hari dan halaman yang paling sering dibuka.
 - **Jadwal & produk:** atur hari buka, sesi, tanggal tutup, dan nama produk yang bisa dipilih saat menulis testimoni.
 
 ## Aturan testimoni

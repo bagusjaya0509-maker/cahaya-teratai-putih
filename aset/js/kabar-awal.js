@@ -16,6 +16,45 @@ const MENIT = 60_000;
 
 export const KABAR_AWAL = [
   {
+    slug: 'pengobatan-lansia-di-panti-werda',
+    judul: 'Pengobatan Lansia di Panti Werda',
+    kategori: 'Kegiatan',
+    penulis: 'Sekretariat Yayasan',
+    terbitPada: wita('2026-11-02') + 30 * MENIT,
+    ringkasan: 'Kegiatan pengobatan yayasan bagi para lansia di panti werda.',
+    sampulKecil: 'lansia',
+    delta: jadi(
+      h2('Keterangan kegiatan'),
+      p('Yayasan Cahaya Teratai Putih melaksanakan kegiatan pengobatan bagi para lansia di panti werda. Program pengobatan yayasan mencakup pemeriksaan kesehatan, pengobatan ringan, dan penyuluhan.'),
+    ),
+  },
+  {
+    slug: 'bantuan-bibit-talas-pratama-3',
+    judul: 'Bantuan Bibit Talas Pratama 3',
+    kategori: 'Kegiatan',
+    penulis: 'Sekretariat Yayasan',
+    terbitPada: wita('2026-11-02') + 20 * MENIT,
+    ringkasan: 'Kegiatan bantuan bibit talas Pratama 3 dari yayasan.',
+    sampulKecil: 'talas',
+    delta: jadi(
+      h2('Keterangan kegiatan'),
+      p('Yayasan Cahaya Teratai Putih memberikan bantuan bibit talas Pratama 3. Kegiatan ini sejalan dengan unsur Palemahan dalam ajaran Tri Hita Karana, yaitu keharmonisan hubungan manusia dengan alam, serta program pemberdayaan ekonomi komunitas yayasan.'),
+    ),
+  },
+  {
+    slug: 'upacara-suci-homma-jnana',
+    judul: 'Upacara Suci Homma Jnana',
+    kategori: 'Kegiatan',
+    penulis: 'Sekretariat Yayasan',
+    terbitPada: wita('2026-11-02') + 10 * MENIT,
+    ringkasan: 'Upacara suci untuk pembersihan jiwa dan penguatan energi spiritual.',
+    sampulKecil: 'homma',
+    delta: jadi(
+      h2('Keterangan kegiatan'),
+      p('Upacara suci Homma Jnana adalah ritual keagamaan untuk pembersihan jiwa dan penguatan energi spiritual. Upacara ini termasuk program bidang keagamaan yayasan, bersama meditasi bersama, pelatihan dharma, serta piodalan dan upacara adat.'),
+    ),
+  },
+  {
     slug: 'mengenal-betara-sakti-dang-hyang-nirartha',
     judul: 'Mengenal Betara Sakti Dang Hyang Nirartha',
     kategori: 'Dharma Sastra',
@@ -163,7 +202,7 @@ export const KABAR_AWAL = [
   {
     slug: 'dari-pasraman-menjadi-yayasan',
     judul: 'Dari Pasraman Menjadi Yayasan',
-    kategori: 'Kegiatan',
+    kategori: 'Berita',
     penulis: 'Sekretariat Yayasan',
     terbitPada: wita('2024-07-30'),
     ringkasan: 'Sekitar sebelas tahun berjalan sebagai pasraman, Cahaya Teratai Putih disahkan sebagai yayasan oleh Kementerian Hukum dan HAM pada 30 Juli 2024.',

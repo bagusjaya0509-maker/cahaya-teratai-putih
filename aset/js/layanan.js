@@ -111,12 +111,12 @@ async function fbMuatProfil(u) {
     const data = profil?.exists() ? profil.data() : {};
     const diblokir = (await F.getDoc(F.doc(db, 'blokir', u.uid)).catch(() => null))?.exists() || false;
     umumkan({
-      uid: u.uid, email, nama: data.nama || u.displayName || email, wa: data.wa || '', kota: data.kota || '',
+      uid: u.uid, email, nama: data.nama || u.displayName || email, wa: data.wa || '', kota: data.kota || '', foto: u.photoURL || '',
       terverifikasi: u.emailVerified, penyedia: u.providerData[0]?.providerId || 'password', admin, diblokir,
     });
   } catch (e) {
     console.error(e);
-    umumkan({ uid: u.uid, email: u.email, nama: u.displayName || u.email, terverifikasi: u.emailVerified, admin: false });
+    umumkan({ uid: u.uid, email: u.email, nama: u.displayName || u.email, foto: u.photoURL || '', terverifikasi: u.emailVerified, admin: false });
   }
 }
 
@@ -331,6 +331,12 @@ const fbMesin = {
   },
 
   // ---------- kabar ----------
+  async trafikHarian(n = 30) {
+    wajibAdmin();
+    const { F, db } = await fb();
+    const s = await F.getDocs(F.query(F.collection(db, 'trafik'), F.orderBy(F.documentId(), 'desc'), F.limit(n)));
+    return s.docs.map(rapikan);
+  },
   async semuaKabarAdmin() {
     wajibAdmin();
     const { F, db } = await fb();
@@ -656,6 +662,9 @@ const demoMesin = {
     d.ubahDemo((s) => delete s.admin[uid]);
   },
 
+  async trafikHarian() {
+    return [];
+  },
   async semuaKabarAdmin() {
     wajibAdmin();
     const d = await demo();

@@ -1,6 +1,6 @@
 import { $, $$, BASE, MODE } from './inti.js';
 import { daftarKabar, daftarTestimoni } from './publik.js';
-import { utamaKabar, barisKabar } from './kartu.js';
+import { utamaKabar, barisKabar, slideKegiatan } from './kartu.js';
 import { kartuTestimoni } from './testimoni.js';
 
 const wadah = $('[data-kabar-portal]');
@@ -45,30 +45,41 @@ panel.forEach((butir) => {
   });
 });
 
-// Dokumentasi kegiatan: layar sentuh menggeser sendiri, tombol untuk tetikus dan papan ketik.
+// Dokumentasi kegiatan: kabar berkategori Kegiatan tampil sebagai slide yang bisa dibuka.
+// Layar sentuh menggeser sendiri, tombol untuk tetikus dan papan ketik.
 const jalur = $('[data-geser-jalur]');
 if (jalur) {
-  const foto = [...jalur.children];
+  const kendali = $('[data-geser-kendali]');
   const hitung = $('[data-geser-hitung]');
   const mundur = $('[data-geser-mundur]');
   const maju = $('[data-geser-maju]');
-  const posisi = (i) => foto[i].offsetLeft - foto[0].offsetLeft;
+  const butir = () => [...jalur.children];
+  const posisi = (i) => butir()[i].offsetLeft - butir()[0].offsetLeft;
   const kini = () => {
-    if (jalur.scrollLeft + jalur.clientWidth >= jalur.scrollWidth - 2) return foto.length - 1;
-    return foto.reduce((dekat, _, i) => (Math.abs(posisi(i) - jalur.scrollLeft) < Math.abs(posisi(dekat) - jalur.scrollLeft) ? i : dekat), 0);
+    if (jalur.scrollLeft + jalur.clientWidth >= jalur.scrollWidth - 2) return butir().length - 1;
+    return butir().reduce((dekat, _, i) => (Math.abs(posisi(i) - jalur.scrollLeft) < Math.abs(posisi(dekat) - jalur.scrollLeft) ? i : dekat), 0);
   };
   const perbarui = () => {
     const i = kini();
-    hitung.textContent = `${i + 1} / ${foto.length}`;
+    hitung.textContent = `${i + 1} / ${butir().length}`;
     mundur.disabled = i === 0;
-    maju.disabled = i === foto.length - 1;
+    maju.disabled = i === butir().length - 1;
+    kendali.hidden = jalur.scrollWidth <= jalur.clientWidth + 2;
   };
   const halus = !matchMedia('(prefers-reduced-motion: reduce)').matches;
   const ke = (i) => jalur.scrollTo({ left: posisi(i), behavior: halus ? 'smooth' : 'auto' });
   mundur.addEventListener('click', () => ke(kini() - 1));
   maju.addEventListener('click', () => ke(kini() + 1));
   jalur.addEventListener('scroll', perbarui, { passive: true });
+  jalur.addEventListener('load', perbarui, true);
   addEventListener('resize', perbarui);
-  $('[data-geser-kendali]').hidden = false;
   perbarui();
+  daftarKabar({ kategori: 'Kegiatan', batas: 12 })
+    .then((d) => {
+      const ada = d.filter((k) => k.sampulKecil);
+      if (!ada.length) return;
+      jalur.innerHTML = ada.map(slideKegiatan).join('');
+      perbarui();
+    })
+    .catch((e) => console.warn(e));
 }

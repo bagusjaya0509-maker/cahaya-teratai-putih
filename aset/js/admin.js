@@ -1,5 +1,5 @@
 // Panel pengurus: booking, testimoni, kabar, jadwal, pengguna, sistem.
-import { $, $$, BASE, ASAL, MODE, KONFIG, esc, ikon, roti, denganMemuat, pesanGalat, tanggalPendek, tanggalJam, waktuLalu, inisial } from './inti.js';
+import { $, $$, BASE, ASAL, MODE, KONFIG, esc, ikon, roti, denganMemuat, pesanGalat, tanggalPendek, tanggalJam, waktuLalu, fotoAkun } from './inti.js';
 import { L, pantauSesi } from './layanan.js';
 import { LAYANAN_BOOKING, STATUS_BOOKING, STATUS_TESTIMONI, NAMA_HARI, PENGATURAN_BAWAAN, namaLayanan, namaCara, namaSesi, tanggalBooking, hariIni, kataKlaim, KATA_KLAIM } from './rujukan.js';
 import { pilStatus, langkahStatus, rincianBooking, liniTanggapan, waIntl, jadwalTeks, bintangHtml } from './booking-tampil.js';
@@ -46,7 +46,7 @@ if (MODE === 'mati') {
     saya = p;
     gerbang.hidden = true;
     $('[data-adm]').hidden = false;
-    $('[data-adm-nama]').innerHTML = `<span class="inisial">${esc(inisial(p.nama))}</span><span><b>${esc(p.nama)}</b><small>${esc(p.email)}</small></span>`;
+    $('[data-adm-nama]').innerHTML = `${fotoAkun(p)}<span><b>${esc(p.nama)}</b><small>${esc(p.email)}</small></span>`;
     if (!mulaiSekali) {
       mulaiSekali = true;
       rute();
@@ -98,6 +98,7 @@ async function rute() {
     else if (bagian === 'booking' && a) await vDetailBooking(a);
     else if (bagian === 'booking') await vBooking();
     else if (bagian === 'testimoni') await vTestimoni();
+    else if (bagian === 'trafik') await vTrafik();
     else if (bagian === 'jadwal') await vJadwal();
     else if (bagian === 'pengguna') await vPengguna();
     else if (bagian === 'sistem') await vSistem();
@@ -218,6 +219,47 @@ async function vRingkasan() {
         ${grafikBatang(hitungMenurut(bk, (b) => namaLayanan(b.layanan)))}
       </section>
     </div>`;
+}
+
+// ======================================================================
+// TRAFIK
+// ======================================================================
+const NAMA_HALAMAN = {
+  h_beranda: 'Beranda', h_tentang: 'Tentang', h_layanan: 'Layanan', h_kabar: 'Kabar', h_donasi: 'Donasi',
+  h_kontak: 'Kontak', h_booking: 'Booking', h_testimoni: 'Testimoni', h_privasi: 'Kebijakan privasi',
+};
+const tanggalHari = (id) => tanggalPendek(Date.parse(`${id}T12:00:00+08:00`));
+
+async function vTrafik() {
+  setJudul('Trafik');
+  aksi.innerHTML = `<button class="tombol tombol-garis kecil" type="button" data-segarkan>${ikon('refresh-cw')}Muat ulang</button>`;
+  $('[data-segarkan]').addEventListener('click', () => vTrafik());
+  const hari = await L.trafikHarian(30);
+  const kini = hariIni();
+  const jumlah = (daftar, kunci) => daftar.reduce((s, h) => s + (h[kunci] || 0), 0);
+  const ini = hari.find((h) => h.id === kini) || {};
+  const ubin = [
+    { n: ini.kunjungan || 0, t: 'Pengunjung hari ini', k: `${ini.tayangan || 0} halaman dibuka` },
+    { n: jumlah(hari.slice(0, 7), 'kunjungan'), t: 'Pengunjung 7 hari', k: `${jumlah(hari.slice(0, 7), 'tayangan')} halaman dibuka` },
+    { n: jumlah(hari, 'kunjungan'), t: 'Pengunjung 30 hari', k: `${jumlah(hari, 'tayangan')} halaman dibuka` },
+  ];
+  const perHari = hari.slice(0, 14).map((h) => ({ label: tanggalHari(h.id), nilai: h.kunjungan || 0 }));
+  const perHalaman = Object.entries(NAMA_HALAMAN)
+    .map(([kunci, label]) => ({ label, nilai: jumlah(hari, kunci) }))
+    .sort((a, b) => b.nilai - a.nilai);
+  isi.innerHTML = `
+    <div class="adm-ubin">${ubin.map((u) => `<div class="ubin"><span class="ubin-angka">${u.n}</span><span class="ubin-judul">${u.t}</span><span class="ubin-ket">${u.k}</span></div>`).join('')}</div>
+    <div class="adm-kisi-2">
+      <section class="adm-kartu">
+        <h2>Pengunjung per hari</h2>
+        ${grafikBatang(perHari, { kosong: 'Belum ada kunjungan tercatat.', nol: true })}
+      </section>
+      <section class="adm-kartu">
+        <h2>Halaman paling sering dibuka</h2>
+        ${grafikBatang(perHalaman, { kosong: 'Belum ada kunjungan tercatat.' })}
+      </section>
+    </div>
+    <p class="petunjuk" style="margin-top:16px;color:var(--tinta-2)">Satu peramban dihitung sekali per hari sebagai pengunjung. Kunjungan pengurus yang sedang masuk tidak dihitung, dan tidak ada data pribadi yang disimpan.</p>`;
 }
 
 // ======================================================================

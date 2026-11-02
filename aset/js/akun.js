@@ -1,4 +1,4 @@
-import { $, $$, BASE, MODE, esc, ikon, roti, denganMemuat, pesanGalat, tanggalPendek, waktuLalu, inisial } from './inti.js';
+import { $, $$, BASE, MODE, esc, ikon, roti, denganMemuat, pesanGalat, tanggalPendek, waktuLalu, fotoAkun } from './inti.js';
 import { L } from './layanan.js';
 import { jagaAkun } from './gerbang.js';
 import { ambilPengaturan } from './publik.js';
@@ -16,7 +16,7 @@ let sesiJadwal;
 // ---------- kepala & verifikasi ----------
 function kepala(p) {
   $('[data-akun-kepala]').innerHTML = `
-    <div class="akun-identitas"><span class="inisial-besar" aria-hidden="true">${p.tamu ? ikon('calendar') : esc(inisial(p.nama))}</span><div><h1>${p.tamu ? 'Booking saya' : esc(p.nama)}</h1><p>${p.tamu ? 'Tersimpan di perangkat ini' : esc(p.email)}</p></div></div>
+    <div class="akun-identitas">${p.tamu ? `<span class="inisial-besar" aria-hidden="true">${ikon('calendar')}</span>` : fotoAkun(p, 'inisial-besar')}<div><h1>${p.tamu ? 'Booking saya' : esc(p.nama)}</h1><p>${p.tamu ? 'Tersimpan di perangkat ini' : esc(p.email)}</p></div></div>
     <div class="aksi-formulir">
       ${p.admin ? `<a class="tombol tombol-garis-langit" href="${BASE}admin/">${ikon('layout-dashboard')}Panel pengurus</a>` : ''}
       <a class="tombol tombol-utama" href="${BASE}booking/">${ikon('plus')}Booking baru</a>

@@ -110,9 +110,11 @@ export function pesanGalat(e) {
 // localStorage saat masuk supaya tautan "Masuk" bisa berganti menjadi akun.
 export const sesiLokal = {
   baca: () => lokalBaca('ctp.sesi'),
-  simpan: (s) => lokalSimpan('ctp.sesi', s ? { nama: s.nama || s.email || 'Akun', admin: Boolean(s.admin), tamu: Boolean(s.tamu) } : null),
+  simpan: (s) => lokalSimpan('ctp.sesi', s ? { nama: s.nama || s.email || 'Akun', foto: s.foto || '', admin: Boolean(s.admin), tamu: Boolean(s.tamu) } : null),
 };
 export const inisial = (nama) => String(nama || '?').trim().split(/\s+/).slice(0, 2).map((k) => k[0]).join('').toUpperCase();
+/** Foto profil akun Google; inisial tetap ada di bawahnya bila foto gagal dimuat. */
+export const fotoAkun = (s, kelas = 'inisial') => `<span class="${kelas}" aria-hidden="true">${esc(inisial(s.nama))}${s.foto ? `<img src="${esc(s.foto)}" alt="" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}</span>`;
 
 function pasangKepala() {
   const kepala = $('[data-kepala]');
@@ -124,7 +126,7 @@ function pasangKepala() {
     $$('[data-tautan-akun]').forEach((a) => {
       a.href = tautan(sesi.admin ? 'admin/' : 'akun/');
       const label = sesi.admin ? 'Panel' : sesi.tamu ? 'Booking saya' : 'Akun saya';
-      if (a.classList.contains('tautan-akun')) a.innerHTML = sesi.tamu ? `${ikon('calendar')}<span>${label}</span>` : `<span class="inisial" aria-hidden="true">${esc(inisial(sesi.nama))}</span><span>${label}</span>`;
+      if (a.classList.contains('tautan-akun')) a.innerHTML = sesi.tamu ? `${ikon('calendar')}<span>${label}</span>` : `${fotoAkun(sesi)}<span>${label}</span>`;
       else a.textContent = sesi.admin ? 'Buka panel pengurus' : `Buka ${label.toLowerCase()}`;
     });
   }
