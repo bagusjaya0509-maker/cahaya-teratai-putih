@@ -334,8 +334,9 @@ const fbMesin = {
   async trafikHarian(n = 30) {
     wajibAdmin();
     const { F, db } = await fb();
-    const s = await F.getDocs(F.query(F.collection(db, 'trafik'), F.orderBy(F.documentId(), 'desc'), F.limit(n)));
-    return s.docs.map(rapikan);
+    const awal = new Date(Date.now() - (n - 1) * 864e5).toISOString().slice(0, 10);
+    const s = await F.getDocs(F.query(F.collection(db, 'trafik'), F.where(F.documentId(), '>=', awal)));
+    return s.docs.map(rapikan).reverse();
   },
   async semuaKabarAdmin() {
     wajibAdmin();
