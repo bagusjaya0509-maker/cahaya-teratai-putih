@@ -99,6 +99,7 @@ async function rute() {
     else if (bagian === 'booking') await vBooking();
     else if (bagian === 'testimoni') await vTestimoni();
     else if (bagian === 'trafik') await vTrafik();
+    else if (bagian === 'berkas') vBerkas();
     else if (bagian === 'jadwal') await vJadwal();
     else if (bagian === 'pengguna') await vPengguna();
     else if (bagian === 'sistem') await vSistem();
@@ -260,6 +261,41 @@ async function vTrafik() {
       </section>
     </div>
     <p class="petunjuk" style="margin-top:16px;color:var(--tinta-2)">Satu peramban dihitung sekali per hari sebagai pengunjung. Kunjungan pengurus yang sedang masuk tidak dihitung, dan tidak ada data pribadi yang disimpan.</p>`;
+}
+
+// ======================================================================
+// BERKAS YAYASAN
+// ======================================================================
+// Berkas disimpan di Google Drive akun yayasan, bukan di situs: repo situs publik dan akta memuat
+// data pribadi pengurus. Tautan folder hanya terbuka bagi akun Google yang diberi akses.
+const DRIVE = 'https://drive.google.com/drive/folders/';
+const FOLDER_BERKAS = [
+  {
+    judul: 'Legalitas dan profil', id: '1W4wQQDRIiADJcO6-da8G8rot_gBUI7xl', ikon: 'shield-check',
+    isi: ['Akta pendirian yayasan (Nomor 17, 27 Juli 2024)', 'SK Kemenkumham AHU-0011828.AH.01.04.Tahun 2024',
+      'Nomor Induk Berusaha', 'NPWP yayasan', 'Surat keterangan domisili', 'Tanda Daftar Ditjen Bimas Hindu',
+      'Tanda Daftar LKS Dinas Sosial Kota Mataram', 'Rekomendasi Kemenag Kota Mataram dan Kanwil Kemenag NTB',
+      'Struktur organisasi', 'Sejarah singkat dan profil yayasan', 'Foto kegiatan', 'Bukti transaksi notaris'],
+  },
+  {
+    judul: 'Proposal bantuan', id: '1RlIm_MJFj8g03jazHK-iM-VhkaZVwkD2', ikon: 'file-text',
+    isi: ['Proposal Pembinaan Umat Hindu Berbasis Tri Hita Karana TA 2027 (PDF dan Word)',
+      'Proposal Kesehatan Holistik Masyarakat Hindu TA 2027 (PDF dan Word)', 'RAB kedua proposal (Excel)'],
+  },
+];
+
+function vBerkas() {
+  setJudul('Berkas yayasan');
+  aksi.innerHTML = `<a class="tombol tombol-garis kecil" href="${DRIVE}14QbEsuoRTeY92XyT9XwbM1OPZdzIFTui" target="_blank" rel="noopener">${ikon('external-link')}Buka semua di Drive</a>`;
+  isi.innerHTML = `
+    <div class="adm-kisi-2">
+      ${FOLDER_BERKAS.map((f) => `<section class="adm-kartu">
+        <h2>${ikon(f.ikon)} ${esc(f.judul)}</h2>
+        <ul style="margin:12px 0 18px;padding-left:20px;display:grid;gap:6px">${f.isi.map((n) => `<li>${esc(n)}</li>`).join('')}</ul>
+        <a class="tombol tombol-utama kecil" href="${DRIVE}${f.id}" target="_blank" rel="noopener">${ikon('external-link')}Buka folder</a>
+      </section>`).join('')}
+    </div>
+    <p class="petunjuk" style="margin-top:16px;color:var(--tinta-2)">Berkas tersimpan di Google Drive akun yayasan (cahayaterataiputih11@gmail.com), bukan di situs, karena sebagian memuat data pribadi pengurus. Folder hanya bisa dibuka akun Google yang diberi akses oleh pemilik Drive. Tambahkan berkas baru langsung ke folder Drive yang sesuai.</p>`;
 }
 
 // ======================================================================
