@@ -307,7 +307,7 @@ async function vKabar() {
   const daftar = await L.semuaKabarAdmin();
   const awalBelum = KABAR_AWAL.filter((k) => !daftar.some((d) => d.slug === k.slug));
   isi.innerHTML = `
-    ${awalBelum.length ? `<div class="pesan" style="margin-bottom:20px">${ikon('newspaper')}<div><p><b>${awalBelum.length} kabar awal siap terbit.</b> Disusun dari berkas resmi yayasan: ${awalBelum.map((k) => `“${esc(k.judul)}”`).join(', ')}.</p><p style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><button class="tombol tombol-utama kecil" type="button" data-terbit-awal>Terbitkan kabar awal</button><button class="tombol tombol-garis kecil" type="button" data-lihat-awal>Lihat isinya dulu</button></p></div></div>` : ''}
+    ${awalBelum.length ? `<div class="pesan" style="margin-bottom:20px">${ikon('newspaper')}<div><p><b>${awalBelum.length} tulisan siap terbit:</b> ${awalBelum.map((k) => `“${esc(k.judul)}”`).join(', ')}.</p><p style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><button class="tombol tombol-utama kecil" type="button" data-terbit-awal>Terbitkan sekarang</button><button class="tombol tombol-garis kecil" type="button" data-lihat-awal>Lihat isinya dulu</button></p></div></div>` : ''}
     ${daftar.length ? `<div class="tabel-wadah"><table class="tabel adm-tabel">
       <thead><tr><th>Judul</th><th>Kategori</th><th>Status</th><th>Tanggal terbit</th><th>Diubah</th><th><span class="sr-only">Aksi</span></th></tr></thead>
       <tbody>${daftar.map((k) => `<tr>
@@ -325,7 +325,7 @@ async function vKabar() {
   $('[data-terbit-awal]')?.addEventListener('click', (e) => denganMemuat(e.currentTarget, async () => {
     try {
       for (const k of awalBelum) await L.terbitkan({ ...k, sampul: '', keteranganSampul: k.keteranganSampul || '' });
-      roti(`${awalBelum.length} kabar awal terbit.`, 'berhasil');
+      roti(`${awalBelum.length} tulisan terbit.`, 'berhasil');
       vKabar();
     } catch (err) { roti(pesanGalat(err), 'galat'); }
   }));
