@@ -791,6 +791,11 @@ body.beranda .kepala:not(.tergulir):not(:has(.nav.terbuka)) { background: transp
 .kaki a { color: #e6efeb; }
 .kaki a:hover { color: var(--sari-muda); }
 .kaki-kontak .ikon, .kaki-sosial .ikon { color: var(--sari); }
+.kaki-sosial { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.kaki-sosial a { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; border: 1px solid rgb(255 255 255 / 0.22); transition: background-color 0.2s, border-color 0.2s; }
+.kaki-sosial a .ikon { width: 20px; height: 20px; }
+.kaki-sosial a:hover { background: var(--sari); border-color: var(--sari); }
+.kaki-sosial a:hover .ikon { color: #fff; }
 .kaki-bawah { color: #8fa6a1; }
 
 /* ---------- masuk ---------- */

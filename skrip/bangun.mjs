@@ -94,19 +94,19 @@ const templat = {
   kaki: await baca('src/templat/kaki.html'),
 };
 
-// Nama akun ditampilkan di samping ikon, lebih mudah dicari daripada ikon saja.
+// Kaki halaman hanya menampilkan ikon (permintaan pemilik); nama akun tampil di halaman Kontak.
 const NAMA_SOSIAL = { instagram: 'Instagram', facebook: 'Facebook', youtube: 'YouTube', tiktok: 'TikTok' };
 function akunSosial(nama, url) {
   const bagian = new URL(url).pathname.split('/').filter(Boolean);
   const akun = (bagian[bagian.length - 1] || '').replace(/^@/, '');
-  if (!akun) return NAMA_SOSIAL[nama] || nama;
+  if (!akun || akun.endsWith('.php')) return 'Yayasan Cahaya Teratai Putih';
   return nama === 'facebook' ? akun : `@${akun}`;
 }
 const daftarSosial = Object.entries(konfig.sosial)
   .filter(([, url]) => url)
   .map(([nama, url]) => ({ nama, url, akun: akunSosial(nama, url) }));
 const tautanSosial = daftarSosial
-  .map(({ nama, url, akun }) => `<a href="${esc(url)}" target="_blank" rel="noopener" aria-label="${NAMA_SOSIAL[nama] || nama} ${esc(akun)}"><svg class="ikon" aria-hidden="true"><use href="${BASE}aset/img/ikon.svg#i-${nama}"/></svg><span>${esc(akun)}</span></a>`)
+  .map(({ nama, url, akun }) => `<a href="${esc(url)}" target="_blank" rel="noopener" aria-label="${NAMA_SOSIAL[nama] || nama} ${esc(akun)}"><svg class="ikon" aria-hidden="true"><use href="${BASE}aset/img/ikon.svg#i-${nama}"/></svg></a>`)
   .join('');
 const kartuSosial = daftarSosial
   .map(({ nama, url, akun }) => `<div class="kartu kontak-butir"><svg class="ikon" aria-hidden="true"><use href="${BASE}aset/img/ikon.svg#i-${nama}"/></svg><div><h2>${NAMA_SOSIAL[nama] || nama}</h2><p style="font-size:1.1rem;font-weight:600;margin-bottom:8px">${esc(akun)}</p><a class="tombol tombol-garis kecil" href="${esc(url)}" target="_blank" rel="noopener">Buka ${NAMA_SOSIAL[nama] || nama}</a></div></div>`)
