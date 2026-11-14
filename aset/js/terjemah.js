@@ -6,7 +6,7 @@ import { $$, lokalBaca, lokalSimpan } from './inti.js';
 
 const KUNCI = 'ctp.bahasa';
 const BAHASA = [
-  ['id', 'Indonesia'], ['en', 'English'], ['de', 'Deutsch'], ['fr', 'Français'], ['nl', 'Nederlands'],
+  ['id', 'Indonesia'], ['en', 'English'], ['de', 'Deutsch'], ['fr', 'Français'], ['es', 'Español'], ['nl', 'Nederlands'],
   ['ru', 'Русский'], ['ja', '日本語'], ['ko', '한국어'], ['zh-CN', '中文'],
 ];
 const halamanPribadi = /\/(akun|masuk)\//.test(location.pathname);
