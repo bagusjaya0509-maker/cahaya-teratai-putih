@@ -7,7 +7,8 @@ const wadah = $('[data-kabar-portal]');
 
 async function muatKabar() {
   try {
-    const semua = await daftarKabar({ batas: 6 });
+    // Kegiatan sudah punya slide Dokumentasi sendiri, jadi tidak diulang di Kabar (permintaan pemilik).
+    const semua = (await daftarKabar({ batas: 20 })).filter((k) => k.kategori !== 'Kegiatan').slice(0, 6);
     wadah.removeAttribute('aria-busy');
     if (!semua.length) {
       wadah.outerHTML = `<div class="kosong"><h3>Kabar pertama sedang disiapkan</h3><p>Kegiatan yayasan yang diterbitkan pengurus akan tampil di sini.</p></div>`;
