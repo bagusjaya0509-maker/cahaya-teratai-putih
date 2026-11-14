@@ -1013,19 +1013,3 @@ body { overflow-wrap: break-word; }
   .pilih-butir img { left: 0; translate: none; width: 100%; }
   .pilih-teks { width: 60vw; }
 }
-
-/* Latar emas (14 Nov 2026): warna latar resmi yayasan emas, menggantikan hijau tua di Meditasi purnama dan kaki halaman. */
-.purnama { background: var(--sari); color: rgb(15 52 55 / 0.86); }
-.purnama .label { color: var(--telaga-2); }
-.purnama h2 { color: var(--telaga); }
-.purnama p span { color: var(--telaga); font-weight: 700; }
-.purnama .tombol-garis-terang { border-color: var(--telaga); color: var(--telaga); }
-.purnama .tombol-garis-terang:hover { border-color: var(--telaga); color: var(--telaga); background: rgb(15 52 55 / 0.08); }
-.kaki { background: var(--sari); color: rgb(15 52 55 / 0.82); }
-.kaki-lambang { color: var(--telaga); }
-.kaki-nama { color: var(--telaga); }
-.kaki-motto, .kaki h2 { color: var(--telaga-2); }
-.kaki a { color: var(--telaga); }
-.kaki a:hover { color: var(--telaga-gelap); }
-.kaki-kontak .ikon, .kaki-sosial .ikon { color: var(--telaga); }
-.kaki-bawah { color: rgb(15 52 55 / 0.72); border-top-color: rgb(15 52 55 / 0.18); }
