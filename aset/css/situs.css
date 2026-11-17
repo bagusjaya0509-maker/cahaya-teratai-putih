@@ -615,7 +615,7 @@ a:hover .sampul img { transform: scale(1.03); }
 .kepala-isi { display: flex; align-items: center; gap: 28px; min-height: var(--tinggi-kepala); }
 .merek { display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; flex: none; }
 .merek:hover { color: inherit; }
-.merek-lambang { width: 48px; height: 48px; flex: none; }
+.merek-lambang { width: 48px; height: 48px; flex: none; color: var(--sari); }
 .merek-teks { display: flex; flex-direction: column; line-height: 1.12; }
 .merek-sub { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em; opacity: 0.8; }
 .merek-nama { font-family: var(--f-judul); font-weight: 500; font-size: 1.28rem; }
@@ -783,7 +783,7 @@ body.beranda .kepala:not(.tergulir):not(:has(.nav.terbuka)) { background: transp
 
 /* ---------- kaki ---------- */
 .kaki { background: var(--telaga-gelap); color: #b9cbc6; font-size: 1rem; }
-.kaki-lambang { width: 84px; height: 84px; color: var(--kelopak); margin-bottom: 14px; }
+.kaki-lambang { width: 84px; height: 84px; color: var(--sari); margin-bottom: 14px; }
 .kaki-nama { font-family: var(--f-judul); font-weight: 400; font-size: 1.45rem; color: #fff; text-transform: none; letter-spacing: 0; margin-bottom: 6px; }
 .kaki-motto { color: var(--sari-muda); font-family: var(--f-judul); margin: 0; }
 .kaki-sti { margin: 6px 0 0; font-family: var(--f-judul); color: #e6efeb; letter-spacing: 0.02em; }
