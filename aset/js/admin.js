@@ -272,9 +272,9 @@ const DRIVE = 'https://drive.google.com/drive/folders/';
 const FOLDER_BERKAS = [
   {
     judul: 'Legalitas dan profil', id: '1W4wQQDRIiADJcO6-da8G8rot_gBUI7xl', ikon: 'shield-check',
-    isi: ['Akta pendirian yayasan (Nomor 17, 27 Juli 2024)', 'SK Kemenkumham AHU-0011828.AH.01.04.Tahun 2024',
+    isi: ['Akta pendirian yayasan (Nomor 17, 27 Juli 2024)', 'Anggaran Dasar dan Anggaran Rumah Tangga', 'SK Kemenkumham AHU-0011828.AH.01.04.Tahun 2024',
       'Nomor Induk Berusaha', 'NPWP yayasan', 'Surat keterangan domisili', 'Tanda Daftar Ditjen Bimas Hindu',
-      'Tanda Daftar LKS Dinas Sosial Kota Mataram', 'Rekomendasi Kemenag Kota Mataram dan Kanwil Kemenag NTB',
+      'Tanda Daftar LKS dan Rekomendasi Operasional LKS Dinas Sosial Kota Mataram', 'Rekomendasi Kemenag Kota Mataram dan Kanwil Kemenag NTB',
       'Struktur organisasi', 'Sejarah singkat dan profil yayasan', 'Foto kegiatan', 'Bukti transaksi notaris'],
   },
   {
