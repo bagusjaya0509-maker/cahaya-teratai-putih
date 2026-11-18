@@ -117,8 +117,9 @@ const kt = konfig.kontak || {};
 const ikonH = (n) => `<svg class="ikon" aria-hidden="true"><use href="${BASE}aset/img/ikon.svg#i-${n}"/></svg>`;
 const waTautan = `<a href="https://wa.me/${esc(kt.whatsapp)}" target="_blank" rel="noopener">${ikonH('whatsapp')}${esc(kt.telepon)}</a>`;
 const emailTautan = `<a href="mailto:${esc(kt.email)}">${ikonH('mail')}${esc(kt.email)}</a>`;
-// Nomor tambahan (19 Nov 2026): konsultasi dan pengurus, di samping nomor sekretariat.
-const nomorLain = [['Konsultasi', kt.konsultasi], ['Pengurus', kt.pengurus]].filter(([, n]) => n && n.whatsapp);
+// Kaki & halaman Kontak cukup satu nomor sekretariat. Nomor konsultasi (Pembina) dipakai
+// formulir booking saja (aset/js/booking.js), tidak ditampilkan (pemilik, 19 Nov 2026).
+const nomorLain = [];
 const waLainKaki = nomorLain.map(([lbl, n]) => `<li><a href="https://wa.me/${esc(n.whatsapp)}" target="_blank" rel="noopener">${ikonH('whatsapp')}${esc(n.telepon)} <small>(${lbl.toLowerCase()})</small></a></li>`).join('');
 const kakiKontak = `<address>${esc(kt.alamat)}</address><ul class="kaki-kontak"><li>${waTautan}</li>${waLainKaki}<li>${emailTautan}</li></ul>`;
 const kontakHalaman = `<div class="kontak-daftar">
@@ -175,7 +176,7 @@ const ORGANISASI_LD = {
   telephone: '+' + kt.whatsapp,
   address: { '@type': 'PostalAddress', streetAddress: 'Jl. Gora Gang Markisa No. 3, Cakranegara Utara', addressLocality: 'Kota Mataram', addressRegion: 'Nusa Tenggara Barat', postalCode: '83239', addressCountry: 'ID' },
   sameAs: Object.values(konfig.sosial).filter(Boolean),
-  contactPoint: [['customer support', kt.whatsapp], ['reservations', kt.konsultasi?.whatsapp], ['customer support', kt.pengurus?.whatsapp]].filter(([, w]) => w).map(([t, w]) => ({ '@type': 'ContactPoint', contactType: t, telephone: '+' + w, availableLanguage: ['id'] })),
+  contactPoint: [['customer support', kt.whatsapp]].filter(([, w]) => w).map(([t, w]) => ({ '@type': 'ContactPoint', contactType: t, telephone: '+' + w, availableLanguage: ['id'] })),
 };
 
 function rakit({ meta, badan, nama, sisip = {} }) {
