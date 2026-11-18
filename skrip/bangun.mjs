@@ -117,10 +117,14 @@ const kt = konfig.kontak || {};
 const ikonH = (n) => `<svg class="ikon" aria-hidden="true"><use href="${BASE}aset/img/ikon.svg#i-${n}"/></svg>`;
 const waTautan = `<a href="https://wa.me/${esc(kt.whatsapp)}" target="_blank" rel="noopener">${ikonH('whatsapp')}${esc(kt.telepon)}</a>`;
 const emailTautan = `<a href="mailto:${esc(kt.email)}">${ikonH('mail')}${esc(kt.email)}</a>`;
-const kakiKontak = `<address>${esc(kt.alamat)}</address><ul class="kaki-kontak"><li>${waTautan}</li><li>${emailTautan}</li></ul>`;
+// Nomor tambahan (19 Nov 2026): konsultasi dan pengurus, di samping nomor sekretariat.
+const nomorLain = [['Konsultasi', kt.konsultasi], ['Pengurus', kt.pengurus]].filter(([, n]) => n && n.whatsapp);
+const waLainKaki = nomorLain.map(([lbl, n]) => `<li><a href="https://wa.me/${esc(n.whatsapp)}" target="_blank" rel="noopener">${ikonH('whatsapp')}${esc(n.telepon)} <small>(${lbl.toLowerCase()})</small></a></li>`).join('');
+const kakiKontak = `<address>${esc(kt.alamat)}</address><ul class="kaki-kontak"><li>${waTautan}</li>${waLainKaki}<li>${emailTautan}</li></ul>`;
 const kontakHalaman = `<div class="kontak-daftar">
         <div class="kartu kontak-butir">${ikonH('map-pin')}<div><h2>Alamat</h2><address>${esc(kt.alamat)}</address><a class="tombol-teks" href="${esc(kt.peta)}" target="_blank" rel="noopener">Buka di Google Maps ${ikonH('external-link')}</a></div></div>
-        <div class="kartu kontak-butir">${ikonH('whatsapp')}<div><h2>WhatsApp dan telepon</h2><p style="font-size:1.25rem;font-weight:600">${esc(kt.telepon)}</p><a class="tombol tombol-utama kecil" href="https://wa.me/${esc(kt.whatsapp)}" target="_blank" rel="noopener">Kirim pesan WhatsApp</a></div></div>
+        <div class="kartu kontak-butir">${ikonH('whatsapp')}<div><h2>WhatsApp dan telepon</h2><p style="margin:0">Sekretariat</p><p style="font-size:1.25rem;font-weight:600">${esc(kt.telepon)}</p><a class="tombol tombol-utama kecil" href="https://wa.me/${esc(kt.whatsapp)}" target="_blank" rel="noopener">Kirim pesan WhatsApp</a></div></div>
+        ${nomorLain.map(([lbl, n]) => `<div class="kartu kontak-butir">${ikonH('whatsapp')}<div><h2>${lbl === 'Konsultasi' ? 'Kontak konsultasi' : 'Kontak pengurus'}</h2><p style="font-size:1.25rem;font-weight:600">${esc(n.telepon)}</p><a class="tombol tombol-utama kecil" href="https://wa.me/${esc(n.whatsapp)}" target="_blank" rel="noopener">Kirim pesan WhatsApp</a></div></div>`).join('')}
         <div class="kartu kontak-butir">${ikonH('mail')}<div><h2>Email</h2><p><a href="mailto:${esc(kt.email)}">${esc(kt.email)}</a></p></div></div>
         ${kartuSosial}
       </div>`;
@@ -169,8 +173,9 @@ const ORGANISASI_LD = {
   logo: ASAL + 'aset/img/lambang-512.png',
   email: kt.email,
   telephone: '+' + kt.whatsapp,
-  address: { '@type': 'PostalAddress', streetAddress: 'Jl. Gora Gang Markisa No. 3, Cakranegara Utara', addressLocality: 'Kota Mataram', addressRegion: 'Nusa Tenggara Barat', postalCode: '83238', addressCountry: 'ID' },
+  address: { '@type': 'PostalAddress', streetAddress: 'Jl. Gora Gang Markisa No. 3, Cakranegara Utara', addressLocality: 'Kota Mataram', addressRegion: 'Nusa Tenggara Barat', postalCode: '83239', addressCountry: 'ID' },
   sameAs: Object.values(konfig.sosial).filter(Boolean),
+  contactPoint: [['customer support', kt.whatsapp], ['reservations', kt.konsultasi?.whatsapp], ['customer support', kt.pengurus?.whatsapp]].filter(([, w]) => w).map(([t, w]) => ({ '@type': 'ContactPoint', contactType: t, telephone: '+' + w, availableLanguage: ['id'] })),
 };
 
 function rakit({ meta, badan, nama, sisip = {} }) {

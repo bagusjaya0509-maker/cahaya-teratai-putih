@@ -8,10 +8,12 @@
     "wilayah": "Kota Mataram, Nusa Tenggara Barat"
   },
   "kontak": {
-    "alamat": "Jl. Gora Gang Markisa No. 3, Saksari, Cakranegara Utara, Kota Mataram, Nusa Tenggara Barat 83238",
+    "alamat": "Jl. Gora Gang Markisa No. 3, Saksari, Cakranegara Utara, Kota Mataram, Nusa Tenggara Barat 83239",
     "alamatPendek": "Cakranegara, Kota Mataram",
     "telepon": "0813-3956-7110",
     "whatsapp": "6281339567110",
+    "konsultasi": { "telepon": "0817-5703-787", "whatsapp": "628175703787" },
+    "pengurus": { "telepon": "0859-4772-0369", "whatsapp": "6285947720369" },
     "email": "yayasan@cahayaterataiputih.org",
     "peta": "https://www.google.com/maps/search/?api=1&query=Jl.+Gora+Gang+Markisa+No.3+Cakranegara+Utara+Mataram"
   },

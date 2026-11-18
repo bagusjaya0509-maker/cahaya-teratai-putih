@@ -86,7 +86,7 @@ const pesanWa = (d) => [
   d.kota ? `Domisili: ${d.kota}` : '',
   d.catatan && !d.nomor ? `Catatan: ${d.catatan}` : '',
 ].filter(Boolean).join('\n');
-const tautanPesan = (d) => `https://wa.me/${KONFIG.kontak.whatsapp}?text=${encodeURIComponent(pesanWa(d))}`;
+const tautanPesan = (d) => `https://wa.me/${KONFIG.kontak.konsultasi?.whatsapp || KONFIG.kontak.whatsapp}?text=${encodeURIComponent(pesanWa(d))}`;
 
 function tampilHasil(d) {
   const hasil = $('[data-hasil]');
