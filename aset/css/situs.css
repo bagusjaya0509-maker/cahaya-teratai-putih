@@ -590,7 +590,20 @@ a:hover .sampul img { transform: scale(1.03); }
 :root[data-langit='pagi'] { --l-cahaya: #fffdf0cc; --l-atas: #a9dbe2; --l-tengah: #dff1ea; --l-bawah: #fff0c2; --l-teks: #0f3437; --l-teks-2: #27505a; }
 :root[data-langit='siang'] { --l-cahaya: #ffffffb0; --l-atas: #6cc3d1; --l-tengah: #c5e9e3; --l-bawah: #f3faf3; --l-teks: #0f3437; --l-teks-2: #1f4a50; }
 :root[data-langit='senja'] { --l-cahaya: #ffc59a40; --l-atas: #232c5c; --l-tengah: #8e3f6b; --l-bawah: #ec8a47; --l-teks: #fff; --l-teks-2: #fbe9df; }
-:root[data-langit='malam'] { --l-cahaya: #3b4f9a33; --l-atas: #03050f; --l-tengah: #0a1230; --l-bawah: #18234a; --l-teks: #fbfcf9; --l-teks-2: #d3d9ee; }
+:root[data-langit='malam'] { --l-cahaya: #fff4d61a; --l-atas: #010102; --l-tengah: #05060a; --l-bawah: #0d0f14; --l-teks: #fbfcf9; --l-teks-2: #dcdcd6; }
+
+/* Bulan di langit malam beranda: elemen .bulan (bukan gradien, supaya pendarnya tidak membentuk kotak). */
+.bulan { display: none; }
+:root[data-langit='malam'] .bulan {
+  display: block; position: absolute; z-index: -1; pointer-events: none;
+  top: calc(var(--tinggi-kepala) + 28px); right: 11%; width: 66px; height: 66px; border-radius: 50%;
+  background: radial-gradient(circle at 38% 36%, #fffef6 0%, #fbf3d6 55%, #eadfb4 100%);
+  box-shadow: 0 0 18px 4px #fff6d488, 0 0 70px 24px #ffefc040, 0 0 180px 80px #ffe9b018;
+}
+@media (max-width: 640px) {
+  :root[data-langit='malam'] .bulan { top: calc(var(--tinggi-kepala) + 4px); right: 5%; width: 34px; height: 34px;
+    box-shadow: 0 0 12px 3px #fff6d488, 0 0 44px 16px #ffefc040, 0 0 110px 50px #ffe9b018; }
+}
 
 /* Malam: langit gelap berbintang. Bintang = titik radial-gradient berulang dengan ukuran ubin
    berbeda supaya polanya tidak terlihat berulang; berkedip pelan (dimatikan bila pengguna
