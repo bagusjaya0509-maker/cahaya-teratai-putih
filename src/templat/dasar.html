@@ -24,12 +24,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Spectral:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap">
 <script>
-// Warna langit mengikuti jam di Mataram (WITA), malam = gelap berbintang (permintaan pemilik 18 Nov 2026).
-// Dipasang sebelum halaman digambar supaya tidak berkedip; ?langit= hanya untuk uji.
+// Warna langit mengikuti jam di Mataram (WITA), hanya pagi, siang, dan sore/senja (permintaan pemilik 18 Nov 2026:
+// tanpa warna malam). 00.00-10.59 pagi, 11.00-15.59 siang, 16.00-23.59 senja. ?langit= hanya untuk uji.
 (function () {
   var d = new Date(), j = (d.getUTCHours() + 8) % 24 + d.getUTCMinutes() / 60;
   var uji = new URLSearchParams(location.search).get('langit');
-  document.documentElement.dataset.langit = uji || (j < 5 ? 'malam' : j < 6.75 ? 'subuh' : j < 11 ? 'pagi' : j < 16 ? 'siang' : j < 18.75 ? 'senja' : 'malam');
+  document.documentElement.dataset.langit = uji || (j < 11 ? 'pagi' : j < 16 ? 'siang' : 'senja');
 })();
 </script>
 <link rel="stylesheet" href="{{BASE}}aset/css/situs.css?v={{V}}">
