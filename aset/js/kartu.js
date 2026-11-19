@@ -1,16 +1,45 @@
 // Potongan HTML kabar yang dipakai beranda, daftar kabar, dan "baca juga".
 import { BASE, esc, ikon, tanggal } from './inti.js';
-import { gambarYoutube } from './isi.js';
+import { gambarYoutube, htmlPemutar } from './isi.js';
 
 export const urlKabar = (k) => `${BASE}kabar/${k.id || k.slug}/`;
 
 // Kabar awal memakai nama foto kegiatan yang sudah ada di situs, bukan data URL.
 const urlSampul = (s) => (/^[a-z]+$/.test(s) ? `${BASE}aset/img/kegiatan/${s}.webp` : s);
 
+const atrVideo = (k) => (k.video ? ` data-video="${esc(k.video)}" data-tegak="${k.videoTegak ? 1 : 0}" data-judul="${esc(k.judul)}" data-latar="${esc(k.sampulKecil ? urlSampul(k.sampulKecil) : '')}"` : '');
+
+/** Buka video dalam jendela pemutar di halaman yang sama, langsung terputar. */
+export function bukaPemutar({ video, tegak, judul, latar }) {
+  let d = document.querySelector('dialog.dialog-video');
+  if (!d) {
+    d = document.createElement('dialog');
+    d.className = 'dialog-video';
+    d.setAttribute('aria-label', 'Pemutar video');
+    document.body.appendChild(d);
+    d.addEventListener('click', (e) => { if (e.target === d || e.target.closest('[data-tutup-video]')) d.close(); });
+    d.addEventListener('close', () => { d.innerHTML = ''; });
+  }
+  d.innerHTML = `<div class="dialog-video-isi">
+  <div class="dialog-video-kepala"><h2>${esc(judul || 'Video')}</h2><button type="button" class="dialog-video-tutup" data-tutup-video aria-label="Tutup video">&times;</button></div>
+  ${htmlPemutar({ id: video, tegak, judul, latar, otomatis: true })}
+</div>`;
+  d.showModal();
+}
+if (typeof document !== 'undefined') {
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[data-video]');
+    if (!a || e.ctrlKey || e.metaKey || e.shiftKey || e.button) return;
+    if (typeof HTMLDialogElement === 'undefined') return;
+    e.preventDefault();
+    bukaPemutar({ video: a.dataset.video, tegak: a.dataset.tegak === '1', judul: a.dataset.judul, latar: a.dataset.latar });
+  });
+}
+
 export function sampul(k, kelas = '') {
   if (k.video) {
-    const src = k.sampulKecil ? urlSampul(k.sampulKecil) : gambarYoutube(k.video);
-    return `<div class="sampul sampul-video ${kelas}"><img src="${esc(src)}" alt="" loading="lazy" decoding="async"><span class="tanda-putar" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div>`;
+    const src = esc(k.sampulKecil ? urlSampul(k.sampulKecil) : gambarYoutube(k.video));
+    return `<div class="sampul sampul-video ${kelas}"><img class="latar-blur" src="${src}" alt="" aria-hidden="true" loading="lazy"><img class="isi-video" src="${src}" alt="" loading="lazy" decoding="async"><span class="tanda-putar" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div>`;
   }
   const galeri = (Array.isArray(k.galeriKecil) ? k.galeriKecil : []).filter((g) => typeof g === 'string' && g);
   if (galeri.length > 1) {
@@ -28,7 +57,7 @@ export const slideKegiatan = (k) => `
 </a>`;
 
 export const kartuKabar = (k) => `
-<a class="kartu-kabar" href="${urlKabar(k)}">
+<a class="kartu-kabar" href="${urlKabar(k)}"${atrVideo(k)}>
   ${sampul(k)}
   <span class="kat">${esc(k.kategori || 'Kabar')}</span>
   <h3>${esc(k.judul)}</h3>
@@ -37,7 +66,7 @@ export const kartuKabar = (k) => `
 </a>`;
 
 export const barisKabar = (k) => `
-<li><a class="kabar-baris" href="${urlKabar(k)}">
+<li><a class="kabar-baris" href="${urlKabar(k)}"${atrVideo(k)}>
   ${sampul(k)}
   <div>
     <span class="kat">${esc(k.kategori || 'Kabar')}</span>
@@ -47,7 +76,7 @@ export const barisKabar = (k) => `
 </a></li>`;
 
 export const utamaKabar = (k) => `
-<a class="kabar-utama" href="${urlKabar(k)}">
+<a class="kabar-utama" href="${urlKabar(k)}"${atrVideo(k)}>
   ${sampul(k)}
   <h3>${esc(k.judul)}</h3>
   ${k.ringkasan ? `<p>${esc(k.ringkasan)}</p>` : ''}

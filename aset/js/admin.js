@@ -860,12 +860,12 @@ async function vEditor(slug) {
             <p class="petunjuk" data-petunjuk-kategori hidden>Kategori baru otomatis muncul sebagai pilihan saring di halaman Kabar.</p></div>
           <div class="medan"><label for="e-tanggal">Tanggal terbit</label><input id="e-tanggal" data-e="terbitPada" type="datetime-local" value="${keLokal(k.terbitPada)}"><p class="petunjuk">Bisa diisi tanggal kegiatan berlangsung.</p></div>
           <div class="medan"><label for="e-penulis">Penulis</label><input id="e-penulis" data-e="penulis" type="text" maxlength="80" value="${esc(k.penulis)}"></div>
-          <div class="medan"><label for="e-video">Tautan video YouTube</label><input id="e-video" data-e="video" type="url" maxlength="200" value="${k.video ? `https://youtu.be/${esc(k.video)}` : ''}" placeholder="https://youtube.com/shorts/…"><p class="petunjuk">Untuk kategori Dharma Wacana. Video tampil dan bisa diputar di halaman kabar; gambar mininya jadi sampul kartu bila foto sampul kosong.</p></div>
+          <div class="medan"><label for="e-video">Tautan video YouTube</label><input id="e-video" data-e="video" type="url" maxlength="200" value="${k.video ? `https://youtu.be/${esc(k.video)}` : ''}" placeholder="https://youtube.com/shorts/…"><p class="petunjuk">Untuk kategori Dharma Wacana. Klik kartu langsung memutar video. Thumbnail diunggah manual lewat “Foto sampul” (tidak dipotong); bila kosong, dipakai gambar mini YouTube.</p></div>
           <label class="centang"><input type="checkbox" data-e="unggulan" ${k.unggulan ? 'checked' : ''}><span>Jadikan kabar utama di beranda</span></label>
           <div class="medan"><label for="e-slug">Alamat halaman</label><div class="slug-medan"><span class="kode">/kabar/</span><input id="e-slug" data-e="slug" type="text" maxlength="80" value="${esc(k.slug)}" ${slugTerkunci ? 'readonly' : ''} pattern="[a-z0-9-]+"></div><p class="petunjuk">${slugTerkunci ? 'Alamat dikunci sesudah disimpan agar tautan yang sudah dibagikan tidak rusak.' : 'Terisi otomatis dari judul. Alamat dikunci setelah pertama kali disimpan.'}</p></div>
         </section>
         <section class="adm-kartu medan-kecil">
-          <h2>Foto sampul</h2>
+          <h2>Foto sampul / thumbnail video</h2>
           <label class="unggah sampul-unggah" data-sampul-unggah>
             <input type="file" accept="image/*" hidden data-sampul-berkas>
             <div data-sampul-pratinjau>${k.sampul ? `<img src="${k.sampul}" alt="">` : `${ikon('image')}<p><b>Pilih foto</b> (dipotong 16:9)</p>`}</div>
@@ -961,8 +961,10 @@ async function vEditor(slug) {
     if (!file) return;
     pratinjauSampul.innerHTML = `${ikon('loader-circle', 'ikon berputar')}<p>Memperkecil foto…</p>`;
     try {
-      k.sampul = await kompres(file, { maks: 1600, mutu: 0.8, rasio: 16 / 9 });
-      k.sampulKecil = await kompres(file, { maks: 640, mutu: 0.72, rasio: 16 / 10 });
+      // Thumbnail video diunggah utuh (tidak dipotong); sisi kosong diisi latar blur di situs.
+      const adaVideo = Boolean(idYoutube(E('video').value));
+      k.sampul = await kompres(file, { maks: 1600, mutu: 0.8, rasio: adaVideo ? null : 16 / 9 });
+      k.sampulKecil = await kompres(file, { maks: adaVideo ? 720 : 640, mutu: 0.74, rasio: adaVideo ? null : 16 / 10 });
       pratinjauSampul.innerHTML = `<img src="${k.sampul}" alt="">`;
       $('[data-hapus-sampul]').hidden = false;
       tandaiUbah();

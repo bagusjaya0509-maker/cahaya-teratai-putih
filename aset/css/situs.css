@@ -1100,11 +1100,22 @@ a.agenda-butir:hover { border-color: var(--daun); }
 .pita-kain::before { background: var(--telaga); opacity: 0.06; }
 
 /* ---------- Dharma Wacana: video YouTube ---------- */
-.sampul-video { position: relative; }
-.sampul-video img { object-fit: cover; }
+.sampul-video { position: relative; background: #0b1416; }
+.sampul-video .latar-blur, .pemutar-video .latar-blur { position: absolute; inset: -24px; width: calc(100% + 48px); height: calc(100% + 48px); object-fit: cover; filter: blur(22px) brightness(.55) saturate(1.15); transform: none !important; }
+.sampul-video img.isi-video { position: relative; width: 100%; height: 100%; object-fit: contain; }
 .tanda-putar { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
 .tanda-putar svg { width: 54px; height: 54px; padding: 13px 11px 13px 15px; border-radius: 50%; fill: #fff; background: rgb(20 40 45 / .62); box-shadow: 0 0 0 2px rgb(255 255 255 / .55); transition: transform .2s ease, background .2s ease; }
 a:hover .tanda-putar svg, a:focus-visible .tanda-putar svg { transform: scale(1.08); background: var(--sari, #c79a2b); }
-.baca-video { position: relative; aspect-ratio: 16 / 9; background: #0b1416; border-radius: var(--radius, 12px); overflow: hidden; }
-.baca-video.tegak { aspect-ratio: 9 / 16; max-width: 380px; margin-inline: auto; }
-.baca-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.pemutar-video { position: relative; aspect-ratio: 16 / 9; background: #0b1416; border-radius: var(--radius, 12px); overflow: hidden; }
+.pemutar-video iframe { position: absolute; top: 0; left: 50%; width: 100%; height: 100%; border: 0; transform: translateX(-50%); }
+.pemutar-video.tegak iframe { width: auto; aspect-ratio: 9 / 16; box-shadow: 0 0 40px rgb(0 0 0 / .45); }
+.tautan-yt { margin: 10px 0 0; font-size: .9rem; color: var(--tinta-2); word-break: break-all; }
+.tautan-yt a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.baca-sampul .pemutar-video { margin: 0; }
+dialog.dialog-video { width: min(980px, 94vw); max-width: none; padding: 0; border: 0; background: transparent; color: #fff; }
+dialog.dialog-video::backdrop { background: rgb(5 12 14 / .82); backdrop-filter: blur(3px); }
+.dialog-video-kepala { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+.dialog-video-kepala h2 { margin: 0; font-size: clamp(1rem, 2.4vw, 1.3rem); color: #fff; line-height: 1.3; }
+.dialog-video-tutup { flex: none; width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgb(255 255 255 / .14); color: #fff; font-size: 1.7rem; line-height: 1; cursor: pointer; }
+.dialog-video-tutup:hover, .dialog-video-tutup:focus-visible { background: var(--sari, #c79a2b); }
+.dialog-video .tautan-yt { color: rgb(255 255 255 / .8); }
