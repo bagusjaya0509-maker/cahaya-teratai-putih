@@ -1,6 +1,7 @@
-// Halaman testimoni: daftar yang sudah ditinjau pengurus dan formulir menulis.
+// Halaman testimoni: daftar testimoni (langsung tampil, pengurus dapat menghapus) dan formulir menulis.
 import { $, $$, BASE, MODE, esc, ikon, tanggal, roti, denganMemuat, pesanGalat } from './inti.js';
-import { L } from './layanan.js';
+import { pasangOpsiMasuk } from './opsi-masuk.js';
+import { L, pantauSesi } from './layanan.js';
 import { daftarTestimoni, ambilPengaturan } from './publik.js';
 import { LAYANAN_BOOKING, pasangKota, kataKlaim } from './rujukan.js';
 import { bintangHtml } from './booking-tampil.js';
@@ -12,7 +13,7 @@ export const kartuTestimoni = (t) => `
   ${t.foto ? `<img src="${esc(t.foto)}" alt="" loading="lazy" decoding="async">` : ''}
   ${bintangHtml(t.bintang)}
   <blockquote>${esc(t.isi)}</blockquote>
-  <figcaption><b>${esc(t.nama)}</b>${t.kota ? `<span>${esc(t.kota)}</span>` : ''}<span class="kat">${esc(t.tentang)}</span></figcaption>
+  <figcaption>${t.akunEmail ? `<span class="testi-akun">${t.akunFoto ? `<img src="${esc(t.akunFoto)}" alt="" referrerpolicy="no-referrer" loading="lazy" width="36" height="36">` : ''}<span><b>${esc(t.nama)}</b><small><svg class="ikon" aria-hidden="true"><use href="${BASE}aset/img/ikon.svg#i-badge-check"/></svg>${esc(t.akunEmail)}</small></span></span>` : `<b>${esc(t.nama)}</b>`}${t.kota ? `<span>${esc(t.kota)}</span>` : ''}<span class="kat">${esc(t.tentang)}</span></figcaption>
 </figure>`;
 
 const kisi = $('[data-testimoni]');
@@ -22,12 +23,16 @@ if (kisi) {
   let semua = [];
   let tentang = '';
   let foto = '';
+  if (f) {
+    pasangOpsiMasuk($('[data-opsi-masuk]'), { tujuan: 'testimoni' });
+    pantauSesi((p) => { if (p && !p.tamu && !f.elements.nama.value) f.elements.nama.value = p.nama || ''; });
+  }
 
   function gambar() {
     const h = tentang ? semua.filter((t) => t.tentang === tentang) : semua;
     kisi.innerHTML = h.length
       ? h.map(kartuTestimoni).join('')
-      : `<div class="kosong" style="grid-column:1/-1"><h3>${semua.length ? 'Belum ada testimoni untuk pilihan ini' : 'Belum ada testimoni'}</h3><p>${semua.length ? 'Pilih layanan atau produk lain.' : 'Testimoni yang telah ditinjau pengurus akan tampil di sini.'}</p></div>`;
+      : `<div class="kosong" style="grid-column:1/-1"><h3>${semua.length ? 'Belum ada testimoni untuk pilihan ini' : 'Belum ada testimoni'}</h3><p>${semua.length ? 'Pilih layanan atau produk lain.' : 'Jadilah yang pertama menulis testimoni.'}</p></div>`;
     const pilihan = ['', ...new Set(semua.map((t) => t.tentang))];
     saringan.hidden = pilihan.length < 3;
     saringan.innerHTML = pilihan.map((p) => `<button class="chip" type="button" data-pilih="${esc(p)}" aria-pressed="${p === tentang}">${esc(p || 'Semua')}</button>`).join('');
@@ -108,7 +113,7 @@ if (kisi) {
             nama: E.nama.value.trim(), wa, kota: E.kota.value.trim(), tentang: t.slice(0, 80), bintang: Number(E.bintang.value),
             isi: E.isi.value.trim(), foto, tampilNama: E.tampilNama.checked ? 'inisial' : 'lengkap',
           });
-          $('[data-tulis-wadah]').innerHTML = `<div class="kartu hasil-kirim"><span class="hasil-ikon">${ikon('circle-check')}</span><h2>Testimoni terkirim</h2><p>Terima kasih. Pengurus akan meninjau testimoni Anda sebelum ditampilkan di halaman ini.</p><a class="tombol tombol-garis" href="${BASE}testimoni/">Kembali ke testimoni</a></div>`;
+          $('[data-tulis-wadah]').innerHTML = `<div class="kartu hasil-kirim"><span class="hasil-ikon">${ikon('circle-check')}</span><h2>Testimoni terkirim</h2><p>Terima kasih. Testimoni Anda sudah tampil di halaman ini.</p><a class="tombol tombol-garis" href="${BASE}testimoni/">Kembali ke testimoni</a></div>`;
         } catch (err) {
           console.error(err);
           galat.textContent = pesanGalat(err);

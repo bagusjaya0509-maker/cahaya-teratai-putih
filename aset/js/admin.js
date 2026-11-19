@@ -134,7 +134,7 @@ async function segarkanLencana() {
     const [bk, ts] = await Promise.all([ambilBooking(), ambilTestimoni()]);
     const set = (k, n) => { const el = $(`[data-lencana="${k}"]`); el.textContent = n; el.hidden = !n; };
     set('booking', bk.filter(perluPerhatian).length);
-    set('testimoni', ts.filter((t) => t.status === 'menunggu').length);
+    set('testimoni', 0);
   } catch (e) { console.warn(e); }
 }
 
@@ -197,7 +197,7 @@ async function vRingkasan() {
   const ubin = [
     { n: bk.filter((b) => b.status === 'baru').length, t: 'Booking baru', k: 'Menunggu konfirmasi', href: '#booking', tanda: true },
     { n: akanDatang.length, t: 'Jadwal mendatang', k: 'Sudah dikonfirmasi', href: '#booking' },
-    { n: ts.filter((t) => t.status === 'menunggu').length, t: 'Testimoni baru', k: 'Perlu ditinjau', href: '#testimoni' },
+    { n: ts.filter((t) => Date.now() - (t.dibuat || 0) < 7 * 864e5).length, t: 'Testimoni baru', k: '7 hari terakhir', href: '#testimoni' },
     { n: kabar.filter((k) => k.terbit).length, t: 'Kabar terbit', k: `${kabar.filter((k) => !k.terbit).length} draf`, href: '#kabar' },
   ];
   const perhatian = bk.filter(perluPerhatian).slice(0, 8);
@@ -1263,18 +1263,31 @@ async function vTestimoni(paksa = false) {
           <p class="adm-testimoni-tentang">${bintangHtml(t.bintang)} <span>${esc(t.tentang)}</span></p>
           <p class="adm-testimoni-isi">${tandaiKlaim(t.isi)}</p>
           ${t.foto ? `<img src="${esc(t.foto)}" alt="Foto dari ${esc(t.nama)}" loading="lazy">` : ''}
-          ${klaim.length ? `<p class="pesan pesan-peringatan">${ikon('triangle-alert')}<span>Menyebut ${esc(klaim.join(', '))}. Periksa dulu sebelum ditampilkan.</span></p>` : ''}
-          <div class="aksi-formulir"><button class="tombol tombol-utama kecil" type="button" data-tinjau="${t.id}">${ikon('eye')}Tinjau</button><span class="meta-kecil">${esc(waktuLalu(t.dibuat))}</span></div></li>`;
+          ${klaim.length ? `<p class="pesan pesan-peringatan">${ikon('triangle-alert')}<span>Menyebut ${esc(klaim.join(', '))}. Bila terbaca sebagai janji kesembuhan, sebaiknya dihapus.</span></p>` : ''}
+          <div class="aksi-formulir"><button class="tombol tombol-hapus kecil" type="button" data-hapus-testi="${t.id}">${ikon('trash-2')}Hapus testimoni</button><span class="meta-kecil">${esc(waktuLalu(t.dibuat))}</span></div></li>`;
       }).join('')}</ul>`
-      : `<div class="kosong"><h3>${semua.length ? 'Tidak ada di kelompok ini' : 'Belum ada testimoni'}</h3><p>${semua.length ? 'Pilih kelompok lain di atas.' : 'Testimoni yang ditulis pengunjung masuk ke sini dulu, tidak langsung tampil di situs.'}</p></div>`;
+      : `<div class="kosong"><h3>${semua.length ? 'Tidak ada di kelompok ini' : 'Belum ada testimoni'}</h3><p>${semua.length ? 'Pilih kelompok lain di atas.' : 'Testimoni yang ditulis pengunjung langsung tampil di situs dan tercatat di sini.'}</p></div>`;
   };
   isi.innerHTML = `
-    <div class="pesan pesan-peringatan" style="margin-bottom:18px">${ikon('info')}<div><p><b>Baca dulu sebelum menampilkan.</b> Aturan Kemenkes dan BPOM melarang iklan layanan kesehatan, obat tradisional, dan suplemen memuat testimoni kesembuhan. Tampilkan cerita pengalaman, bukan janji sembuh. Kata berisiko ditandai kuning.</p></div></div>
+    <div class="pesan pesan-peringatan" style="margin-bottom:18px">${ikon('info')}<div><p><b>Testimoni langsung tampil di situs.</b> Pantau secara berkala dan hapus testimoni yang tidak pantas. Aturan Kemenkes dan BPOM melarang iklan layanan kesehatan, obat tradisional, dan suplemen memuat testimoni kesembuhan, jadi kata berisiko ditandai kuning.</p></div></div>
     <div class="chip-grup" data-pilih-status style="margin-bottom:16px"></div>
     <div data-tabel></div>`;
   gambar();
   $('[data-pilih-status]').addEventListener('click', (e) => { const b = e.target.closest('[data-st]'); if (b) { s.status = b.dataset.st; gambar(); } });
-  $('[data-tabel]').addEventListener('click', (e) => { const b = e.target.closest('[data-tinjau]'); if (b) tinjauTestimoni(semua.find((t) => t.id === b.dataset.tinjau)); });
+  $('[data-tabel]').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-hapus-testi]');
+    if (!b) return;
+    const t = semua.find((x) => x.id === b.dataset.hapusTesti);
+    if (!t || !confirm(`Hapus testimoni dari ${t.nama}? Testimoni langsung hilang dari situs dan tidak bisa dikembalikan.`)) return;
+    denganMemuat(b, async () => {
+      try {
+        await L.hapusTestimoni(t.id);
+        roti('Testimoni dihapus dari situs.', 'berhasil');
+        segarkanLencana();
+        vTestimoni(true);
+      } catch (err) { roti(pesanGalat(err), 'galat'); }
+    });
+  });
   $('[data-segarkan]').addEventListener('click', () => { segarkanLencana(); vTestimoni(true); });
 }
 

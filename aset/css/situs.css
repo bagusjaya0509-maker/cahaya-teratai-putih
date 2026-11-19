@@ -1123,3 +1123,15 @@ dialog.dialog-video::backdrop { background: rgb(5 12 14 / .82); backdrop-filter:
 /* Tulisan kabar: rata kiri-kanan, awal paragraf menjorok (permintaan pengurus, 19 Nov 2026) */
 .prosa > p { text-align: justify; text-indent: 2em; hyphens: auto; -webkit-hyphens: auto; }
 .prosa > p:has(> strong:only-child) { text-indent: 0; }
+
+/* Masuk dengan Google (opsional) di formulir testimoni & booking; identitas akun pada kartu testimoni */
+.opsi-masuk { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 14px 16px; margin-bottom: 22px; border: 1px solid var(--garis, rgb(0 0 0/.12)); border-radius: var(--radius, 12px); background: var(--embun-2, #f4f7f6); }
+.opsi-masuk > div { flex: 1 1 240px; display: grid; gap: 3px; }
+.opsi-masuk small { color: var(--tinta-2); font-size: .86rem; line-height: 1.45; display: inline-flex; align-items: center; gap: 5px; }
+.opsi-masuk img, .opsi-masuk-inisial { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; flex: none; }
+.opsi-masuk-inisial { display: grid; place-items: center; background: var(--telaga, #12343a); color: #fff; font-weight: 700; }
+.opsi-masuk.masuk small .ikon, .testi-akun small .ikon { width: 15px; height: 15px; color: #1a73e8; flex: none; }
+.testi-akun { display: flex; align-items: center; gap: 10px; }
+.testi-akun img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; flex: none; }
+.testi-akun > span { display: grid; gap: 1px; }
+.testi-akun small { display: inline-flex; align-items: center; gap: 4px; font-size: .8rem; color: var(--tinta-2); word-break: break-all; }

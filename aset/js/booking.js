@@ -2,10 +2,12 @@
 // menyusun pesan WhatsApp, jadi pengunjung tetap bisa booking.
 import { $, $$, BASE, MODE, KONFIG, esc, ikon, param, roti, denganMemuat, pesanGalat, lokalBaca, lokalSimpan } from './inti.js';
 import { L, pantauSesi } from './layanan.js';
+import { pasangOpsiMasuk } from './opsi-masuk.js';
 import { ambilPengaturan } from './publik.js';
 import { LAYANAN_BOOKING, CARA_BERTEMU, NAMA_HARI, namaLayanan, namaCara, namaSesi, tanggalBooking, hariIni, pasangKota } from './rujukan.js';
 
 const f = $('[data-booking]');
+if (MODE === 'firebase') pasangOpsiMasuk($('[data-opsi-masuk]'), { tujuan: 'booking' });
 const KUNCI_DRAF = 'ctp.draf.booking';
 let atur = null;
 

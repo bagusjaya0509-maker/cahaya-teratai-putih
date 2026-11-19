@@ -155,8 +155,18 @@ service cloud.firestore {
     }
 
     // ---------- testimoni ----------
+    // Identitas akun pada testimoni: email disamarkan dari email login, foto = foto profil login.
+    function akunSah(d) {
+      let tok = request.auth.token;
+      return (!('akunEmail' in d) || d.akunEmail == ''
+          || (tok.firebase.sign_in_provider != 'anonymous' && tok.email is string
+              && d.akunEmail.size() <= 120 && d.akunEmail.matches('^[^@*]{1,2}[*]{3,}[^@*]?@[^@]+$')
+              && d.akunEmail.split('@')[1] == tok.email.lower().split('@')[1]))
+        && (!('akunFoto' in d) || d.akunFoto == '' || ('picture' in tok && d.akunFoto == tok.picture));
+    }
     function testimoniSah(d) {
-      return hanyaKunci(d, ['nama', 'wa', 'kota', 'tentang', 'bintang', 'isi', 'foto', 'tampilNama', 'uid', 'status', 'dibuat'])
+      return hanyaKunci(d, ['nama', 'wa', 'kota', 'tentang', 'bintang', 'isi', 'foto', 'tampilNama', 'uid', 'status', 'dibuat', 'akunEmail', 'akunFoto'])
+        && akunSah(d)
         && teksWajib(d.nama, 2, 80) && teks(d.wa, 20) && teks(d.kota, 60)
         && teksWajib(d.tentang, 2, 80)
         && d.bintang is int && d.bintang >= 1 && d.bintang <= 5
@@ -171,7 +181,7 @@ service cloud.firestore {
       allow create: if masuk() && tidakDiblokir()
         && testimoniSah(request.resource.data)
         && request.resource.data.uid == saya()
-        && request.resource.data.status == 'menunggu'
+        && request.resource.data.status in ['menunggu', 'tampil']
         && request.resource.data.dibuat == request.time;
       allow update: if pengurus()
         && request.resource.data.status in ['menunggu', 'tampil', 'ditolak']
@@ -224,9 +234,21 @@ service cloud.firestore {
       allow write: if pengurus();
     }
 
+    // Testimoni langsung tampil (tanpa ditinjau, 19 Nov 2026): pengirim menulis salinan publik
+    // dalam satu batch dengan testimoni aslinya; isinya harus sama persis dan tanpa nomor WhatsApp.
+    function publikSah(id, d) {
+      let asli = getAfter(/databases/$(database)/documents/testimoni/$(id)).data;
+      return hanyaKunci(d, ['nama', 'kota', 'tentang', 'bintang', 'isi', 'foto', 'tampilPada', 'akunEmail', 'akunFoto'])
+        && d.get('akunEmail', '') == asli.get('akunEmail', '') && d.get('akunFoto', '') == asli.get('akunFoto', '')
+        && asli.uid == saya() && asli.status == 'tampil'
+        && teksWajib(d.nama, 1, 80) && d.kota == asli.kota && d.tentang == asli.tentang
+        && d.bintang == asli.bintang && d.isi == asli.isi && d.foto == asli.foto
+        && d.tampilPada == request.time;
+    }
     match /testimoniPublik/{id} {
       allow read: if true;
-      allow write: if pengurus();
+      allow create: if masuk() && tidakDiblokir() && publikSah(id, request.resource.data);
+      allow update, delete: if pengurus();
     }
   }
 }

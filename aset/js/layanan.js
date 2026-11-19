@@ -40,6 +40,15 @@ export function pantauSesi(fn) {
 }
 export const tungguSesi = () => (mulai(), sesiSiap);
 export const pengguna = () => penggunaKini || null;
+/** bagusjaya0509@gmail.com -> ba**********9@gmail.com (aturan Firestore memeriksa bentuk ini). */
+export function samarkanEmail(email) {
+  const [lokal = '', domain = ''] = String(email || '').toLowerCase().split('@');
+  if (!lokal || !domain) return '';
+  const depan = lokal.slice(0, Math.min(2, Math.max(1, lokal.length - 2)));
+  const ekor = lokal.length > 4 ? lokal.slice(-1) : '';
+  return `${depan}${'*'.repeat(Math.max(3, lokal.length - depan.length - ekor.length))}${ekor}@${domain}`;
+}
+const identitasAkun = (p) => (p && !p.tamu && p.email ? { akunEmail: samarkanEmail(p.email), akunFoto: p.foto || '' } : { akunEmail: '', akunFoto: '' });
 function wajibMasuk() {
   if (!penggunaKini) throw galat('BELUM_MASUK');
   return penggunaKini;
@@ -237,7 +246,13 @@ const fbMesin = {
     const p = await this.pastikanSesi();
     if (p.diblokir) throw galat('DIBLOKIR');
     const { F, db } = await fb();
-    await F.addDoc(F.collection(db, 'testimoni'), { ...data, uid: p.uid, status: 'menunggu', dibuat: F.serverTimestamp() });
+    // Langsung tampil: aslinya (dengan WhatsApp) privat, salinan tanpa kontak masuk ke testimoniPublik.
+    const ref = F.doc(F.collection(db, 'testimoni'));
+    const b = F.writeBatch(db);
+    const akun = identitasAkun(p);
+    b.set(ref, { ...data, ...akun, uid: p.uid, status: 'tampil', dibuat: F.serverTimestamp() });
+    b.set(F.doc(db, 'testimoniPublik', ref.id), { ...potongTestimoni({ ...data, ...akun }), tampilPada: F.serverTimestamp() });
+    await b.commit();
   },
 
   // ---------- panel pengurus ----------
@@ -276,6 +291,15 @@ const fbMesin = {
     const b = F.writeBatch(db);
     b.update(F.doc(db, 'testimoni', t.id), { status: 'tampil', isi, diputuskan: F.serverTimestamp(), oleh: p.nama });
     b.set(F.doc(db, 'testimoniPublik', t.id), { ...potongTestimoni({ ...t, isi }), tampilPada: F.serverTimestamp() });
+    await b.commit();
+  },
+  /** Turunkan dari situs dan hapus permanen (asli + salinan publik). */
+  async hapusTestimoni(id) {
+    wajibAdmin();
+    const { F, db } = await fb();
+    const b = F.writeBatch(db);
+    b.delete(F.doc(db, 'testimoni', id));
+    b.delete(F.doc(db, 'testimoniPublik', id));
     await b.commit();
   },
   async tolakTestimoni(id) {
@@ -646,7 +670,12 @@ const demoMesin = {
     if (p.diblokir) throw galat('DIBLOKIR');
     const d = await demo();
     await d.tunda(300);
-    d.ubahDemo((s) => (s.testimoni[d.idAcak(20)] = { ...data, uid: p.uid, status: 'menunggu', dibuat: Date.now() }));
+    d.ubahDemo((s) => {
+      const id = d.idAcak(20);
+      const akun = identitasAkun(p);
+      s.testimoni[id] = { ...data, ...akun, uid: p.uid, status: 'tampil', dibuat: Date.now() };
+      s.testimoniPublik[id] = { ...potongTestimoni({ ...data, ...akun }), tampilPada: Date.now() };
+    });
   },
 
   async semuaBooking() {
@@ -682,6 +711,11 @@ const demoMesin = {
       Object.assign(s.testimoni[t.id], { status: 'tampil', isi, diputuskan: Date.now(), oleh: p.nama });
       s.testimoniPublik[t.id] = { ...potongTestimoni({ ...t, isi }), tampilPada: Date.now() };
     });
+  },
+  async hapusTestimoni(id) {
+    wajibAdmin();
+    const d = await demo();
+    d.ubahDemo((s) => { delete s.testimoni[id]; delete s.testimoniPublik[id]; });
   },
   async tolakTestimoni(id) {
     const p = wajibAdmin();
@@ -866,7 +900,7 @@ const inisialNama = (nama) => String(nama).trim().split(/\s+/).map((k, i) => (i 
 function potongTestimoni(t) {
   return {
     nama: t.tampilNama === 'inisial' ? inisialNama(t.nama) : t.nama, kota: t.kota || '', tentang: t.tentang,
-    bintang: t.bintang, isi: t.isi, foto: t.foto || '',
+    bintang: t.bintang, isi: t.isi, foto: t.foto || '', akunEmail: t.akunEmail || '', akunFoto: t.akunFoto || '',
   };
 }
 
