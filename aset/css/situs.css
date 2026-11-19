@@ -1066,8 +1066,8 @@ body { overflow-wrap: break-word; }
 .agenda-garis { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
 .agenda-butir { display: grid; grid-template-columns: 64px 1fr; gap: 16px; align-items: start; padding: 14px 16px; border: 1px solid var(--garis); border-radius: var(--radius); background: var(--kelopak); color: inherit; text-decoration: none; }
 a.agenda-butir:hover { border-color: var(--daun); }
-.agenda-tgl { display: grid; justify-items: center; padding: 8px 0; border-radius: 10px; background: var(--sari); color: var(--sari-tua); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; }
-.agenda-tgl b { font-size: 1.6rem; line-height: 1; letter-spacing: 0; color: var(--hijau); }
+.agenda-tgl { display: grid; justify-items: center; padding: 8px 0; border-radius: 10px; background: linear-gradient(160deg, #f9dd8a 0%, var(--sari) 55%, #d4950a 100%); color: #3d2a00; box-shadow: inset 0 0 0 1px rgb(125 90 0 / 0.25); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.agenda-tgl b { font-size: 1.6rem; line-height: 1; letter-spacing: 0; }
 .agenda-isi { display: grid; gap: 3px; min-width: 0; }
 .agenda-label { justify-self: start; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--daun); }
 .agenda-label.pertama { color: #b4540a; }
