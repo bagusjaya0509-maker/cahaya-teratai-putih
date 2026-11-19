@@ -718,7 +718,7 @@ body.beranda .kepala:not(.tergulir):not(:has(.nav.terbuka)) { background: transp
 .pita-kain-isi { display: flex; flex-wrap: wrap; gap: 24px 48px; align-items: center; justify-content: space-between; padding-block: clamp(40px, 5vw, 64px); }
 .pita-kain h2 { font-size: clamp(1.9rem, 3.4vw, 2.75rem); font-weight: 400; letter-spacing: -0.014em; }
 .pita-kain p { margin: 8px 0 0; font-size: 1.1rem; max-width: 46ch; }
-.pita-kain .tombol-garis { border-color: var(--telaga); color: var(--telaga); }
+.pita-kain .tombol-garis { border-color: var(--telaga); color: var(--telaga); background: var(--sari); }
 .pita-kain .tombol-garis:hover { background: rgb(15 52 55 / 0.08); color: var(--telaga); }
 
 /* ---------- testimoni ---------- */
