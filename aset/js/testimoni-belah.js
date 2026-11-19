@@ -52,6 +52,8 @@ export function pasangTestimoniBelah(wadah, daftar) {
     el('kutipan').className = `belah-kutipan ${s.ukuran}`;
     el('penulis').innerHTML = s.penulis;
     el('gambar').innerHTML = s.gambar;
+    // Panel foto hanya muncul bila pengirim mengunggah foto.
+    akar.classList.toggle('tanpa-foto', !daftar[i].foto);
     akar.querySelectorAll('[data-ke]').forEach((b, n) => b.setAttribute('aria-current', String(n === i)));
   }
 

@@ -1188,3 +1188,6 @@ dialog.dialog-video::backdrop { background: rgb(5 12 14 / .82); backdrop-filter:
 .kolom-inisial { display: grid; place-items: center; background: var(--telaga, #12343a); color: #fff; font-weight: 700; font-size: .9rem; }
 .kolom-email { display: inline-flex; align-items: center; gap: 4px; word-break: break-all; }
 .kolom-email .ikon { width: 14px; height: 14px; color: #1a73e8; flex: none; }
+.belah.tanpa-foto { grid-template-columns: 1fr; }
+.belah.tanpa-foto .belah-kanan { display: none; }
+.belah.tanpa-foto .belah-kutipan { max-width: 46ch; }
