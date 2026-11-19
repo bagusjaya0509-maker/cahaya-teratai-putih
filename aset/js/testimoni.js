@@ -33,7 +33,7 @@ if (kisi) {
     const h = tentang ? semua.filter((t) => t.tentang === tentang) : semua;
     if (h.length) pasangTestimoniKolom(kisi, h);
     else kisi.className = 'kisi-testimoni';
-    if (!h.length) kisi.innerHTML = `<div class="kosong" style="grid-column:1/-1"><h3>${semua.length ? 'Belum ada testimoni untuk pilihan ini' : 'Belum ada testimoni'}</h3><p>${semua.length ? 'Pilih layanan atau produk lain.' : 'Jadilah yang pertama menulis testimoni.'}</p></div>`;
+    if (!h.length) kisi.innerHTML = `<div class="kosong" style="grid-column:1/-1"><h3>${semua.length ? 'Belum ada ulasan untuk pilihan ini' : 'Belum ada ulasan'}</h3><p>${semua.length ? 'Pilih layanan atau produk lain.' : 'Jadilah yang pertama menulis ulasan.'}</p></div>`;
     const pilihan = ['', ...new Set(semua.map((t) => t.tentang))];
     saringan.hidden = pilihan.length < 3;
     saringan.innerHTML = pilihan.map((p) => `<button class="chip" type="button" data-pilih="${esc(p)}" aria-pressed="${p === tentang}">${esc(p || 'Semua')}</button>`).join('');
@@ -47,7 +47,7 @@ if (kisi) {
 
   daftarTestimoni().then((d) => { semua = d; gambar(); }).catch((e) => {
     console.error(e);
-    kisi.innerHTML = '<div class="kosong" style="grid-column:1/-1"><h3>Testimoni belum bisa dimuat</h3><p>Periksa koneksi internet, lalu muat ulang halaman.</p></div>';
+    kisi.innerHTML = '<div class="kosong" style="grid-column:1/-1"><h3>Ulasan belum bisa dimuat</h3><p>Periksa koneksi internet, lalu muat ulang halaman.</p></div>';
   });
 
   if (MODE === 'mati') {
@@ -98,7 +98,7 @@ if (kisi) {
         E.nama.value.trim().length < 2 && 'Isi nama lengkap.',
         t.length < 2 && 'Pilih layanan atau produk yang Anda ceritakan.',
         !E.bintang.value && 'Beri nilai bintang.',
-        E.isi.value.trim().length < 20 && 'Isi testimoni minimal 20 karakter.',
+        E.isi.value.trim().length < 20 && 'Isi ulasan minimal 20 karakter.',
         wa && !/^(\+?62|0)8\d{7,12}$/.test(wa) && 'Nomor WhatsApp diawali 08 atau +628.',
         !E.setuju.checked && 'Centang persetujuan di bagian bawah.',
       ].filter(Boolean);
@@ -114,7 +114,7 @@ if (kisi) {
             nama: E.nama.value.trim(), wa, kota: E.kota.value.trim(), tentang: t.slice(0, 80), bintang: Number(E.bintang.value),
             isi: E.isi.value.trim(), foto, tampilNama: E.tampilNama.checked ? 'inisial' : 'lengkap',
           });
-          $('[data-tulis-wadah]').innerHTML = `<div class="kartu hasil-kirim"><span class="hasil-ikon">${ikon('circle-check')}</span><h2>Testimoni terkirim</h2><p>Terima kasih. Testimoni Anda sudah tampil di halaman ini.</p><a class="tombol tombol-garis" href="${BASE}testimoni/">Kembali ke testimoni</a></div>`;
+          $('[data-tulis-wadah]').innerHTML = `<div class="kartu hasil-kirim"><span class="hasil-ikon">${ikon('circle-check')}</span><h2>Ulasan terkirim</h2><p>Terima kasih. Ulasan Anda sudah tampil di halaman ini.</p><a class="tombol tombol-garis" href="${BASE}testimoni/">Kembali ke Suara Umat</a></div>`;
         } catch (err) {
           console.error(err);
           galat.textContent = pesanGalat(err);

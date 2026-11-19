@@ -49,7 +49,7 @@ export function jagaAkun({ wadah, pesan, keperluan, saatMasuk }) {
       return;
     }
     if (p.diblokir) {
-      pesan.innerHTML = `<div class="kartu kartu-gerbang">${ikon('ban', 'ikon ikon-besar')}<h2>Pengiriman dinonaktifkan</h2><p>Perangkat ini tidak dapat mengirim booking atau testimoni. Bila menurut Anda ini keliru, hubungi yayasan lewat WhatsApp ${tautanWa()}.</p></div>`;
+      pesan.innerHTML = `<div class="kartu kartu-gerbang">${ikon('ban', 'ikon ikon-besar')}<h2>Pengiriman dinonaktifkan</h2><p>Perangkat ini tidak dapat mengirim booking atau ulasan. Bila menurut Anda ini keliru, hubungi yayasan lewat WhatsApp ${tautanWa()}.</p></div>`;
       pesan.hidden = false;
       wadah.hidden = true;
       return;

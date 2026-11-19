@@ -197,7 +197,7 @@ async function vRingkasan() {
   const ubin = [
     { n: bk.filter((b) => b.status === 'baru').length, t: 'Booking baru', k: 'Menunggu konfirmasi', href: '#booking', tanda: true },
     { n: akanDatang.length, t: 'Jadwal mendatang', k: 'Sudah dikonfirmasi', href: '#booking' },
-    { n: ts.filter((t) => Date.now() - (t.dibuat || 0) < 7 * 864e5).length, t: 'Testimoni baru', k: '7 hari terakhir', href: '#testimoni' },
+    { n: ts.filter((t) => Date.now() - (t.dibuat || 0) < 7 * 864e5).length, t: 'Ulasan baru', k: '7 hari terakhir', href: '#testimoni' },
     { n: kabar.filter((k) => k.terbit).length, t: 'Kabar terbit', k: `${kabar.filter((k) => !k.terbit).length} draf`, href: '#kabar' },
   ];
   const perhatian = bk.filter(perluPerhatian).slice(0, 8);
@@ -229,7 +229,7 @@ async function vRingkasan() {
 // ======================================================================
 const NAMA_HALAMAN = {
   h_beranda: 'Beranda', h_tentang: 'Tentang', h_layanan: 'Layanan', h_kabar: 'Kabar', h_donasi: 'Donasi',
-  h_kontak: 'Kontak', h_booking: 'Booking', h_testimoni: 'Testimoni', h_privasi: 'Kebijakan privasi',
+  h_kontak: 'Kontak', h_booking: 'Booking', h_testimoni: 'Suara Umat', h_privasi: 'Kebijakan privasi',
 };
 const tanggalHari = (id) => tanggalPendek(Date.parse(`${id}T12:00:00+08:00`));
 
@@ -1249,13 +1249,13 @@ function tandaiKlaim(teks) {
 }
 
 async function vTestimoni(paksa = false) {
-  setJudul('Testimoni');
+  setJudul('Suara Umat');
   const semua = await ambilTestimoni(paksa);
   aksi.innerHTML = `<button class="tombol tombol-garis kecil" type="button" data-segarkan>${ikon('refresh-cw')}Muat ulang</button>`;
   const s = saringTesti;
   const gambar = () => {
     const h = semua.filter((t) => !s.status || t.status === s.status);
-    $('[data-pilih-status]').innerHTML = `<span class="meta-kecil">${semua.length} testimoni tampil di situs</span>`;
+    $('[data-pilih-status]').innerHTML = `<span class="meta-kecil">${semua.length} ulasan tampil di situs</span>`;
     $('[data-tabel]').innerHTML = h.length
       ? `<ul class="adm-testimoni">${h.map((t) => {
         const klaim = kataKlaim(t.isi);
@@ -1264,12 +1264,12 @@ async function vTestimoni(paksa = false) {
           <p class="adm-testimoni-isi">${tandaiKlaim(t.isi)}</p>
           ${t.foto ? `<img src="${esc(t.foto)}" alt="Foto dari ${esc(t.nama)}" loading="lazy">` : ''}
           ${klaim.length ? `<p class="pesan pesan-peringatan">${ikon('triangle-alert')}<span>Menyebut ${esc(klaim.join(', '))}. Bila terbaca sebagai janji kesembuhan, sebaiknya dihapus.</span></p>` : ''}
-          <div class="aksi-formulir"><button class="tombol tombol-garis kecil" type="button" data-animasi-testi="${t.id}" aria-pressed="${t.gambarAnimasi === 'teratai'}">${ikon('flower-2')}${t.gambarAnimasi === 'teratai' ? 'Animasi teratai: aktif' : 'Animasi teratai'}</button><button class="tombol tombol-hapus kecil" type="button" data-hapus-testi="${t.id}">${ikon('trash-2')}Hapus testimoni</button><span class="meta-kecil">${esc(waktuLalu(t.dibuat))}</span></div></li>`;
+          <div class="aksi-formulir"><button class="tombol tombol-garis kecil" type="button" data-animasi-testi="${t.id}" aria-pressed="${t.gambarAnimasi === 'teratai'}">${ikon('flower-2')}${t.gambarAnimasi === 'teratai' ? 'Animasi teratai: aktif' : 'Animasi teratai'}</button><button class="tombol tombol-hapus kecil" type="button" data-hapus-testi="${t.id}">${ikon('trash-2')}Hapus ulasan</button><span class="meta-kecil">${esc(waktuLalu(t.dibuat))}</span></div></li>`;
       }).join('')}</ul>`
-      : `<div class="kosong"><h3>${semua.length ? 'Tidak ada di kelompok ini' : 'Belum ada testimoni'}</h3><p>${semua.length ? 'Pilih kelompok lain di atas.' : 'Testimoni yang ditulis pengunjung langsung tampil di situs dan tercatat di sini.'}</p></div>`;
+      : `<div class="kosong"><h3>${semua.length ? 'Tidak ada di kelompok ini' : 'Belum ada ulasan'}</h3><p>${semua.length ? 'Pilih kelompok lain di atas.' : 'Ulasan yang ditulis pengunjung langsung tampil di situs dan tercatat di sini.'}</p></div>`;
   };
   isi.innerHTML = `
-    <div class="pesan pesan-peringatan" style="margin-bottom:18px">${ikon('info')}<div><p><b>Testimoni langsung tampil di situs.</b> Pantau secara berkala dan hapus testimoni yang tidak pantas. Aturan Kemenkes dan BPOM melarang iklan layanan kesehatan, obat tradisional, dan suplemen memuat testimoni kesembuhan, jadi kata berisiko ditandai kuning.</p></div></div>
+    <div class="pesan pesan-peringatan" style="margin-bottom:18px">${ikon('info')}<div><p><b>Ulasan langsung tampil di situs.</b> Pantau secara berkala dan hapus ulasan yang tidak pantas. Aturan Kemenkes dan BPOM melarang iklan layanan kesehatan, obat tradisional, dan suplemen memuat testimoni kesembuhan, jadi kata berisiko ditandai kuning.</p></div></div>
     <div class="chip-grup" data-pilih-status style="margin-bottom:16px"></div>
     <div data-tabel></div>`;
   gambar();
@@ -1282,7 +1282,7 @@ async function vTestimoni(paksa = false) {
       denganMemuat(a, async () => {
         try {
           await L.aturAnimasiTestimoni(t.id, nyala);
-          roti(nyala ? 'Gambar testimoni diganti animasi teratai.' : 'Gambar testimoni kembali ke foto asli.', 'berhasil');
+          roti(nyala ? 'Gambar ulasan diganti animasi teratai.' : 'Gambar ulasan kembali ke foto asli.', 'berhasil');
           vTestimoni(true);
         } catch (err) { roti(pesanGalat(err), 'galat'); }
       });
@@ -1291,11 +1291,11 @@ async function vTestimoni(paksa = false) {
     const b = e.target.closest('[data-hapus-testi]');
     if (!b) return;
     const t = semua.find((x) => x.id === b.dataset.hapusTesti);
-    if (!t || !confirm(`Hapus testimoni dari ${t.nama}? Testimoni langsung hilang dari situs dan tidak bisa dikembalikan.`)) return;
+    if (!t || !confirm(`Hapus ulasan dari ${t.nama}? Ulasan langsung hilang dari situs dan tidak bisa dikembalikan.`)) return;
     denganMemuat(b, async () => {
       try {
         await L.hapusTestimoni(t.id);
-        roti('Testimoni dihapus dari situs.', 'berhasil');
+        roti('Ulasan dihapus dari situs.', 'berhasil');
         segarkanLencana();
         vTestimoni(true);
       } catch (err) { roti(pesanGalat(err), 'galat'); }
@@ -1308,7 +1308,7 @@ function tinjauTestimoni(t) {
   bukaModal(`Testimoni dari ${t.nama}`, `
     <p class="adm-testimoni-tentang">${bintangHtml(t.bintang)} <span>${esc(t.tentang)}</span></p>
     <dl class="rincian"><dt>Tampil sebagai</dt><dd>${t.tampilNama === 'inisial' ? 'Nama disingkat' : 'Nama lengkap'}</dd>${t.wa ? `<dt>WhatsApp (tidak ditampilkan)</dt><dd><a href="https://wa.me/${esc(waIntl(t.wa))}" target="_blank" rel="noopener">${esc(t.wa)}</a></dd>` : ''}</dl>
-    <div class="medan" style="margin-top:14px"><label for="m-isi">Isi testimoni</label><textarea id="m-isi" rows="7" maxlength="1200">${esc(t.isi)}</textarea><p class="petunjuk">Perbaikan ejaan boleh. Jangan menambah kalimat yang tidak ditulis pengirim.</p></div>
+    <div class="medan" style="margin-top:14px"><label for="m-isi">Isi ulasan</label><textarea id="m-isi" rows="7" maxlength="1200">${esc(t.isi)}</textarea><p class="petunjuk">Perbaikan ejaan boleh. Jangan menambah kalimat yang tidak ditulis pengirim.</p></div>
     <p class="pesan pesan-peringatan" data-klaim hidden></p>`,
     `<button class="tombol tombol-hapus kecil" type="button" data-putus="ditolak">Jangan tampilkan</button>
      <button class="tombol tombol-utama kecil" type="button" data-putus="tampil">${t.status === 'tampil' ? 'Simpan perubahan' : 'Tampilkan di situs'}</button>`, 640);
@@ -1375,8 +1375,8 @@ async function vJadwal() {
         <div class="adm-tambah"><input type="date" data-libur-baru aria-label="Tanggal tutup baru" min="${hariIni()}"><button class="tombol tombol-garis kecil" type="button" data-tambah-libur>${ikon('plus')}Tambah</button></div>
       </section>
       <section class="adm-kartu medan-kecil adm-tumpuk">
-        <h2>Produk untuk testimoni</h2>
-        <p class="petunjuk" style="margin:0">Nama produk yang bisa dipilih pengunjung saat menulis testimoni. Layanan seperti konseling dan meditasi sudah otomatis ada.</p>
+        <h2>Produk untuk ulasan</h2>
+        <p class="petunjuk" style="margin:0">Nama produk yang bisa dipilih pengunjung saat menulis ulasan. Layanan seperti konseling dan meditasi sudah otomatis ada.</p>
         <ul class="adm-label">${d.produk.map((p, i) => `<li>${esc(p)}<button type="button" data-hapus-produk="${i}" aria-label="Hapus ${esc(p)}">${ikon('x')}</button></li>`).join('') || '<li class="kosong-kecil">Belum ada produk</li>'}</ul>
         <div class="adm-tambah"><input type="text" data-produk-baru maxlength="60" placeholder="Nama produk" aria-label="Nama produk baru"><button class="tombol tombol-garis kecil" type="button" data-tambah-produk>${ikon('plus')}Tambah</button></div>
         <h2>Catatan di formulir booking</h2>
@@ -1475,7 +1475,7 @@ async function vPengguna() {
     const b = e.target.closest('[data-blokir]');
     if (!b) return;
     const blokir = b.dataset.nilai === '1';
-    if (blokir && !confirm('Blokir akun ini? Pemiliknya tidak bisa lagi mengirim booking atau testimoni.')) return;
+    if (blokir && !confirm('Blokir akun ini? Pemiliknya tidak bisa lagi mengirim booking atau ulasan.')) return;
     denganMemuat(b, async () => { try { await L.aturBlokir(b.dataset.blokir, blokir); roti(blokir ? 'Akun diblokir.' : 'Blokir dibuka.', 'berhasil'); vPengguna(); } catch (err) { roti(pesanGalat(err), 'galat'); } });
   });
   $$('[data-cabut]').forEach((b) => b.addEventListener('click', () => {

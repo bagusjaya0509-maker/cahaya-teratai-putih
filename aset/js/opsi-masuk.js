@@ -7,7 +7,7 @@ import { L, pantauSesi, samarkanEmail } from './layanan.js';
 export function pasangOpsiMasuk(wadah, { tujuan = 'testimoni' } = {}) {
   if (!wadah) return;
   const manfaat = tujuan === 'testimoni'
-    ? 'Testimoni Anda akan tampil dengan foto profil dan email yang disamarkan, sehingga lebih tepercaya.'
+    ? 'Ulasan Anda akan tampil dengan foto profil dan email yang disamarkan, sehingga lebih tepercaya.'
     : 'Data Anda terisi otomatis dan status booking bisa dipantau dari halaman akun.';
   pantauSesi((p) => {
     if (p && !p.tamu && p.email) {
