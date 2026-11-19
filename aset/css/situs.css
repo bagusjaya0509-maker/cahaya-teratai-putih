@@ -1194,16 +1194,17 @@ dialog.dialog-video::backdrop { background: rgb(5 12 14 / .82); backdrop-filter:
 .belah.tanpa-foto .belah-kutipan { max-width: 60ch; }
 
 /* ---------- Animasi lambang teratai (pengganti foto testimoni akun yayasan) ---------- */
-.animasi-teratai { position: absolute; inset: 0; overflow: hidden; background: none; color: #E3A70C; }
+.animasi-teratai { position: absolute; inset: 0; overflow: hidden; background: none; color: #fff; }
 .kolom-foto > .animasi-teratai { position: relative; height: 100%; border-radius: inherit; }
 .kolom-foto:has(.animasi-teratai) { position: relative; overflow: hidden; }
 .at-cahaya { position: absolute; left: 50%; top: 52%; width: 120%; aspect-ratio: 1; transform: translate(-50%, -50%); background: radial-gradient(circle, rgb(239 179 15 / .30) 0%, rgb(239 179 15 / .10) 34%, transparent 62%); animation: at-denyut 5s ease-in-out infinite; }
 .at-lambang { position: absolute; left: 50%; top: 52%; width: 78%; aspect-ratio: 1; transform: translate(-50%, -50%); }
 .at-lambang svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.at-lambang { filter: drop-shadow(0 1px 2px rgb(150 100 0 / .55)) drop-shadow(0 0 10px rgb(200 140 0 / .45)); }
 .at-surya { animation: at-goyang 9s ease-in-out infinite, at-sinar 5s ease-in-out infinite; transform-origin: 50% 62%; }
 .at-teratai { animation: at-mekar 5s ease-in-out infinite; transform-origin: 50% 78%; filter: drop-shadow(0 2px 6px rgb(160 110 0 / .25)); }
 .at-sosok { animation: at-sinar-sosok 5s ease-in-out infinite; }
-.at-partikel { position: absolute; bottom: -6%; left: calc(12% + var(--i) * 12.5%); width: 4px; height: 4px; border-radius: 50%; background: #f2c230; box-shadow: 0 0 8px 2px rgb(239 179 15 / .55); opacity: 0; animation: at-naik calc(6s + var(--i) * .7s) linear infinite; animation-delay: calc(var(--i) * -1.3s); }
+.at-partikel { position: absolute; bottom: -6%; left: calc(12% + var(--i) * 12.5%); width: 4px; height: 4px; border-radius: 50%; background: #fff; box-shadow: 0 0 6px 2px rgb(220 160 10 / .6); opacity: 0; animation: at-naik calc(6s + var(--i) * .7s) linear infinite; animation-delay: calc(var(--i) * -1.3s); }
 @keyframes at-goyang { 0%, 100% { transform: rotate(-4deg) scale(.98); } 50% { transform: rotate(4deg) scale(1.03); } }
 @keyframes at-sinar { 0%, 100% { opacity: .75; } 50% { opacity: 1; } }
 @keyframes at-mekar { 0%, 100% { transform: scale(.96); } 50% { transform: scale(1.04); } }
