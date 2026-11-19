@@ -347,7 +347,7 @@ let jumlahKabar = 0;
           sisip: { slug, prerender: '1', __mentah: { '@@ARTIKEL@@': html } },
         }),
       );
-      if (!kabar.video) peta.push({ loc: urlHalaman, prioritas: '0.7', lastmod: (kabar.diubah || kabar.terbitPada) && new Date(kabar.diubah || kabar.terbitPada).toISOString().slice(0, 10) });
+      peta.push({ loc: urlHalaman, prioritas: '0.7', lastmod: (kabar.diubah || kabar.terbitPada) && new Date(kabar.diubah || kabar.terbitPada).toISOString().slice(0, 10) });
       jumlahKabar++;
     }
     console.log(`✓ ${jumlahKabar} kabar statis dibuat dari ${pakaiFirebase && !pakaiAwal ? 'Firestore' : 'kabar awal'}`);
