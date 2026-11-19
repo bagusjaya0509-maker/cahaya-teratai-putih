@@ -2,6 +2,7 @@
 import { $, $$, BASE, MODE, esc, ikon, tanggal, roti, denganMemuat, pesanGalat } from './inti.js';
 import { pasangOpsiMasuk } from './opsi-masuk.js';
 import { L, pantauSesi } from './layanan.js';
+import { pasangTestimoniKolom } from './testimoni-kolom.js';
 import { daftarTestimoni, ambilPengaturan } from './publik.js';
 import { LAYANAN_BOOKING, pasangKota, kataKlaim } from './rujukan.js';
 import { bintangHtml } from './booking-tampil.js';
@@ -30,9 +31,9 @@ if (kisi) {
 
   function gambar() {
     const h = tentang ? semua.filter((t) => t.tentang === tentang) : semua;
-    kisi.innerHTML = h.length
-      ? h.map(kartuTestimoni).join('')
-      : `<div class="kosong" style="grid-column:1/-1"><h3>${semua.length ? 'Belum ada testimoni untuk pilihan ini' : 'Belum ada testimoni'}</h3><p>${semua.length ? 'Pilih layanan atau produk lain.' : 'Jadilah yang pertama menulis testimoni.'}</p></div>`;
+    if (h.length) pasangTestimoniKolom(kisi, h);
+    else kisi.className = 'kisi-testimoni';
+    if (!h.length) kisi.innerHTML = `<div class="kosong" style="grid-column:1/-1"><h3>${semua.length ? 'Belum ada testimoni untuk pilihan ini' : 'Belum ada testimoni'}</h3><p>${semua.length ? 'Pilih layanan atau produk lain.' : 'Jadilah yang pertama menulis testimoni.'}</p></div>`;
     const pilihan = ['', ...new Set(semua.map((t) => t.tentang))];
     saringan.hidden = pilihan.length < 3;
     saringan.innerHTML = pilihan.map((p) => `<button class="chip" type="button" data-pilih="${esc(p)}" aria-pressed="${p === tentang}">${esc(p || 'Semua')}</button>`).join('');
