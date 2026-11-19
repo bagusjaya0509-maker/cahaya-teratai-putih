@@ -1090,3 +1090,11 @@ a.agenda-butir:hover { border-color: var(--daun); }
 .kaki { position: relative; isolation: isolate; }
 .kaki::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: #fff; opacity: 0.04;
   -webkit-mask: url('../img/motif-batik.webp') center / 420px auto repeat; mask: url('../img/motif-batik.webp') center / 420px auto repeat; }
+
+/* Motif batik samar di bagian berlatar: embun (hijau muda), meditasi purnama, dan pita kuning */
+.bagian-embun, .purnama, .pita-kain { position: relative; isolation: isolate; }
+.bagian-embun::before, .purnama::before, .pita-kain::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  -webkit-mask: url('../img/motif-batik.webp') center / 420px auto repeat; mask: url('../img/motif-batik.webp') center / 420px auto repeat; }
+.bagian-embun::before { background: var(--telaga); opacity: 0.05; }
+.purnama::before { background: #fff; opacity: 0.04; }
+.pita-kain::before { background: var(--telaga); opacity: 0.06; }
