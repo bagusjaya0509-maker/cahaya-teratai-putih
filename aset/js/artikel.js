@@ -8,7 +8,14 @@ export function susunArtikel({ kabar, isi, base, urlHalaman = '', gantiGambar, s
   // Kabar awal memakai nama foto kegiatan; kabar tanpa foto mendapat sampul polos.
   const sumberSampul = sampul || isi?.sampul || kabar.sampulKecil || '';
   const gambarSampul = /^[a-z]+$/.test(sumberSampul) ? `${base}aset/img/kegiatan/${sumberSampul}.webp` : sumberSampul;
-  const badan = deltaKeHtml(isi?.delta || '[]', { gantiGambar });
+  let badan = deltaKeHtml(isi?.delta || '[]', { gantiGambar });
+  // Kabar yang dibuka dengan galeri foto: galeri menggantikan foto sampul di atas.
+  let galeriAtas = '';
+  if (badan.trimStart().startsWith('<div class="galeri"')) {
+    const akhir = badan.indexOf('\n');
+    galeriAtas = akhir === -1 ? badan : badan.slice(0, akhir);
+    badan = akhir === -1 ? '' : badan.slice(akhir + 1);
+  }
   const bagikan = encodeURIComponent(urlHalaman);
   const teksBagikan = encodeURIComponent(kabar.judul || '');
   return `
@@ -26,7 +33,7 @@ export function susunArtikel({ kabar, isi, base, urlHalaman = '', gantiGambar, s
     <span>${lamaBaca(isi?.delta || '[]')} menit baca</span>
   </div>
 </header>
-${gambarSampul ? `<figure class="baca-sampul"><img src="${esc(gambarSampul)}" alt="${esc(isi?.keteranganSampul || kabar.judul)}" width="1200" height="675" fetchpriority="high">${isi?.keteranganSampul ? `<figcaption>${esc(isi.keteranganSampul)}</figcaption>` : ''}</figure>` : `<div class="baca-sampul sampul-kosong" aria-hidden="true"><span class="sampul-kat">${esc(kat)}</span></div>`}
+${galeriAtas ? `<div class="baca-sampul">${galeriAtas}</div>` : gambarSampul ? `<figure class="baca-sampul"><img src="${esc(gambarSampul)}" alt="${esc(isi?.keteranganSampul || kabar.judul)}" width="1200" height="675" fetchpriority="high">${isi?.keteranganSampul ? `<figcaption>${esc(isi.keteranganSampul)}</figcaption>` : ''}</figure>` : `<div class="baca-sampul sampul-kosong" aria-hidden="true"><span class="sampul-kat">${esc(kat)}</span></div>`}
 <div class="prosa">
 ${badan || '<p>Isi kabar ini belum tersedia.</p>'}
 </div>

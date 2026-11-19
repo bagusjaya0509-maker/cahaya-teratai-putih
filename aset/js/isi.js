@@ -84,6 +84,19 @@ export function deltaKeHtml(delta, opsi = {}) {
     kutipan = null;
   };
 
+  // Gambar berurutan (tanpa teks di antaranya) digabung menjadi galeri geser.
+  let galeri = [];
+  const tutupGaleri = () => {
+    if (galeri.length === 1) keluar.push(galeri[0]);
+    else if (galeri.length > 1) {
+      keluar.push(`<div class="galeri" data-galeri><div class="galeri-jalur" tabindex="0" aria-label="Galeri foto, geser untuk melihat foto lain">${galeri.join('')}</div>`
+        + `<button class="galeri-panah kiri" type="button" data-geser="-1" aria-label="Foto sebelumnya">&#8249;</button>`
+        + `<button class="galeri-panah kanan" type="button" data-geser="1" aria-label="Foto berikutnya">&#8250;</button>`
+        + `<div class="galeri-titik" aria-hidden="true">${galeri.map((_, i) => `<i${i ? '' : ' class="aktif"'}></i>`).join('')}</div></div>`);
+    }
+    galeri = [];
+  };
+
   for (const b of baris) {
     const hanyaGambar = b.isi.length === 1 && b.isi[0].gambar;
     const html = b.isi
@@ -98,6 +111,12 @@ export function deltaKeHtml(delta, opsi = {}) {
       })
       .join('');
     const blok = b.blok;
+    if (hanyaGambar && !blok.list && !blok.blockquote && !blok.header) {
+      const ket = b.isi[0].a.alt || '';
+      if (html) galeri.push(`<figure>${html}${ket ? `<figcaption>${esc(ket)}</figcaption>` : ''}</figure>`);
+      continue;
+    }
+    tutupGaleri();
     const jenisDaftar = blok.list === 'ordered' ? 'ol' : blok.list ? 'ul' : null;
 
     if (!jenisDaftar) tutupDaftar();
@@ -120,6 +139,7 @@ export function deltaKeHtml(delta, opsi = {}) {
       keluar.push(`<p>${html}</p>`);
     }
   }
+  tutupGaleri();
   tutupDaftar();
   tutupKutipan();
   return keluar.join('\n');

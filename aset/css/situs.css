@@ -1037,3 +1037,20 @@ body { overflow-wrap: break-word; }
 .laporan-masuk { color: var(--hijau); font-weight: 600; }
 .laporan-keluar { color: var(--tinta); font-weight: 600; }
 @media (max-width: 560px) { .laporan-batang > div { grid-template-columns: 1fr auto; } .laporan-batang i { grid-column: 1 / -1; grid-row: 2; } }
+
+/* Foto di isi kabar: ukuran seragam 16:9 (foto tegak dipotong), galeri bisa digeser */
+.prosa figure { margin-left: 0; margin-right: 0; }
+.prosa figure img, .galeri figure img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--radius); display: block; }
+.prosa figcaption, .galeri figcaption { font-size: 0.88rem; color: var(--tinta-2); margin-top: 8px; line-height: 1.5; }
+.galeri { position: relative; max-width: 100%; }
+.galeri-jalur { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; border-radius: var(--radius); }
+.galeri-jalur::-webkit-scrollbar { display: none; }
+.galeri-jalur figure { flex: 0 0 100%; margin: 0; scroll-snap-align: start; }
+.galeri-panah { position: absolute; top: calc(50% - 30px); transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; border: 0;
+  background: rgb(255 255 255 / 0.88); color: var(--tinta); font-size: 1.6rem; line-height: 1; cursor: pointer; box-shadow: 0 2px 10px rgb(0 0 0 / 0.18); }
+.galeri-panah.kiri { left: 10px; }
+.galeri-panah.kanan { right: 10px; }
+.galeri-panah:focus-visible { outline: 3px solid var(--sari, #f1a907); }
+.galeri-titik { display: flex; justify-content: center; gap: 6px; margin-top: 10px; }
+.galeri-titik i { width: 7px; height: 7px; border-radius: 50%; background: var(--garis); transition: background 0.2s; }
+.galeri-titik i.aktif { background: var(--daun); }

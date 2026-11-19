@@ -31,6 +31,21 @@ function pasangBagikan() {
   }
 }
 
+/** Galeri foto geser: tombol panah dan titik penanda. */
+function pasangGaleri() {
+  document.querySelectorAll('[data-galeri]').forEach((g) => {
+    const jalur = g.querySelector('.galeri-jalur');
+    const titik = [...g.querySelectorAll('.galeri-titik i')];
+    const ke = (arah) => jalur.scrollBy({ left: arah * jalur.clientWidth, behavior: 'smooth' });
+    g.querySelectorAll('[data-geser]').forEach((b) => b.addEventListener('click', () => ke(Number(b.dataset.geser))));
+    jalur.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') ke(1); if (e.key === 'ArrowLeft') ke(-1); });
+    jalur.addEventListener('scroll', () => {
+      const i = Math.round(jalur.scrollLeft / jalur.clientWidth);
+      titik.forEach((t, n) => t.classList.toggle('aktif', n === i));
+    }, { passive: true });
+  });
+}
+
 async function kabarLain(slugIni) {
   try {
     const daftar = (await daftarKabar({ batas: 4 })).filter((k) => k.id !== slugIni).slice(0, 3);
@@ -56,6 +71,7 @@ async function renderDariData(slug) {
     $('meta[name="description"]')?.setAttribute('content', data.kabar.ringkasan || '');
     $('meta[name="robots"]')?.setAttribute('content', 'index,follow');
     pasangBagikan();
+    pasangGaleri();
     kabarLain(slug);
   } catch (e) {
     console.error(e);
@@ -65,6 +81,7 @@ async function renderDariData(slug) {
 
 if (utama.dataset.prerender === '1') {
   pasangBagikan();
+  pasangGaleri();
   kabarLain(utama.dataset.slug);
 } else {
   const m = location.pathname.slice(BASE.length - 1).match(/^\/kabar\/([a-z0-9-]{1,90})\/?$/);
