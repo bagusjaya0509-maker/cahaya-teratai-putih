@@ -1,7 +1,7 @@
 // Halaman testimoni: daftar testimoni (langsung tampil, pengurus dapat menghapus) dan formulir menulis.
 import { $, $$, BASE, MODE, esc, ikon, tanggal, roti, denganMemuat, pesanGalat } from './inti.js';
 import { pasangOpsiMasuk } from './opsi-masuk.js';
-import { L, pantauSesi } from './layanan.js';
+import { L, pantauSesiNanti } from './layanan.js';
 import { pasangTestimoniKolom } from './testimoni-kolom.js';
 import { daftarTestimoni, ambilPengaturan } from './publik.js';
 import { LAYANAN_BOOKING, pasangKota, kataKlaim } from './rujukan.js';
@@ -26,7 +26,7 @@ if (kisi) {
   let foto = '';
   if (f) {
     pasangOpsiMasuk($('[data-opsi-masuk]'), { tujuan: 'testimoni' });
-    pantauSesi((p) => { if (p && !p.tamu && !f.elements.nama.value) f.elements.nama.value = p.nama || ''; });
+    pantauSesiNanti((p) => { if (p && !p.tamu && !f.elements.nama.value) f.elements.nama.value = p.nama || ''; }, f);
   }
 
   function gambar() {

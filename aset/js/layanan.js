@@ -39,6 +39,21 @@ export function pantauSesi(fn) {
   return () => pendengar.delete(fn);
 }
 export const tungguSesi = () => (mulai(), sesiSiap);
+/**
+ * Seperti pantauSesi, tetapi SDK Firebase (berat di ponsel) baru dimuat saat dibutuhkan:
+ * interaksi pertama dengan `pemicu` (sentuh, fokus, ketik), atau sesudah halaman tenang. Kirim formulir & tombol masuk tetap memuatnya sendiri.
+ */
+export function pantauSesiNanti(fn, pemicu) {
+  pendengar.add(fn);
+  if (penggunaKini !== undefined) { fn(penggunaKini); return () => pendengar.delete(fn); }
+  if (sudahMulai) return () => pendengar.delete(fn);
+  const sekali = () => mulai();
+  ['pointerdown', 'focusin', 'keydown'].forEach((ev) => pemicu?.addEventListener(ev, sekali, { once: true, passive: true }));
+  // Sesudah halaman tenang (±3 dtk, saat peramban senggang) supaya tombol masuk Google siap tanpa diblokir popup.
+  const santai = window.requestIdleCallback || ((f) => setTimeout(f, 1500));
+  setTimeout(() => santai(sekali, { timeout: 5000 }), 3000);
+  return () => pendengar.delete(fn);
+}
 export const pengguna = () => penggunaKini || null;
 /** bagusjaya0509@gmail.com -> ba**********9@gmail.com (aturan Firestore memeriksa bentuk ini). */
 export function samarkanEmail(email) {

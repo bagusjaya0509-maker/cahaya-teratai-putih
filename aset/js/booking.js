@@ -1,7 +1,7 @@
 // Formulir booking konsultasi. Tanpa Firebase (mode mati), formulir yang sama
 // menyusun pesan WhatsApp, jadi pengunjung tetap bisa booking.
 import { $, $$, BASE, MODE, KONFIG, esc, ikon, param, roti, denganMemuat, pesanGalat, lokalBaca, lokalSimpan } from './inti.js';
-import { L, pantauSesi } from './layanan.js';
+import { L, pantauSesiNanti } from './layanan.js';
 import { pasangOpsiMasuk } from './opsi-masuk.js';
 import { ambilPengaturan } from './publik.js';
 import { LAYANAN_BOOKING, CARA_BERTEMU, NAMA_HARI, namaLayanan, namaCara, namaSesi, tanggalBooking, hariIni, pasangKota } from './rujukan.js';
@@ -154,12 +154,12 @@ f.addEventListener('submit', (e) => {
 if (MODE === 'mati') {
   $('[type=submit]', f).innerHTML = `${ikon('whatsapp')}Kirim lewat WhatsApp`;
 } else {
-  pantauSesi((p) => {
+  pantauSesiNanti((p) => {
     if (!p || p.tamu) return;
     if (!f.elements.nama.value) f.elements.nama.value = p.nama || '';
     if (!f.elements.wa.value && p.wa) f.elements.wa.value = p.wa;
     if (!f.elements.kota.value && p.kota) f.elements.kota.value = p.kota;
-  });
+  }, f);
 }
 
 ambilPengaturan().then((a) => { atur = a; isiJadwal(); }).catch((e) => {
