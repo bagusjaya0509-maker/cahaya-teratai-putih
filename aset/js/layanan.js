@@ -393,6 +393,31 @@ const fbMesin = {
     ['kabar', 'kabarIsi', 'draf'].forEach((c) => b.delete(F.doc(db, c, slug)));
     await b.commit();
   },
+
+  // ---------- agenda surat masuk & keluar (hanya pengurus) ----------
+  async semuaSurat() {
+    wajibAdmin();
+    const { F, db } = await fb();
+    const s = await F.getDocs(F.query(F.collection(db, 'surat'), F.limit(5000)));
+    return s.docs.map(rapikan);
+  },
+  /** id kosong = surat baru. Mengembalikan id. */
+  async simpanSurat(id, data) {
+    const p = wajibAdmin();
+    const { F, db } = await fb();
+    const isi = { ...data, oleh: p.nama, diubah: F.serverTimestamp() };
+    if (id) {
+      await F.updateDoc(F.doc(db, 'surat', id), isi);
+      return id;
+    }
+    const ref = await F.addDoc(F.collection(db, 'surat'), { ...isi, dicatat: F.serverTimestamp() });
+    return ref.id;
+  },
+  async hapusSurat(id) {
+    wajibAdmin();
+    const { F, db } = await fb();
+    await F.deleteDoc(F.doc(db, 'surat', id));
+  },
 };
 
 // Pemberitahuan surel untuk pengurus lewat FormSubmit (gratis, tanpa server).
@@ -717,6 +742,26 @@ const demoMesin = {
     wajibAdmin();
     const d = await demo();
     d.ubahDemo((s) => { delete s.kabar[slug]; delete s.kabarIsi[slug]; delete s.draf[slug]; });
+  },
+  async semuaSurat() {
+    wajibAdmin();
+    const d = await demo();
+    return Object.entries(d.bacaDemo().surat || {}).map(([id, x]) => ({ id, ...x }));
+  },
+  async simpanSurat(id, data) {
+    const p = wajibAdmin();
+    const d = await demo();
+    const kunci = id || d.idAcak();
+    d.ubahDemo((s) => {
+      s.surat ||= {};
+      s.surat[kunci] = { ...(s.surat[kunci] || { dicatat: Date.now() }), ...data, oleh: p.nama, diubah: Date.now() };
+    });
+    return kunci;
+  },
+  async hapusSurat(id) {
+    wajibAdmin();
+    const d = await demo();
+    d.ubahDemo((s) => { delete (s.surat || {})[id]; });
   },
 };
 

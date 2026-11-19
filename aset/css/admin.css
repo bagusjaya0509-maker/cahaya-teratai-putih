@@ -185,3 +185,10 @@ mark { background: var(--sari-muda); color: inherit; padding: 0 2px; border-radi
 .adm-label button:hover { color: var(--merah); }
 .adm-tambah { display: flex; gap: 8px; flex-wrap: wrap; }
 .adm-tambah input { flex: 1 1 180px; padding: 8px 11px; border: 1.5px solid var(--garis-2); border-radius: var(--radius); background: #fff; }
+
+/* Surat: ringkasan jumlah di atas buku agenda */
+.adm-surat-angka { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
+.adm-surat-angka > div { background: var(--kelopak); border: 1px solid var(--garis); border-radius: 12px; padding: 14px 16px; display: grid; gap: 2px; }
+.adm-surat-angka b { font-size: 1.6rem; line-height: 1.1; }
+.adm-surat-angka span { color: var(--tinta-2); font-size: 0.85rem; }
+@media (max-width: 640px) { .adm-surat-angka { grid-template-columns: 1fr 1fr; } .adm-surat-angka > div:last-child { grid-column: 1 / -1; } }

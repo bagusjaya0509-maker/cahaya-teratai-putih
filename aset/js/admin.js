@@ -100,6 +100,7 @@ async function rute() {
     else if (bagian === 'testimoni') await vTestimoni();
     else if (bagian === 'trafik') await vTrafik();
     else if (bagian === 'berkas') vBerkas();
+    else if (bagian === 'surat') await vSurat();
     else if (bagian === 'jadwal') await vJadwal();
     else if (bagian === 'pengguna') await vPengguna();
     else if (bagian === 'sistem') await vSistem();
@@ -296,6 +297,187 @@ function vBerkas() {
       </section>`).join('')}
     </div>
     <p class="petunjuk" style="margin-top:16px;color:var(--tinta-2)">Berkas tersimpan di Google Drive akun yayasan (cahayaterataiputih11@gmail.com), bukan di situs, karena sebagian memuat data pribadi pengurus. Folder hanya bisa dibuka akun Google yang diberi akses oleh pemilik Drive. Tambahkan berkas baru langsung ke folder Drive yang sesuai.</p>`;
+}
+
+// ======================================================================
+// SURAT: buku agenda surat masuk dan keluar
+// ======================================================================
+const ARAH_SURAT = { masuk: 'Surat masuk', keluar: 'Surat keluar' };
+const SIFAT_SURAT = { biasa: 'Biasa', penting: 'Penting', segera: 'Segera', rahasia: 'Rahasia' };
+const STATUS_SURAT = {
+  masuk: { diproses: 'Perlu ditindaklanjuti', selesai: 'Selesai' },
+  keluar: { draf: 'Disiapkan', diproses: 'Menunggu balasan', selesai: 'Terkirim' },
+};
+const PIL_STATUS_SURAT = { draf: 'draf', diproses: 'menunggu', selesai: 'selesai' };
+const ROMAWI = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+const saringSurat = { tahun: String(new Date().getFullYear()) };
+const tahunSurat = (x) => (x.tanggal || '').slice(0, 4);
+const urutSurat = (a, b) => (b.tanggal || '').localeCompare(a.tanggal || '') || (b.agenda || 0) - (a.agenda || 0);
+const urutNaik = (a, b) => (a.tanggal || '').localeCompare(b.tanggal || '') || (a.agenda || 0) - (b.agenda || 0);
+const kodeAgenda = (x) => `${x.arah === 'masuk' ? 'M' : 'K'}-${String(x.agenda).padStart(3, '0')}/${tahunSurat(x)}`;
+const tanggalSurat = (t) => (t ? tanggalBooking(t) : '-');
+
+/** Nomor agenda berikutnya untuk arah dan tahun tertentu (berurut per tahun). */
+function agendaBerikut(semua, arah, tahun) {
+  return Math.max(0, ...semua.filter((x) => x.arah === arah && tahunSurat(x) === tahun).map((x) => x.agenda || 0)) + 1;
+}
+/** Usulan nomor surat keluar, mis. 001/YCTP/SEK/XI/2026. */
+const usulNomorKeluar = (agenda, tanggal) => `${String(agenda).padStart(3, '0')}/YCTP/SEK/${ROMAWI[Number(tanggal.slice(5, 7)) - 1] || 'I'}/${tanggal.slice(0, 4)}`;
+
+function terapkanSaringSurat(daftar, s) {
+  const q = (s.cari || '').toLowerCase();
+  return daftar.filter((x) =>
+    (!s.arah || x.arah === s.arah) &&
+    (!s.tahun || tahunSurat(x) === s.tahun) &&
+    (!s.status || x.status === s.status) &&
+    (!q || `${x.nomor} ${x.pihak} ${x.perihal} ${x.keterangan} ${kodeAgenda(x)}`.toLowerCase().includes(q))).sort(urutSurat);
+}
+
+async function vSurat() {
+  setJudul('Surat');
+  const semua = await L.semuaSurat();
+  const s = saringSurat;
+  const daftarTahun = [...new Set([String(new Date().getFullYear()), ...semua.map(tahunSurat)])].filter(Boolean).sort().reverse();
+  aksi.innerHTML = `
+    <button class="tombol tombol-garis kecil" type="button" data-cetak>${ikon('printer')}Cetak agenda</button>
+    <button class="tombol tombol-garis kecil" type="button" data-unduh>${ikon('file-spreadsheet')}Unduh Excel</button>
+    <button class="tombol tombol-garis kecil" type="button" data-catat="masuk">${ikon('inbox')}Catat surat masuk</button>
+    <button class="tombol tombol-utama kecil" type="button" data-catat="keluar">${ikon('send')}Catat surat keluar</button>`;
+  isi.innerHTML = `
+    <div class="adm-surat-angka" data-angka></div>
+    <form class="adm-saring" data-saring>
+      <label class="cari"><span class="sr-only">Cari</span>${ikon('search')}<input type="search" name="cari" placeholder="Cari nomor, pengirim/tujuan, perihal" value="${esc(s.cari || '')}"></label>
+      <select name="arah" aria-label="Jenis surat"><option value="">Masuk &amp; keluar</option>${Object.entries(ARAH_SURAT).map(([k, v]) => `<option value="${k}" ${s.arah === k ? 'selected' : ''}>${v}</option>`).join('')}</select>
+      <select name="tahun" aria-label="Tahun"><option value="">Semua tahun</option>${daftarTahun.map((t) => `<option ${s.tahun === t ? 'selected' : ''}>${t}</option>`).join('')}</select>
+      <select name="status" aria-label="Status"><option value="">Semua status</option><option value="diproses" ${s.status === 'diproses' ? 'selected' : ''}>Perlu tindak lanjut / menunggu balasan</option><option value="draf" ${s.status === 'draf' ? 'selected' : ''}>Disiapkan</option><option value="selesai" ${s.status === 'selesai' ? 'selected' : ''}>Selesai / terkirim</option></select>
+      <button class="tombol-teks" type="reset">Hapus saringan</button>
+    </form>
+    <p class="adm-hitung" data-hitung></p>
+    <div data-tabel></div>`;
+  const form = $('[data-saring]');
+  let hasil = [];
+  const gambar = () => {
+    hasil = terapkanSaringSurat(semua, s);
+    const periode = semua.filter((x) => !s.tahun || tahunSurat(x) === s.tahun);
+    const kotak = (label, n) => `<div><b>${n}</b><span>${esc(label)}</span></div>`;
+    $('[data-angka]').innerHTML = kotak(`Surat masuk ${s.tahun || ''}`.trim(), periode.filter((x) => x.arah === 'masuk').length)
+      + kotak(`Surat keluar ${s.tahun || ''}`.trim(), periode.filter((x) => x.arah === 'keluar').length)
+      + kotak('Surat masuk perlu ditindaklanjuti', semua.filter((x) => x.arah === 'masuk' && x.status === 'diproses').length);
+    $('[data-hitung]').textContent = `Menampilkan ${hasil.length} dari ${semua.length} surat`;
+    $('[data-tabel]').innerHTML = hasil.length
+      ? `<div class="tabel-wadah"><table class="tabel adm-tabel adm-tabel-klik">
+        <thead><tr><th>Agenda</th><th>Nomor &amp; tanggal surat</th><th>Dari / kepada</th><th>Perihal</th><th>Status</th></tr></thead>
+        <tbody>${hasil.map((x) => `<tr data-buka="${x.id}" tabindex="0">
+          <td class="kode">${esc(kodeAgenda(x))}<small>${x.arah === 'masuk' ? 'Masuk' : 'Keluar'}</small></td>
+          <td>${esc(x.nomor || 'Tanpa nomor')}<small>${esc(tanggalSurat(x.tanggal))}</small></td>
+          <td>${x.arah === 'masuk' ? 'Dari' : 'Kepada'} <b>${esc(x.pihak)}</b>${x.tanggalAgenda ? `<small>${x.arah === 'masuk' ? 'Diterima' : 'Dikirim'} ${esc(tanggalSurat(x.tanggalAgenda))}</small>` : ''}</td>
+          <td>${esc(x.perihal)}${x.lampiran ? `<small>Lampiran: ${esc(x.lampiran)}</small>` : ''}${x.tautan ? `<small><a href="${esc(x.tautan)}" target="_blank" rel="noopener">Buka pindaian/berkas</a></small>` : ''}</td>
+          <td><div class="adm-tanda"><span class="status" data-status="${PIL_STATUS_SURAT[x.status] || 'draf'}">${esc(STATUS_SURAT[x.arah][x.status] || x.status)}</span>${x.sifat && x.sifat !== 'biasa' ? `<span class="status" data-status="mendesak">${esc(SIFAT_SURAT[x.sifat])}</span>` : ''}</div></td>
+        </tr>`).join('')}</tbody></table></div>`
+      : `<div class="kosong"><h3>${semua.length ? 'Tidak ada yang cocok dengan saringan' : 'Belum ada surat tercatat'}</h3><p>${semua.length ? 'Ubah atau hapus saringan untuk melihat data lain.' : 'Catat setiap surat yang diterima atau dikirim yayasan. Nomor agenda dan usulan nomor surat keluar dibuat otomatis.'}</p></div>`;
+  };
+  gambar();
+  const baca = () => {
+    const d = new FormData(form);
+    Object.assign(s, { cari: d.get('cari'), arah: d.get('arah'), tahun: d.get('tahun'), status: d.get('status') });
+    gambar();
+  };
+  form.addEventListener('input', baca);
+  form.addEventListener('reset', () => setTimeout(() => { Object.keys(s).forEach((k) => delete s[k]); baca(); }));
+  form.addEventListener('submit', (e) => e.preventDefault());
+  const buka = (id) => formSurat(semua, semua.find((x) => x.id === id));
+  $('[data-tabel]').addEventListener('click', (e) => { const tr = e.target.closest('[data-buka]'); if (tr && !e.target.closest('a')) buka(tr.dataset.buka); });
+  $('[data-tabel]').addEventListener('keydown', (e) => { const tr = e.target.closest('[data-buka]'); if (tr && e.key === 'Enter') buka(tr.dataset.buka); });
+  $$('[data-catat]', aksi).forEach((b) => b.addEventListener('click', () => formSurat(semua, null, b.dataset.catat)));
+  $('[data-unduh]', aksi).addEventListener('click', () => unduhSurat(hasil));
+  $('[data-cetak]', aksi).addEventListener('click', () => cetakSurat(hasil, s));
+}
+
+function formSurat(semua, x, arahBaru = 'masuk') {
+  const baru = !x;
+  const arah = x?.arah || arahBaru;
+  const keluar = arah === 'keluar';
+  const hari = hariIni();
+  const d = x || { arah, nomor: '', tanggal: hari, tanggalAgenda: hari, pihak: '', perihal: '', lampiran: '', sifat: 'biasa', status: keluar ? 'selesai' : 'diproses', keterangan: '', tautan: '' };
+  const agenda = x?.agenda || agendaBerikut(semua, arah, d.tanggal.slice(0, 4));
+  bukaModal(`${baru ? 'Catat' : 'Ubah'} ${keluar ? 'surat keluar' : 'surat masuk'}${baru ? '' : ` ${kodeAgenda({ ...d, agenda })}`}`, `
+    <form class="adm-tumpuk medan-kecil" data-form-surat>
+      <div class="baris-medan">
+        <div class="medan"><label for="sr-tgl">Tanggal surat</label><input id="sr-tgl" name="tanggal" type="date" required value="${esc(d.tanggal)}"></div>
+        <div class="medan"><label for="sr-tga">${keluar ? 'Tanggal dikirim' : 'Tanggal diterima'}</label><input id="sr-tga" name="tanggalAgenda" type="date" value="${esc(d.tanggalAgenda || '')}"></div>
+      </div>
+      <div class="medan"><label for="sr-no">Nomor surat</label><input id="sr-no" name="nomor" type="text" maxlength="100" value="${esc(d.nomor)}" placeholder="${keluar ? '' : 'Kosongkan bila surat tidak bernomor'}">
+        ${keluar ? `<p class="petunjuk">Nomor agenda ${String(agenda).padStart(3, '0')}. <button class="tombol-teks" type="button" data-usul>Pakai nomor urut ${esc(usulNomorKeluar(agenda, d.tanggal))}</button></p>` : ''}</div>
+      <div class="medan"><label for="sr-ph">${keluar ? 'Kepada' : 'Dari (pengirim)'}</label><input id="sr-ph" name="pihak" type="text" required minlength="2" maxlength="200" value="${esc(d.pihak)}" placeholder="${keluar ? 'Contoh: Kepala Dinas Sosial Kota Mataram' : 'Contoh: Dinas Sosial Kota Mataram'}"></div>
+      <div class="medan"><label for="sr-pr">Perihal</label><input id="sr-pr" name="perihal" type="text" required minlength="2" maxlength="400" value="${esc(d.perihal)}"></div>
+      <div class="baris-medan">
+        <div class="medan"><label for="sr-lp">Lampiran</label><input id="sr-lp" name="lampiran" type="text" maxlength="100" value="${esc(d.lampiran)}" placeholder="Contoh: 1 berkas"></div>
+        <div class="medan"><label for="sr-sf">Sifat</label><select id="sr-sf" name="sifat">${Object.entries(SIFAT_SURAT).map(([k, v]) => `<option value="${k}" ${d.sifat === k ? 'selected' : ''}>${v}</option>`).join('')}</select></div>
+        <div class="medan"><label for="sr-st">Status</label><select id="sr-st" name="status">${Object.entries(STATUS_SURAT[arah]).map(([k, v]) => `<option value="${k}" ${d.status === k ? 'selected' : ''}>${v}</option>`).join('')}</select></div>
+      </div>
+      <div class="medan"><label for="sr-tt">Tautan pindaian atau berkas (Google Drive)</label><input id="sr-tt" name="tautan" type="url" maxlength="600" value="${esc(d.tautan)}" placeholder="https://drive.google.com/..."></div>
+      <div class="medan"><label for="sr-kt">${keluar ? 'Keterangan' : 'Disposisi / tindak lanjut'}</label><textarea id="sr-kt" name="keterangan" rows="3" maxlength="2000">${esc(d.keterangan)}</textarea></div>
+      ${baru ? '' : `<p class="petunjuk" style="margin:0">Dicatat ${esc(tanggalJam(x.dicatat))}${x.oleh ? ` · terakhir diubah oleh ${esc(x.oleh)}` : ''}</p>`}
+    </form>`,
+    `${baru ? '' : '<button class="tombol tombol-hapus kecil" type="button" data-hapus-surat>Hapus</button>'}
+     <button class="tombol tombol-utama kecil" type="button" data-simpan-surat>${ikon('check')}Simpan</button>`, 640);
+  const f = $('[data-form-surat]', modal);
+  $('[data-usul]', modal)?.addEventListener('click', () => { f.nomor.value = usulNomorKeluar(agenda, f.tanggal.value || hari); });
+  $('[data-simpan-surat]', modal).addEventListener('click', (e) => {
+    if (!f.reportValidity()) return;
+    const v = Object.fromEntries(new FormData(f));
+    const tahun = v.tanggal.slice(0, 4);
+    // nomor agenda tetap, kecuali tahun surat berubah
+    const ag = !baru && tahunSurat(x) === tahun ? x.agenda : agendaBerikut(semua.filter((y) => y.id !== x?.id), arah, tahun);
+    const data = { arah, agenda: ag, nomor: v.nomor.trim(), tanggal: v.tanggal, tanggalAgenda: v.tanggalAgenda || '', pihak: v.pihak.trim(), perihal: v.perihal.trim(), lampiran: v.lampiran.trim(), sifat: v.sifat, status: v.status, keterangan: v.keterangan.trim(), tautan: v.tautan.trim() };
+    denganMemuat(e.currentTarget, async () => {
+      try {
+        await L.simpanSurat(x?.id || '', data);
+        roti(`${keluar ? 'Surat keluar' : 'Surat masuk'} ${kodeAgenda(data)} tersimpan.`, 'berhasil');
+        modal.close();
+        vSurat();
+      } catch (err) { roti(pesanGalat(err), 'galat'); }
+    });
+  });
+  $('[data-hapus-surat]', modal)?.addEventListener('click', (e) => {
+    if (!confirm(`Hapus catatan surat ${kodeAgenda(x)} (${x.perihal})? Catatan yang dihapus tidak bisa dikembalikan.`)) return;
+    denganMemuat(e.currentTarget, async () => {
+      try {
+        await L.hapusSurat(x.id);
+        roti('Catatan surat dihapus.', 'berhasil');
+        modal.close();
+        vSurat();
+      } catch (err) { roti(pesanGalat(err), 'galat'); }
+    });
+  });
+}
+
+const barisSurat = (x) => [kodeAgenda(x), x.arah === 'masuk' ? 'Masuk' : 'Keluar', x.nomor || '-', tanggalSurat(x.tanggal), x.tanggalAgenda ? tanggalSurat(x.tanggalAgenda) : '-', x.pihak, x.perihal, x.lampiran || '-', SIFAT_SURAT[x.sifat] || '', STATUS_SURAT[x.arah][x.status] || x.status, x.keterangan || '', x.tautan || ''];
+
+function unduhSurat(daftar) {
+  if (!daftar.length) return roti('Tidak ada data untuk diunduh.', 'galat');
+  const kolom = [['Agenda', 14], ['Jenis', 9], ['Nomor surat', 28], ['Tanggal surat', 18], ['Diterima/dikirim', 18], ['Dari/kepada', 34], ['Perihal', 50], ['Lampiran', 14], ['Sifat', 10], ['Status', 20], ['Keterangan/disposisi', 50], ['Tautan', 40]].map(([judul, lebar]) => ({ judul, lebar }));
+  const lembar = (nama, arah) => ({ nama, kolom, baris: daftar.filter((x) => x.arah === arah).sort(urutNaik).map(barisSurat) });
+  unduhBlob(buatXlsx([lembar('Surat masuk', 'masuk'), lembar('Surat keluar', 'keluar')]), `agenda-surat-cahaya-teratai-putih-${hariIni()}.xlsx`);
+  roti(`${daftar.length} surat diunduh sebagai Excel.`, 'berhasil');
+}
+
+function cetakSurat(daftar, s) {
+  const w = window.open('', '_blank');
+  if (!w) return roti('Peramban memblokir jendela cetak. Izinkan pop-up lalu coba lagi.', 'galat');
+  const bagian = (arah) => {
+    const d = daftar.filter((x) => x.arah === arah).sort(urutNaik);
+    if (!d.length) return '';
+    return `<h3>${ARAH_SURAT[arah]} (${d.length})</h3><table><thead><tr><th>Agenda</th><th>Nomor surat</th><th>Tgl surat</th><th>${arah === 'masuk' ? 'Diterima' : 'Dikirim'}</th><th>${arah === 'masuk' ? 'Dari' : 'Kepada'}</th><th>Perihal</th><th>Lampiran</th><th>${arah === 'masuk' ? 'Disposisi' : 'Keterangan'}</th></tr></thead><tbody>
+      ${d.map((x) => `<tr><td>${esc(kodeAgenda(x))}</td><td>${esc(x.nomor || '-')}</td><td>${esc(tanggalSurat(x.tanggal))}</td><td>${esc(x.tanggalAgenda ? tanggalSurat(x.tanggalAgenda) : '-')}</td><td>${esc(x.pihak)}</td><td>${esc(x.perihal)}</td><td>${esc(x.lampiran || '-')}</td><td>${esc(x.keterangan || '')}</td></tr>`).join('')}</tbody></table>`;
+  };
+  w.document.write(`<!doctype html><html lang="id"><head><meta charset="utf-8"><title>Buku agenda surat — Yayasan Cahaya Teratai Putih</title><style>
+    body{font-family:'Segoe UI',Arial,sans-serif;font-size:11px;color:#0f3437;margin:24px}h1{font-size:18px;margin:0}h2{font-size:13px;font-weight:normal;color:#4b6466;margin:4px 0 16px}h3{font-size:13px;margin:18px 0 6px}
+    table{border-collapse:collapse;width:100%}td,th{border:1px solid #ccc;padding:5px 6px;text-align:left;vertical-align:top}th{background:#0f3437;color:#fff}.kepala{display:flex;gap:12px;align-items:center;border-bottom:2px solid #0f3437;padding-bottom:10px;margin-bottom:12px}
+    @page{size:A4 landscape;margin:12mm}</style></head><body>
+    <div class="kepala"><img src="${ASAL}aset/img/lambang-emas.svg" width="40"><div><h1>Buku agenda surat — Yayasan Cahaya Teratai Putih</h1><h2>${esc(s.tahun ? `Tahun ${s.tahun}` : 'Semua tahun')} · dicetak ${esc(tanggalJam(Date.now()))} oleh ${esc(saya.nama)}</h2></div></div>
+    ${bagian('masuk')}${bagian('keluar')}<script>onload=()=>setTimeout(()=>print(),300)<\/script></body></html>`);
+  w.document.close();
 }
 
 // ======================================================================
