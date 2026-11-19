@@ -1137,7 +1137,7 @@ dialog.dialog-video::backdrop { background: rgb(5 12 14 / .82); backdrop-filter:
 .testi-akun small { display: inline-flex; align-items: center; gap: 4px; font-size: .8rem; color: var(--tinta-2); word-break: break-all; }
 
 /* ---------- Testimoni gaya split (beranda) ---------- */
-.belah { position: relative; display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: center; max-width: 64rem; margin: 0 auto; padding-bottom: 64px; cursor: pointer; outline: none; }
+.belah { position: relative; display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: center; max-width: 64rem; margin: 8px 0 0; padding-bottom: 64px; cursor: pointer; outline: none; }
 .belah:focus-visible { box-shadow: 0 0 0 3px var(--sari, #c79a2b); border-radius: 8px; }
 .belah-kiri { display: grid; gap: 30px; min-width: 0; }
 .belah-label { display: inline-flex; align-items: center; gap: 10px; font-size: .74rem; letter-spacing: .2em; text-transform: uppercase; color: var(--tinta-2); }
