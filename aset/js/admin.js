@@ -101,6 +101,7 @@ async function rute() {
     else if (bagian === 'trafik') await vTrafik();
     else if (bagian === 'berkas') vBerkas();
     else if (bagian === 'surat') await vSurat();
+    else if (bagian === 'kas') await vKas();
     else if (bagian === 'jadwal') await vJadwal();
     else if (bagian === 'pengguna') await vPengguna();
     else if (bagian === 'sistem') await vSistem();
@@ -477,6 +478,265 @@ function cetakSurat(daftar, s) {
     @page{size:A4 landscape;margin:12mm}</style></head><body>
     <div class="kepala"><img src="${ASAL}aset/img/lambang-emas.svg" width="40"><div><h1>Buku agenda surat — Yayasan Cahaya Teratai Putih</h1><h2>${esc(s.tahun ? `Tahun ${s.tahun}` : 'Semua tahun')} · dicetak ${esc(tanggalJam(Date.now()))} oleh ${esc(saya.nama)}</h2></div></div>
     ${bagian('masuk')}${bagian('keluar')}<script>onload=()=>setTimeout(()=>print(),300)<\/script></body></html>`);
+  w.document.close();
+}
+
+// ======================================================================
+// KEBENDAHARAAN: buku kas masuk/keluar, bukti kuitansi, ringkasan publik
+// ======================================================================
+const AKUN_KAS = { tunai: 'Kas tunai', bca: 'Rekening BCA', mandiri: 'Rekening Mandiri', va: 'Virtual account', qris: 'QRIS' };
+const KATEGORI_MASUK = ['Donasi umum', 'Punia Cahaya (donatur rutin)', 'Dana punia upacara', 'Hibah pemerintah', 'Sponsor dan CSR', 'Hasil usaha yayasan', 'Lainnya'];
+const KATEGORI_KELUAR = ['Sarana upakara dan banten', 'Konsumsi', 'Honorarium narasumber dan tenaga', 'Transportasi', 'Bantuan sosial dan santunan', 'Sarana dan peralatan', 'Alat tulis dan administrasi', 'Listrik, air, dan internet', 'Publikasi dan dokumentasi', 'Lainnya'];
+const BIDANG_KAS = ['Umum', 'Dharma (keagamaan)', 'Kesehatan holistik', 'Sosial kemanusiaan', 'Pendidikan dan budaya', 'Kelembagaan'];
+const saringKas = { tahun: String(new Date().getFullYear()) };
+const rp = (n) => (n < 0 ? '−' : '') + 'Rp' + Math.abs(Math.round(n || 0)).toLocaleString('id-ID');
+const tahunKas = (x) => (x.tanggal || '').slice(0, 4);
+const urutKas = (a, b) => (b.tanggal || '').localeCompare(a.tanggal || '') || (b.dicatat || 0) - (a.dicatat || 0);
+const urutKasNaik = (a, b) => -urutKas(a, b);
+
+function nomorKasBerikut(semua, jenis, tahun) {
+  const awalan = `${jenis === 'masuk' ? 'BKM' : 'BKK'}-${tahun}-`;
+  const n = Math.max(0, ...semua.filter((x) => (x.nomor || '').startsWith(awalan)).map((x) => Number(x.nomor.slice(awalan.length)) || 0));
+  return awalan + String(n + 1).padStart(3, '0');
+}
+
+function hitungKas(daftar) {
+  const r = { masuk: 0, keluar: 0, perAkun: {}, perKategoriKeluar: {}, perBidangKeluar: {}, perKategoriMasuk: {} };
+  for (const x of daftar) {
+    const m = x.jenis === 'masuk';
+    r[x.jenis] += x.jumlah;
+    r.perAkun[x.akun] = (r.perAkun[x.akun] || 0) + (m ? x.jumlah : -x.jumlah);
+    if (m) r.perKategoriMasuk[x.kategori] = (r.perKategoriMasuk[x.kategori] || 0) + x.jumlah;
+    else {
+      r.perKategoriKeluar[x.kategori] = (r.perKategoriKeluar[x.kategori] || 0) + x.jumlah;
+      r.perBidangKeluar[x.bidang || 'Umum'] = (r.perBidangKeluar[x.bidang || 'Umum'] || 0) + x.jumlah;
+    }
+  }
+  r.saldo = r.masuk - r.keluar;
+  return r;
+}
+
+/** Ringkasan tanpa data pribadi untuk halaman Donasi (kasPublik/ringkasan). */
+async function terbitkanRingkasanKas(semua) {
+  const t = hitungKas(semua);
+  const perBulan = {};
+  for (const x of semua) {
+    const b = (x.tanggal || '').slice(0, 7);
+    perBulan[b] ||= { masuk: 0, keluar: 0 };
+    perBulan[b][x.jenis] += x.jumlah;
+  }
+  const terakhir = semua.slice().sort(urutKas).slice(0, 30).map((x) => ({
+    tanggal: x.tanggal, jenis: x.jenis, jumlah: x.jumlah, kategori: x.kategori, bidang: x.bidang || '',
+    keterangan: x.jenis === 'keluar' ? x.keterangan : '',
+    nama: x.jenis === 'masuk' ? (x.namaPublik && x.pihak ? x.pihak : 'Hamba Tuhan') : '',
+    bukti: Boolean(x.adaBukti),
+  }));
+  await L.simpanRingkasanKas({ masuk: t.masuk, keluar: t.keluar, saldo: t.saldo, perKategoriKeluar: t.perKategoriKeluar,
+    perBidangKeluar: t.perBidangKeluar, perKategoriMasuk: t.perKategoriMasuk, perBulan, terakhir, jumlahTransaksi: semua.length });
+}
+
+function terapkanSaringKas(daftar, s) {
+  const q = (s.cari || '').toLowerCase();
+  return daftar.filter((x) =>
+    (!s.jenis || x.jenis === s.jenis) &&
+    (!s.tahun || tahunKas(x) === s.tahun) &&
+    (!s.bulan || (x.tanggal || '').slice(5, 7) === s.bulan) &&
+    (!s.akun || x.akun === s.akun) &&
+    (!q || `${x.nomor} ${x.pihak} ${x.keterangan} ${x.kategori} ${x.referensi}`.toLowerCase().includes(q))).sort(urutKas);
+}
+
+async function vKas() {
+  setJudul('Kebendaharaan');
+  const semua = await L.semuaKas();
+  const s = saringKas;
+  const daftarTahun = [...new Set([String(new Date().getFullYear()), ...semua.map(tahunKas)])].filter(Boolean).sort().reverse();
+  aksi.innerHTML = `
+    <button class="tombol tombol-garis kecil" type="button" data-cetak>${ikon('printer')}Cetak laporan</button>
+    <button class="tombol tombol-garis kecil" type="button" data-unduh>${ikon('file-spreadsheet')}Unduh Excel</button>
+    <button class="tombol tombol-garis kecil" type="button" data-catat-kas="masuk">${ikon('download')}Catat pemasukan</button>
+    <button class="tombol tombol-utama kecil" type="button" data-catat-kas="keluar">${ikon('upload')}Catat pengeluaran</button>`;
+  const total = hitungKas(semua);
+  isi.innerHTML = `
+    <div class="adm-surat-angka adm-kas-angka">
+      <div><b>${rp(total.saldo)}</b><span>Saldo seluruh kas</span></div>
+      <div><b data-k-masuk></b><span data-k-masuk-l></span></div>
+      <div><b data-k-keluar></b><span data-k-keluar-l></span></div>
+    </div>
+    <p class="adm-kas-akun">${Object.entries(AKUN_KAS).filter(([k]) => total.perAkun[k]).map(([k, v]) => `<span>${esc(v)}: <b>${rp(total.perAkun[k])}</b></span>`).join('') || '<span>Belum ada transaksi.</span>'}</p>
+    <form class="adm-saring" data-saring>
+      <label class="cari"><span class="sr-only">Cari</span>${ikon('search')}<input type="search" name="cari" placeholder="Cari nomor, nama, keterangan" value="${esc(s.cari || '')}"></label>
+      <select name="jenis" aria-label="Jenis"><option value="">Masuk &amp; keluar</option><option value="masuk" ${s.jenis === 'masuk' ? 'selected' : ''}>Pemasukan</option><option value="keluar" ${s.jenis === 'keluar' ? 'selected' : ''}>Pengeluaran</option></select>
+      <select name="tahun" aria-label="Tahun"><option value="">Semua tahun</option>${daftarTahun.map((t) => `<option ${s.tahun === t ? 'selected' : ''}>${t}</option>`).join('')}</select>
+      <select name="bulan" aria-label="Bulan"><option value="">Semua bulan</option>${['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'].map((b, i) => { const v = String(i + 1).padStart(2, '0'); return `<option value="${v}" ${s.bulan === v ? 'selected' : ''}>${b}</option>`; }).join('')}</select>
+      <select name="akun" aria-label="Akun"><option value="">Semua akun</option>${Object.entries(AKUN_KAS).map(([k, v]) => `<option value="${k}" ${s.akun === k ? 'selected' : ''}>${v}</option>`).join('')}</select>
+      <button class="tombol-teks" type="reset">Hapus saringan</button>
+    </form>
+    <p class="adm-hitung" data-hitung></p>
+    <div data-tabel></div>
+    <p class="petunjuk" style="margin-top:14px;color:var(--tinta-2)">Setiap perubahan otomatis memperbarui laporan dana di halaman Donasi (tanpa foto kuitansi dan tanpa nama donatur yang tidak bersedia ditampilkan).</p>`;
+  const form = $('[data-saring]');
+  let hasil = [];
+  const gambar = () => {
+    hasil = terapkanSaringKas(semua, s);
+    const t = hitungKas(semua.filter((x) => (!s.tahun || tahunKas(x) === s.tahun) && (!s.bulan || x.tanggal.slice(5, 7) === s.bulan)));
+    const periode = [s.bulan && ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'][Number(s.bulan) - 1], s.tahun].filter(Boolean).join(' ') || 'semua periode';
+    $('[data-k-masuk]').textContent = rp(t.masuk);
+    $('[data-k-masuk-l]').textContent = `Pemasukan ${periode}`;
+    $('[data-k-keluar]').textContent = rp(t.keluar);
+    $('[data-k-keluar-l]').textContent = `Pengeluaran ${periode}`;
+    $('[data-hitung]').textContent = `Menampilkan ${hasil.length} dari ${semua.length} transaksi · masuk ${rp(hasil.filter((x) => x.jenis === 'masuk').reduce((a, x) => a + x.jumlah, 0))} · keluar ${rp(hasil.filter((x) => x.jenis === 'keluar').reduce((a, x) => a + x.jumlah, 0))}`;
+    $('[data-tabel]').innerHTML = hasil.length
+      ? `<div class="tabel-wadah"><table class="tabel adm-tabel adm-tabel-klik">
+        <thead><tr><th>Nomor</th><th>Tanggal</th><th>Keterangan</th><th>Akun</th><th style="text-align:right">Masuk</th><th style="text-align:right">Keluar</th></tr></thead>
+        <tbody>${hasil.map((x) => `<tr data-buka="${x.id}" tabindex="0">
+          <td class="kode">${esc(x.nomor)}${x.adaBukti ? '<small>Ada bukti</small>' : (x.jenis === 'keluar' ? '<small style="color:var(--daun)">Bukti belum ada</small>' : '')}</td>
+          <td>${esc(tanggalBooking(x.tanggal))}</td>
+          <td>${esc(x.keterangan)}<small>${esc(x.kategori)}${x.bidang ? ` · ${esc(x.bidang)}` : ''}${x.pihak ? ` · ${x.jenis === 'masuk' ? 'dari' : 'kepada'} ${esc(x.pihak)}` : ''}</small></td>
+          <td>${esc(AKUN_KAS[x.akun] || x.akun)}${x.referensi ? `<small>${esc(x.referensi)}</small>` : ''}</td>
+          <td style="text-align:right;white-space:nowrap">${x.jenis === 'masuk' ? rp(x.jumlah) : ''}</td>
+          <td style="text-align:right;white-space:nowrap">${x.jenis === 'keluar' ? rp(x.jumlah) : ''}</td>
+        </tr>`).join('')}</tbody></table></div>`
+      : `<div class="kosong"><h3>${semua.length ? 'Tidak ada yang cocok dengan saringan' : 'Buku kas masih kosong'}</h3><p>${semua.length ? 'Ubah atau hapus saringan.' : 'Mulai dengan mencatat saldo awal sebagai pemasukan (kategori Lainnya), lalu catat setiap uang masuk dan keluar beserta foto kuitansinya.'}</p></div>`;
+  };
+  gambar();
+  const baca = () => {
+    const d = new FormData(form);
+    Object.assign(s, { cari: d.get('cari'), jenis: d.get('jenis'), tahun: d.get('tahun'), bulan: d.get('bulan'), akun: d.get('akun') });
+    gambar();
+  };
+  form.addEventListener('input', baca);
+  form.addEventListener('reset', () => setTimeout(() => { Object.keys(s).forEach((k) => delete s[k]); baca(); }));
+  form.addEventListener('submit', (e) => e.preventDefault());
+  const buka = (id) => formKas(semua, semua.find((x) => x.id === id));
+  $('[data-tabel]').addEventListener('click', (e) => { const tr = e.target.closest('[data-buka]'); if (tr) buka(tr.dataset.buka); });
+  $('[data-tabel]').addEventListener('keydown', (e) => { const tr = e.target.closest('[data-buka]'); if (tr && e.key === 'Enter') buka(tr.dataset.buka); });
+  $$('[data-catat-kas]', aksi).forEach((b) => b.addEventListener('click', () => formKas(semua, null, b.dataset.catatKas)));
+  $('[data-unduh]', aksi).addEventListener('click', () => unduhKas(hasil, s));
+  $('[data-cetak]', aksi).addEventListener('click', () => cetakKas(hasil, s));
+}
+
+function formKas(semua, x, jenisBaru = 'masuk') {
+  const baru = !x;
+  const jenis = x?.jenis || jenisBaru;
+  const keluar = jenis === 'keluar';
+  const hari = hariIni();
+  const d = x || { jenis, tanggal: hari, jumlah: '', akun: keluar ? 'tunai' : 'mandiri', kategori: '', bidang: 'Umum', pihak: '', keterangan: '', referensi: '', namaPublik: false };
+  const daftarKat = keluar ? KATEGORI_KELUAR : KATEGORI_MASUK;
+  let fotoBaru;
+  bukaModal(`${baru ? 'Catat' : 'Ubah'} ${keluar ? 'pengeluaran' : 'pemasukan'}${baru ? '' : ` ${x.nomor}`}`, `
+    <form class="adm-tumpuk medan-kecil" data-form-kas>
+      <div class="baris-medan">
+        <div class="medan"><label for="k-tgl">Tanggal</label><input id="k-tgl" name="tanggal" type="date" required value="${esc(d.tanggal)}"></div>
+        <div class="medan"><label for="k-jml">Jumlah (Rp)</label><input id="k-jml" name="jumlah" type="text" inputmode="numeric" required value="${d.jumlah ? Number(d.jumlah).toLocaleString('id-ID') : ''}" placeholder="0" autocomplete="off"></div>
+      </div>
+      <div class="medan"><label for="k-ket">${keluar ? 'Kegunaan / catatan pengeluaran' : 'Keterangan'}</label><input id="k-ket" name="keterangan" type="text" required minlength="3" maxlength="600" value="${esc(d.keterangan)}" placeholder="${keluar ? 'Contoh: Beli banten untuk meditasi purnama Desember' : 'Contoh: Donasi kegiatan meditasi purnama'}"></div>
+      <div class="baris-medan">
+        <div class="medan"><label for="k-kat">${keluar ? 'Jenis biaya' : 'Sumber dana'}</label><select id="k-kat" name="kategori" required><option value="">Pilih</option>${daftarKat.map((k) => `<option ${d.kategori === k ? 'selected' : ''}>${esc(k)}</option>`).join('')}</select></div>
+        <div class="medan"><label for="k-bid">Bidang</label><select id="k-bid" name="bidang">${BIDANG_KAS.map((k) => `<option ${d.bidang === k ? 'selected' : ''}>${esc(k)}</option>`).join('')}</select></div>
+      </div>
+      <div class="baris-medan">
+        <div class="medan"><label for="k-akun">${keluar ? 'Dibayar dari' : 'Masuk ke'}</label><select id="k-akun" name="akun">${Object.entries(AKUN_KAS).map(([k, v]) => `<option value="${k}" ${d.akun === k ? 'selected' : ''}>${v}</option>`).join('')}</select></div>
+        <div class="medan"><label for="k-ref">Nomor referensi (opsional)</label><input id="k-ref" name="referensi" type="text" maxlength="100" value="${esc(d.referensi)}" placeholder="No. transfer, VA, atau nota"></div>
+      </div>
+      <div class="medan"><label for="k-ph">${keluar ? 'Dibayar kepada' : 'Nama donatur / pemberi'}</label><input id="k-ph" name="pihak" type="text" maxlength="120" value="${esc(d.pihak)}" placeholder="${keluar ? 'Contoh: Toko Banten Sari' : 'Kosongkan bila anonim'}"></div>
+      ${keluar ? '' : `<label class="centang"><input type="checkbox" name="namaPublik" ${d.namaPublik ? 'checked' : ''}><span>Donatur bersedia namanya tampil di laporan dana publik</span></label>`}
+      <div class="medan">
+        <label>Foto ${keluar ? 'kuitansi / nota' : 'bukti transfer'} ${keluar ? '<b style="color:var(--daun)">(wajib)</b>' : '(opsional)'}</label>
+        <div class="adm-kas-bukti" data-bukti>${x?.adaBukti ? '<p class="petunjuk">Memuat bukti…</p>' : '<p class="petunjuk">Belum ada foto.</p>'}</div>
+        <div class="adm-tambah"><label class="tombol tombol-garis kecil" style="cursor:pointer">${ikon('image')}Pilih atau ambil foto<input type="file" accept="image/*" capture="environment" data-berkas-bukti hidden></label>
+        ${x?.adaBukti ? '<button class="tombol-teks" type="button" data-hapus-bukti>Hapus foto</button>' : ''}</div>
+      </div>
+      ${baru ? '' : `<p class="petunjuk" style="margin:0">Dicatat ${esc(tanggalJam(x.dicatat))}${x.oleh ? ` · terakhir diubah oleh ${esc(x.oleh)}` : ''}</p>`}
+    </form>`,
+    `${baru ? '' : '<button class="tombol tombol-hapus kecil" type="button" data-hapus-kas>Hapus</button>'}
+     <button class="tombol tombol-utama kecil" type="button" data-simpan-kas>${ikon('check')}Simpan</button>`, 640);
+  const f = $('[data-form-kas]', modal);
+  const wadahBukti = $('[data-bukti]', modal);
+  const tampilBukti = (src) => { wadahBukti.innerHTML = src ? `<a href="${src}" target="_blank" rel="noopener"><img src="${src}" alt="Bukti" style="max-width:100%;max-height:260px;border-radius:8px;border:1px solid var(--garis)"></a>` : '<p class="petunjuk">Belum ada foto.</p>'; };
+  if (x?.adaBukti) L.ambilBuktiKas(x.id).then(tampilBukti).catch(() => { wadahBukti.innerHTML = '<p class="petunjuk">Bukti tidak bisa dimuat.</p>'; });
+  f.jumlah.addEventListener('input', () => { const n = f.jumlah.value.replace(/\D/g, ''); f.jumlah.value = n ? Number(n).toLocaleString('id-ID') : ''; });
+  $('[data-berkas-bukti]', modal).addEventListener('change', async (e) => {
+    const berkas = e.target.files[0];
+    if (!berkas) return;
+    wadahBukti.innerHTML = `<p class="petunjuk">${ikon('loader-circle', 'ikon berputar')} Memperkecil foto…</p>`;
+    try {
+      fotoBaru = await kompres(berkas, { maks: 1400, mutu: 0.72 });
+      if (fotoBaru.length > 900000) fotoBaru = await kompres(berkas, { maks: 1000, mutu: 0.6 });
+      tampilBukti(fotoBaru);
+    } catch { fotoBaru = undefined; wadahBukti.innerHTML = '<p class="petunjuk">Foto tidak bisa dibaca. Coba foto lain.</p>'; }
+  });
+  $('[data-hapus-bukti]', modal)?.addEventListener('click', () => { fotoBaru = ''; tampilBukti(''); });
+  $('[data-simpan-kas]', modal).addEventListener('click', (e) => {
+    if (!f.reportValidity()) return;
+    const jumlah = Number(f.jumlah.value.replace(/\D/g, ''));
+    if (!jumlah) return roti('Isi jumlah uang.', 'galat');
+    const adaFoto = fotoBaru ? true : fotoBaru === '' ? false : Boolean(x?.adaBukti);
+    if (keluar && !adaFoto) return roti('Pengeluaran wajib disertai foto kuitansi atau nota.', 'galat');
+    const tahun = f.tanggal.value.slice(0, 4);
+    const nomor = !baru && tahunKas(x) === tahun ? x.nomor : nomorKasBerikut(semua.filter((y) => y.id !== x?.id), jenis, tahun);
+    const data = { jenis, nomor, tanggal: f.tanggal.value, jumlah, akun: f.akun.value, kategori: f.kategori.value, bidang: f.bidang.value,
+      pihak: f.pihak.value.trim(), keterangan: f.keterangan.value.trim(), referensi: f.referensi.value.trim(), namaPublik: keluar ? false : Boolean(f.namaPublik?.checked) };
+    denganMemuat(e.currentTarget, async () => {
+      try {
+        const id = await L.simpanKas(x?.id || '', data, fotoBaru);
+        const terbaru = [...semua.filter((y) => y.id !== id), { ...x, ...data, id, adaBukti: adaFoto }];
+        await terbitkanRingkasanKas(terbaru).catch((er) => console.warn(er));
+        roti(`${nomor} tersimpan.`, 'berhasil');
+        modal.close();
+        vKas();
+      } catch (err) { roti(pesanGalat(err), 'galat'); }
+    });
+  });
+  $('[data-hapus-kas]', modal)?.addEventListener('click', (e) => {
+    if (!confirm(`Hapus transaksi ${x.nomor} (${rp(x.jumlah)})? Transaksi dan foto buktinya tidak bisa dikembalikan.`)) return;
+    denganMemuat(e.currentTarget, async () => {
+      try {
+        await L.hapusKas(x.id);
+        await terbitkanRingkasanKas(semua.filter((y) => y.id !== x.id)).catch((er) => console.warn(er));
+        roti('Transaksi dihapus.', 'berhasil');
+        modal.close();
+        vKas();
+      } catch (err) { roti(pesanGalat(err), 'galat'); }
+    });
+  });
+}
+
+function unduhKas(daftar, s) {
+  if (!daftar.length) return roti('Tidak ada data untuk diunduh.', 'galat');
+  const urut = daftar.slice().sort(urutKasNaik);
+  let saldo = 0;
+  const baris = urut.map((x) => { saldo += x.jenis === 'masuk' ? x.jumlah : -x.jumlah; return [x.nomor, tanggalBooking(x.tanggal), x.keterangan, x.kategori, x.bidang || '', x.pihak || '', AKUN_KAS[x.akun] || x.akun, x.referensi || '', x.jenis === 'masuk' ? x.jumlah : '', x.jenis === 'keluar' ? x.jumlah : '', saldo, x.adaBukti ? 'Ada' : '-', x.oleh || '']; });
+  const kolom = [['Nomor', 16], ['Tanggal', 24], ['Keterangan', 50], ['Kategori', 28], ['Bidang', 20], ['Pihak', 26], ['Akun', 18], ['Referensi', 20], ['Masuk', 16], ['Keluar', 16], ['Saldo berjalan', 18], ['Bukti', 8], ['Dicatat oleh', 18]].map(([judul, lebar]) => ({ judul, lebar }));
+  const t = hitungKas(daftar);
+  const rek = (label, o) => [[label, ''], ...Object.entries(o).sort((a, b) => b[1] - a[1]).map(([k, v]) => [k, v]), ['', '']];
+  unduhBlob(buatXlsx([
+    { nama: 'Buku kas', kolom, baris },
+    { nama: 'Ringkasan', kolom: [{ judul: 'Uraian', lebar: 40 }, { judul: 'Jumlah (Rp)', lebar: 18 }], baris: [['Total pemasukan', t.masuk], ['Total pengeluaran', t.keluar], ['Selisih', t.saldo], ['', ''], ...rek('Pemasukan per sumber', t.perKategoriMasuk), ...rek('Pengeluaran per jenis biaya', t.perKategoriKeluar), ...rek('Pengeluaran per bidang', t.perBidangKeluar)] },
+  ]), `buku-kas-cahaya-teratai-putih-${s.tahun || 'semua'}${s.bulan ? '-' + s.bulan : ''}.xlsx`);
+  roti(`${daftar.length} transaksi diunduh sebagai Excel.`, 'berhasil');
+}
+
+function cetakKas(daftar, s) {
+  const w = window.open('', '_blank');
+  if (!w) return roti('Peramban memblokir jendela cetak. Izinkan pop-up lalu coba lagi.', 'galat');
+  const urut = daftar.slice().sort(urutKasNaik);
+  const t = hitungKas(daftar);
+  let saldo = 0;
+  const periode = [s.bulan && ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'][Number(s.bulan) - 1], s.tahun].filter(Boolean).join(' ') || 'Semua periode';
+  const rek = (judulR, o) => `<h3>${judulR}</h3><table><tbody>${Object.entries(o).sort((a, b) => b[1] - a[1]).map(([k, v]) => `<tr><td>${esc(k)}</td><td style="text-align:right">${rp(v)}</td></tr>`).join('') || '<tr><td>-</td><td></td></tr>'}</tbody></table>`;
+  w.document.write(`<!doctype html><html lang="id"><head><meta charset="utf-8"><title>Laporan kas — Yayasan Cahaya Teratai Putih</title><style>
+    body{font-family:'Segoe UI',Arial,sans-serif;font-size:11px;color:#0f3437;margin:24px}h1{font-size:18px;margin:0}h2{font-size:13px;font-weight:normal;color:#4b6466;margin:4px 0 16px}h3{font-size:12px;margin:16px 0 6px}
+    table{border-collapse:collapse;width:100%}td,th{border:1px solid #ccc;padding:5px 6px;text-align:left;vertical-align:top}th{background:#0f3437;color:#fff}.r{text-align:right;white-space:nowrap}.rekap{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.kepala{display:flex;gap:12px;align-items:center;border-bottom:2px solid #0f3437;padding-bottom:10px;margin-bottom:12px}
+    .ttd{display:grid;grid-template-columns:1fr 1fr;margin-top:40px;text-align:center}.ttd b{display:block;margin-top:60px;text-decoration:underline}
+    @page{size:A4 landscape;margin:12mm}</style></head><body>
+    <div class="kepala"><img src="${ASAL}aset/img/lambang-emas.svg" width="40"><div><h1>Laporan kas — Yayasan Cahaya Teratai Putih</h1><h2>${esc(periode)} · ${daftar.length} transaksi · dicetak ${esc(tanggalJam(Date.now()))} oleh ${esc(saya.nama)}</h2></div></div>
+    <table><tbody><tr><td>Total pemasukan</td><td class="r">${rp(t.masuk)}</td><td>Total pengeluaran</td><td class="r">${rp(t.keluar)}</td><td>Selisih periode</td><td class="r"><b>${rp(t.saldo)}</b></td></tr></tbody></table>
+    <div class="rekap">${rek('Pemasukan per sumber', t.perKategoriMasuk)}${rek('Pengeluaran per jenis biaya', t.perKategoriKeluar)}${rek('Pengeluaran per bidang', t.perBidangKeluar)}</div>
+    <h3>Buku kas</h3><table><thead><tr><th>Nomor</th><th>Tanggal</th><th>Keterangan</th><th>Kategori</th><th>Akun</th><th class="r">Masuk</th><th class="r">Keluar</th><th class="r">Saldo</th><th>Bukti</th></tr></thead><tbody>
+    ${urut.map((x) => { saldo += x.jenis === 'masuk' ? x.jumlah : -x.jumlah; return `<tr><td>${esc(x.nomor)}</td><td>${esc(x.tanggal)}</td><td>${esc(x.keterangan)}${x.pihak ? ` (${esc(x.pihak)})` : ''}</td><td>${esc(x.kategori)}</td><td>${esc(AKUN_KAS[x.akun] || x.akun)}</td><td class="r">${x.jenis === 'masuk' ? rp(x.jumlah) : ''}</td><td class="r">${x.jenis === 'keluar' ? rp(x.jumlah) : ''}</td><td class="r">${rp(saldo)}</td><td>${x.adaBukti ? 'Ada' : '-'}</td></tr>`; }).join('')}
+    </tbody></table>
+    <div class="ttd"><div>Bendahara,<b>&nbsp;</b></div><div>Ketua,<b>&nbsp;</b></div></div>
+    <script>onload=()=>setTimeout(()=>print(),300)<\/script></body></html>`);
   w.document.close();
 }
 

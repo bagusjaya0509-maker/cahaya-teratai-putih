@@ -96,3 +96,13 @@ export async function ambilPengaturan() {
   }
   return { ...PENGATURAN_BAWAAN, ...(d || {}) };
 }
+
+/** Ringkasan kas yayasan untuk halaman Donasi (tanpa data pribadi). */
+export async function ambilRingkasanKas() {
+  if (MODE === 'demo') {
+    const { bacaDemo } = await import('./demo.js');
+    return bacaDemo().kasPublik || null;
+  }
+  if (MODE === 'firebase') return ambilDokumen({ ...fb(), jalur: 'kasPublik/ringkasan' }).catch(() => null);
+  return null;
+}

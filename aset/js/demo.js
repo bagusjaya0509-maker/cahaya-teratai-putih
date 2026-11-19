@@ -7,7 +7,7 @@ import { KABAR_AWAL } from './kabar-awal.js';
 const KUNCI = 'ctp.demo.v1';
 
 function kosong() {
-  const s = { akun: {}, pengguna: {}, admin: {}, blokir: {}, kabar: {}, kabarIsi: {}, draf: {}, booking: {}, tanggapan: {}, internal: {}, testimoni: {}, testimoniPublik: {}, surat: {}, pengaturan: null, sesi: null };
+  const s = { akun: {}, pengguna: {}, admin: {}, blokir: {}, kabar: {}, kabarIsi: {}, draf: {}, booking: {}, tanggapan: {}, internal: {}, testimoni: {}, testimoniPublik: {}, surat: {}, kas: {}, kasBukti: {}, kasPublik: null, pengaturan: null, sesi: null };
   for (const k of KABAR_AWAL) {
     const { delta, sampul, keteranganSampul, ...meta } = k;
     s.kabar[k.slug] = { ...meta, diubah: k.terbitPada };

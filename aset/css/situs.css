@@ -1024,3 +1024,16 @@ body { overflow-wrap: break-word; }
   .pilih-butir img { left: 0; translate: none; width: 100%; }
   .pilih-teks { width: 60vw; }
 }
+
+/* Laporan dana terbuka (halaman Donasi) */
+.laporan-angka { margin: 18px 0 8px; }
+.laporan-label { margin: 0; color: var(--tinta-2); font-size: 0.9rem; }
+.laporan-nilai { margin: 4px 0 0; font-size: 1.5rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.laporan-batang { display: grid; gap: 8px; margin: 10px 0 18px; }
+.laporan-batang > div { display: grid; grid-template-columns: minmax(120px, 34%) 1fr auto; gap: 10px; align-items: center; font-size: 0.92rem; }
+.laporan-batang i { display: block; height: 10px; border-radius: 6px; background: linear-gradient(90deg, var(--daun) var(--l), var(--embun-2) var(--l)); }
+.laporan-batang b { font-variant-numeric: tabular-nums; }
+.laporan-tabel td small { display: block; color: var(--tinta-2); font-size: 0.8rem; }
+.laporan-masuk { color: var(--hijau); font-weight: 600; }
+.laporan-keluar { color: var(--tinta); font-weight: 600; }
+@media (max-width: 560px) { .laporan-batang > div { grid-template-columns: 1fr auto; } .laporan-batang i { grid-column: 1 / -1; grid-row: 2; } }

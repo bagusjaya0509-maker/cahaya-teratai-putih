@@ -418,6 +418,48 @@ const fbMesin = {
     const { F, db } = await fb();
     await F.deleteDoc(F.doc(db, 'surat', id));
   },
+
+  // ---------- kebendaharaan: buku kas, bukti kuitansi, ringkasan publik ----------
+  async semuaKas() {
+    wajibAdmin();
+    const { F, db } = await fb();
+    const s = await F.getDocs(F.query(F.collection(db, 'kas'), F.limit(20000)));
+    return s.docs.map(rapikan);
+  },
+  /** foto: data URL baru, '' untuk menghapus bukti, undefined bila tidak berubah. Mengembalikan id. */
+  async simpanKas(id, data, foto) {
+    const p = wajibAdmin();
+    const { F, db } = await fb();
+    const ref = id ? F.doc(db, 'kas', id) : F.doc(F.collection(db, 'kas'));
+    const b = F.writeBatch(db);
+    const isi = { ...data, oleh: p.nama, diubah: F.serverTimestamp() };
+    if (foto !== undefined) isi.adaBukti = Boolean(foto);
+    if (id) b.update(ref, isi);
+    else b.set(ref, { ...isi, adaBukti: Boolean(foto), dicatat: F.serverTimestamp() });
+    if (foto) b.set(F.doc(db, 'kasBukti', ref.id), { foto, diubah: F.serverTimestamp() });
+    else if (foto === '') b.delete(F.doc(db, 'kasBukti', ref.id));
+    await b.commit();
+    return ref.id;
+  },
+  async ambilBuktiKas(id) {
+    wajibAdmin();
+    const { F, db } = await fb();
+    const d = await F.getDoc(F.doc(db, 'kasBukti', id));
+    return d.exists() ? d.data().foto : '';
+  },
+  async hapusKas(id) {
+    wajibAdmin();
+    const { F, db } = await fb();
+    const b = F.writeBatch(db);
+    b.delete(F.doc(db, 'kas', id));
+    b.delete(F.doc(db, 'kasBukti', id));
+    await b.commit();
+  },
+  async simpanRingkasanKas(r) {
+    wajibAdmin();
+    const { F, db } = await fb();
+    await F.setDoc(F.doc(db, 'kasPublik', 'ringkasan'), { ...r, diubah: F.serverTimestamp() });
+  },
 };
 
 // Pemberitahuan surel untuk pengurus lewat FormSubmit (gratis, tanpa server).
@@ -762,6 +804,39 @@ const demoMesin = {
     wajibAdmin();
     const d = await demo();
     d.ubahDemo((s) => { delete (s.surat || {})[id]; });
+  },
+  async semuaKas() {
+    wajibAdmin();
+    const d = await demo();
+    return Object.entries(d.bacaDemo().kas || {}).map(([id, x]) => ({ id, ...x }));
+  },
+  async simpanKas(id, data, foto) {
+    const p = wajibAdmin();
+    const d = await demo();
+    const kunci = id || d.idAcak();
+    d.ubahDemo((s) => {
+      s.kas ||= {}; s.kasBukti ||= {};
+      const lama = s.kas[kunci] || { dicatat: Date.now(), adaBukti: false };
+      s.kas[kunci] = { ...lama, ...data, oleh: p.nama, diubah: Date.now(), ...(foto !== undefined ? { adaBukti: Boolean(foto) } : {}) };
+      if (foto) s.kasBukti[kunci] = foto;
+      else if (foto === '') delete s.kasBukti[kunci];
+    });
+    return kunci;
+  },
+  async ambilBuktiKas(id) {
+    wajibAdmin();
+    const d = await demo();
+    return (d.bacaDemo().kasBukti || {})[id] || '';
+  },
+  async hapusKas(id) {
+    wajibAdmin();
+    const d = await demo();
+    d.ubahDemo((s) => { delete (s.kas || {})[id]; delete (s.kasBukti || {})[id]; });
+  },
+  async simpanRingkasanKas(r) {
+    wajibAdmin();
+    const d = await demo();
+    d.ubahDemo((s) => { s.kasPublik = { ...r, diubah: Date.now() }; });
   },
 };
 
