@@ -2,6 +2,8 @@
 // peramban (kabar yang belum ikut build), supaya hasilnya selalu sama.
 import { esc, deltaKeHtml, lamaBaca, tanggalPanjang } from './isi.js';
 
+const pemutar = (kabar) => `<div class="baca-sampul baca-video${kabar.videoTegak ? ' tegak' : ''}"><iframe src="https://www.youtube-nocookie.com/embed/${esc(kabar.video)}?rel=0&amp;modestbranding=1&amp;playsinline=1" title="${esc(kabar.judul)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>`;
+
 export function susunArtikel({ kabar, isi, base, urlHalaman = '', gantiGambar, sampul, sprite = `${base}aset/img/ikon.svg` }) {
   const kat = kabar.kategori || 'Kabar';
   const iso = kabar.terbitPada ? new Date(kabar.terbitPada).toISOString() : '';
@@ -30,12 +32,12 @@ export function susunArtikel({ kabar, isi, base, urlHalaman = '', gantiGambar, s
   <div class="baca-meta">
     ${kabar.penulis ? `<span>${esc(kabar.penulis)}</span>` : ''}
     ${iso ? `<time datetime="${iso}">${tanggalPanjang(kabar.terbitPada)}</time>` : ''}
-    <span>${lamaBaca(isi?.delta || '[]')} menit baca</span>
+    <span>${kabar.video ? 'Video' : `${lamaBaca(isi?.delta || '[]')} menit baca`}</span>
   </div>
 </header>
-${galeriAtas ? `<div class="baca-sampul">${galeriAtas}</div>` : gambarSampul ? `<figure class="baca-sampul"><img src="${esc(gambarSampul)}" alt="${esc(isi?.keteranganSampul || kabar.judul)}" width="1200" height="675" fetchpriority="high">${isi?.keteranganSampul ? `<figcaption>${esc(isi.keteranganSampul)}</figcaption>` : ''}</figure>` : `<div class="baca-sampul sampul-kosong" aria-hidden="true"><span class="sampul-kat">${esc(kat)}</span></div>`}
+${kabar.video && /^[\w-]{11}$/.test(kabar.video) ? pemutar(kabar) : galeriAtas ? `<div class="baca-sampul">${galeriAtas}</div>` : gambarSampul ? `<figure class="baca-sampul"><img src="${esc(gambarSampul)}" alt="${esc(isi?.keteranganSampul || kabar.judul)}" width="1200" height="675" fetchpriority="high">${isi?.keteranganSampul ? `<figcaption>${esc(isi.keteranganSampul)}</figcaption>` : ''}</figure>` : `<div class="baca-sampul sampul-kosong" aria-hidden="true"><span class="sampul-kat">${esc(kat)}</span></div>`}
 <div class="prosa">
-${badan || '<p>Isi kabar ini belum tersedia.</p>'}
+${galeriAtas && kabar.video ? galeriAtas : ''}${badan || (kabar.video ? '' : '<p>Isi kabar ini belum tersedia.</p>')}
 </div>
 <footer class="baca-kaki">
   <p class="baca-kaki-label">Bagikan kabar ini</p>

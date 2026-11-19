@@ -159,7 +159,17 @@ export function lamaBaca(delta) {
   return Math.max(1, Math.round(kata / 200));
 }
 
-export const KATEGORI_KABAR = ['Kegiatan', 'Berita', 'Pengumuman', 'Opini', 'Dharma Sastra'];
+export const KATEGORI_KABAR = ['Kegiatan', 'Berita', 'Pengumuman', 'Opini', 'Dharma Sastra', 'Dharma Wacana'];
+
+/** Ambil ID video YouTube dari tautan apa pun (watch, youtu.be, shorts, embed) atau ID polos. */
+export function idYoutube(teks) {
+  const s = String(teks || '').trim();
+  if (/^[\w-]{11}$/.test(s)) return s;
+  const m = /(?:youtu\.be\/|[?&]v=|\/shorts\/|\/embed\/|\/live\/)([\w-]{11})/.exec(s);
+  return m ? m[1] : '';
+}
+/** Gambar mini video YouTube. */
+export const gambarYoutube = (id) => (id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : '');
 
 export function buatSlug(teks) {
   return String(teks || '')

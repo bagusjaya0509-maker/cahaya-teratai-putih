@@ -3,7 +3,7 @@ import { $, $$, BASE, ASAL, MODE, KONFIG, esc, ikon, roti, denganMemuat, pesanGa
 import { L, pantauSesi } from './layanan.js';
 import { LAYANAN_BOOKING, STATUS_BOOKING, STATUS_TESTIMONI, NAMA_HARI, PENGATURAN_BAWAAN, namaLayanan, namaCara, namaSesi, tanggalBooking, hariIni, kataKlaim, KATA_KLAIM } from './rujukan.js';
 import { pilStatus, langkahStatus, rincianBooking, liniTanggapan, waIntl, jadwalTeks, bintangHtml } from './booking-tampil.js';
-import { KATEGORI_KABAR, buatSlug, deltaKeTeks } from './isi.js';
+import { KATEGORI_KABAR, buatSlug, deltaKeTeks, idYoutube } from './isi.js';
 import { susunArtikel } from './artikel.js';
 import { kompres, ukuranDataUrl, formatUkuran } from './gambar.js';
 import { buatXlsx, unduhBlob } from './xlsx.js';
@@ -829,7 +829,7 @@ async function vEditor(slug) {
   const k = {
     slug: lama?.slug || '', judul: lama?.judul || '', kategori: lama?.kategori || 'Kegiatan', ringkasan: lama?.ringkasan || '',
     penulis: lama?.penulis || saya.nama, unggulan: Boolean(lama?.unggulan), sampul: lama?.sampul || '', sampulKecil: lama?.sampulKecil || '',
-    keteranganSampul: lama?.keteranganSampul || '', delta: lama?.delta || '[]', terbitPada: lama?.terbitPada || Date.now(), terbit: Boolean(lama?.terbit),
+    keteranganSampul: lama?.keteranganSampul || '', video: lama?.video || '', videoTegak: Boolean(lama?.videoTegak), delta: lama?.delta || '[]', terbitPada: lama?.terbitPada || Date.now(), terbit: Boolean(lama?.terbit),
   };
   const daftarKategori = [...new Set([...KATEGORI_KABAR, ...semuaKabar.map((x) => x.kategori).filter(Boolean), k.kategori])];
   let slugTerkunci = Boolean(lama);
@@ -860,6 +860,7 @@ async function vEditor(slug) {
             <p class="petunjuk" data-petunjuk-kategori hidden>Kategori baru otomatis muncul sebagai pilihan saring di halaman Kabar.</p></div>
           <div class="medan"><label for="e-tanggal">Tanggal terbit</label><input id="e-tanggal" data-e="terbitPada" type="datetime-local" value="${keLokal(k.terbitPada)}"><p class="petunjuk">Bisa diisi tanggal kegiatan berlangsung.</p></div>
           <div class="medan"><label for="e-penulis">Penulis</label><input id="e-penulis" data-e="penulis" type="text" maxlength="80" value="${esc(k.penulis)}"></div>
+          <div class="medan"><label for="e-video">Tautan video YouTube</label><input id="e-video" data-e="video" type="url" maxlength="200" value="${k.video ? `https://youtu.be/${esc(k.video)}` : ''}" placeholder="https://youtube.com/shorts/…"><p class="petunjuk">Untuk kategori Dharma Wacana. Video tampil dan bisa diputar di halaman kabar; gambar mininya jadi sampul kartu bila foto sampul kosong.</p></div>
           <label class="centang"><input type="checkbox" data-e="unggulan" ${k.unggulan ? 'checked' : ''}><span>Jadikan kabar utama di beranda</span></label>
           <div class="medan"><label for="e-slug">Alamat halaman</label><div class="slug-medan"><span class="kode">/kabar/</span><input id="e-slug" data-e="slug" type="text" maxlength="80" value="${esc(k.slug)}" ${slugTerkunci ? 'readonly' : ''} pattern="[a-z0-9-]+"></div><p class="petunjuk">${slugTerkunci ? 'Alamat dikunci sesudah disimpan agar tautan yang sudah dibagikan tidak rusak.' : 'Terisi otomatis dari judul. Alamat dikunci setelah pertama kali disimpan.'}</p></div>
         </section>
@@ -923,6 +924,8 @@ async function vEditor(slug) {
     penulis: E('penulis').value.trim(),
     unggulan: E('unggulan').checked,
     keteranganSampul: E('keteranganSampul').value.trim(),
+    video: idYoutube(E('video').value),
+    videoTegak: idYoutube(E('video').value) ? /\/shorts\//.test(E('video').value) || (k.videoTegak && idYoutube(E('video').value) === k.video) : false,
     slug: E('slug').value.trim(),
     terbitPada: E('terbitPada').value ? new Date(E('terbitPada').value).getTime() : Date.now(),
     delta: JSON.stringify(q.getContents().ops),

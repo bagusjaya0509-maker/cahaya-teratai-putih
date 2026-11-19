@@ -1098,3 +1098,13 @@ a.agenda-butir:hover { border-color: var(--daun); }
 .bagian-embun::before { background: var(--telaga); opacity: 0.05; }
 .purnama::before { background: #fff; opacity: 0.04; }
 .pita-kain::before { background: var(--telaga); opacity: 0.06; }
+
+/* ---------- Dharma Wacana: video YouTube ---------- */
+.sampul-video { position: relative; }
+.sampul-video img { object-fit: cover; }
+.tanda-putar { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
+.tanda-putar svg { width: 54px; height: 54px; padding: 13px 11px 13px 15px; border-radius: 50%; fill: #fff; background: rgb(20 40 45 / .62); box-shadow: 0 0 0 2px rgb(255 255 255 / .55); transition: transform .2s ease, background .2s ease; }
+a:hover .tanda-putar svg, a:focus-visible .tanda-putar svg { transform: scale(1.08); background: var(--sari, #c79a2b); }
+.baca-video { position: relative; aspect-ratio: 16 / 9; background: #0b1416; border-radius: var(--radius, 12px); overflow: hidden; }
+.baca-video.tegak { aspect-ratio: 9 / 16; max-width: 380px; margin-inline: auto; }
+.baca-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }

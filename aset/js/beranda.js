@@ -2,7 +2,6 @@ import { $, $$, BASE, MODE } from './inti.js';
 import { daftarKabar, daftarTestimoni } from './publik.js';
 import { utamaKabar, barisKabar, slideKegiatan } from './kartu.js';
 import { kartuTestimoni } from './testimoni.js';
-import { pasangAgenda } from './agenda.js';
 
 const wadah = $('[data-kabar-portal]');
 
@@ -86,4 +85,3 @@ if (jalur) {
     .catch((e) => console.warn(e));
 }
 
-pasangAgenda();

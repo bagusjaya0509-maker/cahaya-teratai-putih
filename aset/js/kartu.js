@@ -1,5 +1,6 @@
 // Potongan HTML kabar yang dipakai beranda, daftar kabar, dan "baca juga".
 import { BASE, esc, ikon, tanggal } from './inti.js';
+import { gambarYoutube } from './isi.js';
 
 export const urlKabar = (k) => `${BASE}kabar/${k.id || k.slug}/`;
 
@@ -7,6 +8,10 @@ export const urlKabar = (k) => `${BASE}kabar/${k.id || k.slug}/`;
 const urlSampul = (s) => (/^[a-z]+$/.test(s) ? `${BASE}aset/img/kegiatan/${s}.webp` : s);
 
 export function sampul(k, kelas = '') {
+  if (k.video) {
+    const src = k.sampulKecil ? urlSampul(k.sampulKecil) : gambarYoutube(k.video);
+    return `<div class="sampul sampul-video ${kelas}"><img src="${esc(src)}" alt="" loading="lazy" decoding="async"><span class="tanda-putar" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div>`;
+  }
   const galeri = (Array.isArray(k.galeriKecil) ? k.galeriKecil : []).filter((g) => typeof g === 'string' && g);
   if (galeri.length > 1) {
     return `<div class="sampul sampul-putar ${kelas}">${galeri.map((g, i) => `<img src="${esc(urlSampul(g))}" alt="" loading="lazy" decoding="async"${i ? '' : ' class="aktif"'}>`).join('')}</div>`;

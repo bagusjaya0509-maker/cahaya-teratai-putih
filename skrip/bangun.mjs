@@ -316,7 +316,7 @@ let jumlahKabar = 0;
       const ringkas = kabar.ringkasan || deltaKeTeks(isi.delta || '[]').slice(0, 160);
       const iso = kabar.terbitPada ? new Date(kabar.terbitPada).toISOString() : '';
       const gambarBagi = urlSampul || (/^\//.test(kabar.sampulKecil || '') ? kabar.sampulKecil : '');
-      const ogGambar = gambarBagi ? urlSitus.origin + gambarBagi : ASAL + 'aset/img/og-cahaya.jpg';
+      const ogGambar = gambarBagi ? urlSitus.origin + gambarBagi : kabar.video ? `https://i.ytimg.com/vi/${kabar.video}/hqdefault.jpg` : ASAL + 'aset/img/og-cahaya.jpg';
       await tulis(
         `kabar/${slug}/`,
         rakit({
