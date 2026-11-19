@@ -31,7 +31,7 @@ export function pasangTestimoniBelah(wadah, daftar) {
   if (!wadah || !daftar.length) return;
   let aktif = 0;
   wadah.innerHTML = `
-  <div class="belah" tabindex="0" role="group" aria-roledescription="carousel" aria-label="Testimoni peserta dan penerima layanan">
+  <div class="belah" tabindex="0" role="group" aria-roledescription="carousel" aria-label="Suara umat: ulasan peserta dan penerima layanan">
     <div class="belah-kiri">
       <div class="belah-label" data-b="label"></div>
       <div class="belah-kutipan-wadah"><blockquote class="belah-kutipan" data-b="kutipan" aria-live="polite"></blockquote></div>
@@ -39,9 +39,12 @@ export function pasangTestimoniBelah(wadah, daftar) {
     </div>
     <div class="belah-kanan">
       <div class="belah-gambar" data-b="gambar"></div>
-      ${daftar.length > 1 ? '<span class="belah-lanjut" aria-hidden="true">Berikutnya <svg viewBox="0 0 24 24" width="12" height="12"><path d="M7 17 17 7M8 7h9v9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>' : ''}
     </div>
-    ${daftar.length > 1 ? `<div class="belah-titik">${daftar.map((t, i) => `<button type="button" data-ke="${i}" aria-label="Testimoni ${i + 1} dari ${daftar.length}: ${esc(t.nama)}"><span></span></button>`).join('')}</div>` : ''}
+    ${daftar.length > 1 ? `<div class="belah-navigasi">
+      <button type="button" class="belah-arah" data-arah="-1" aria-label="Ulasan sebelumnya"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Sebelumnya</span></button>
+      <div class="belah-titik">${daftar.map((t, i) => `<button type="button" data-ke="${i}" aria-label="Ulasan ${i + 1} dari ${daftar.length}: ${esc(t.nama)}"><span></span></button>`).join('')}</div>
+      <button type="button" class="belah-arah" data-arah="1" aria-label="Ulasan berikutnya"><span>Berikutnya</span><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M9 18l6-6-6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>` : ''}
   </div>`;
   const akar = wadah.querySelector('.belah');
   const el = (k) => akar.querySelector(`[data-b="${k}"]`);
@@ -86,6 +89,8 @@ export function pasangTestimoniBelah(wadah, daftar) {
   akar.addEventListener('click', (e) => {
     const t = e.target.closest('[data-ke]');
     if (t) { e.stopPropagation(); ke(Number(t.dataset.ke)); return; }
+    const a = e.target.closest('[data-arah]');
+    if (a) { e.stopPropagation(); ke(aktif + Number(a.dataset.arah)); return; }
     if (e.target.closest('a')) return;
     ke(aktif + 1);
   });
