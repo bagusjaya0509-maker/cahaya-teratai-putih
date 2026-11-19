@@ -6,6 +6,10 @@ const pemutar = (kabar) => `<div class="baca-sampul baca-video${kabar.videoTegak
 
 export function susunArtikel({ kabar, isi, base, urlHalaman = '', gantiGambar, sampul, sprite = `${base}aset/img/ikon.svg` }) {
   const kat = kabar.kategori || 'Kabar';
+  if (kabar.video && /^[\w-]{11}$/.test(kabar.video)) {
+    const ke = `${base}kabar/?kategori=${encodeURIComponent('Dharma Wacana')}#v-${kabar.video}`;
+    return `<div class="kosong"><h3>${esc(kabar.judul)}</h3><p>Video ini ada di galeri <a data-alih href="${ke}">Dharma Wacana</a>.</p></div>`;
+  }
   const iso = kabar.terbitPada ? new Date(kabar.terbitPada).toISOString() : '';
   // Kabar awal memakai nama foto kegiatan; kabar tanpa foto mendapat sampul polos.
   const sumberSampul = sampul || isi?.sampul || kabar.sampulKecil || '';

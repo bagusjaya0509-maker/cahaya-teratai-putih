@@ -1,6 +1,6 @@
 import { $, BASE, esc, param, denganMemuat } from './inti.js';
 import { daftarKabar } from './publik.js';
-import { kartuKabar, kerangkaKartu } from './kartu.js';
+import { kartuKabar, kerangkaKartu, ubinWacana, putarWacana } from './kartu.js';
 import { KATEGORI_KABAR } from './isi.js';
 import { pasangAgenda } from './agenda.js';
 
@@ -29,7 +29,12 @@ function tampil() {
     kisi.innerHTML = `<div class="kosong" style="grid-column:1/-1"><h3>${q ? 'Tidak ada kabar yang cocok' : 'Belum ada kabar di kategori ini'}</h3><p>${
       q ? 'Coba kata lain, atau muat kabar sebelumnya lalu cari lagi.' : 'Pilih kategori lain atau kembali ke semua kabar.'
     }</p></div>`;
-  } else kisi.innerHTML = hasil.map(kartuKabar).join('');
+  } else {
+    const wacana = kategori === 'Dharma Wacana';
+    kisi.classList.toggle('kisi-wacana', wacana);
+    kisi.innerHTML = wacana ? hasil.filter((k) => k.video).map(ubinWacana).join('') : hasil.map(kartuKabar).join('');
+    if (wacana && location.hash.startsWith('#v-')) document.getElementById(location.hash.slice(1))?.scrollIntoView({ block: 'center' });
+  }
   tLagi.hidden = habis;
 }
 
@@ -60,6 +65,10 @@ $('[data-chip]').addEventListener('click', (e) => {
   muat();
 });
 cari.addEventListener('input', tampil);
+kisi.addEventListener('click', (e) => {
+  const t = e.target.closest('[data-putar]');
+  if (t) putarWacana(t);
+});
 tLagi.addEventListener('click', () => denganMemuat(tLagi, () => muat(true)));
 
 chip();

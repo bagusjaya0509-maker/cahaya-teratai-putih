@@ -2,7 +2,33 @@
 import { BASE, esc, ikon, tanggal } from './inti.js';
 import { gambarYoutube } from './isi.js';
 
-export const urlKabar = (k) => `${BASE}kabar/${k.id || k.slug}/`;
+export const URL_WACANA = `${BASE}kabar/?kategori=${encodeURIComponent('Dharma Wacana')}`;
+// Video Dharma Wacana tidak punya halaman sendiri: semuanya diputar di galeri kategori.
+export const urlKabar = (k) => (k.video ? `${URL_WACANA}#v-${k.video}` : `${BASE}kabar/${k.id || k.slug}/`);
+
+/** Ubin video vertikal (9:16) di galeri Dharma Wacana; klik untuk memutar di tempat. */
+export const ubinWacana = (k) => `
+<figure class="ubin-wacana" id="v-${esc(k.video)}">
+  <button class="ubin-putar" type="button" data-putar="${esc(k.video)}" data-judul="${esc(k.judul)}" aria-label="Putar video: ${esc(k.judul)}">
+    <img src="${esc(k.sampulKecil ? urlSampul(k.sampulKecil) : gambarYoutube(k.video))}" alt="" loading="lazy" decoding="async"${k.sampulKecil ? '' : ' class="mini-yt"'}>
+    <span class="tanda-putar" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+  </button>
+  <figcaption><h3>${esc(k.judul)}</h3><span class="meta-kecil"><time>${tanggal(k.terbitPada)}</time></span></figcaption>
+</figure>`;
+
+/** Ganti ubin dengan pemutar YouTube. */
+export function putarWacana(tombol) {
+  const id = tombol.dataset.putar;
+  if (!/^[\w-]{11}$/.test(id)) return;
+  const f = document.createElement('iframe');
+  f.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+  f.title = tombol.dataset.judul || 'Video Dharma Wacana';
+  f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+  f.referrerPolicy = 'strict-origin-when-cross-origin';
+  f.allowFullscreen = true;
+  f.className = 'ubin-pemutar';
+  tombol.replaceWith(f);
+}
 
 // Kabar awal memakai nama foto kegiatan yang sudah ada di situs, bukan data URL.
 const urlSampul = (s) => (/^[a-z]+$/.test(s) ? `${BASE}aset/img/kegiatan/${s}.webp` : s);

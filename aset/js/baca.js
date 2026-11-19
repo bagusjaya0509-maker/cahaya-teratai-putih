@@ -67,6 +67,8 @@ async function renderDariData(slug) {
     const data = await ambilKabar(slug);
     if (!data) return tampilTakDitemukan();
     artikel.innerHTML = susunArtikel({ ...data, base: BASE, urlHalaman: location.origin + location.pathname });
+    const alih = artikel.querySelector('[data-alih]');
+    if (alih) return location.replace(alih.href);
     document.title = `${data.kabar.judul} — Yayasan Cahaya Teratai Putih`;
     $('meta[name="description"]')?.setAttribute('content', data.kabar.ringkasan || '');
     $('meta[name="robots"]')?.setAttribute('content', 'index,follow');
