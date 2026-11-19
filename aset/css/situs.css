@@ -1190,7 +1190,8 @@ dialog.dialog-video::backdrop { background: rgb(5 12 14 / .82); backdrop-filter:
 .kolom-email { display: inline-flex; align-items: center; gap: 4px; word-break: break-all; }
 .kolom-email .ikon { width: 14px; height: 14px; color: #1a73e8; flex: none; }
 .belah.tanpa-foto { grid-template-columns: 1fr; }
-.belah-navigasi { grid-column: 1 / -1; display: flex; align-items: center; gap: 18px; padding-top: 6px; }
+.belah-bawah { display: flex; align-items: center; justify-content: space-between; gap: 14px 24px; flex-wrap: wrap; }
+.belah-navigasi { display: flex; align-items: center; gap: 18px; margin-left: auto; }
 .belah-navigasi .belah-titik { position: static; order: -1; margin-right: 6px; }
 .belah-arah { display: inline-flex; align-items: center; gap: 4px; padding: 6px 0; border: 0; background: none; color: var(--tinta-2); font: inherit; font-size: .75rem; letter-spacing: .02em; cursor: pointer; transition: color .2s; }
 .belah-arah svg { width: 12px; height: 12px; }
@@ -1222,4 +1223,4 @@ dialog.dialog-video::backdrop { background: rgb(5 12 14 / .82); backdrop-filter:
 /* Animasi tanpa bingkai/latar: lambang tampil langsung di atas latar halaman */
 .belah-gambar:has(.animasi-teratai) { background: none; border: 0; overflow: visible; }
 .kolom-foto:has(.animasi-teratai) { background: none; }
-@media (min-width: 641px) { .belah-navigasi [data-arah="-1"] { margin-left: auto; } }
+@media (max-width: 640px) { .belah-navigasi { margin-left: 0; width: 100%; } }
