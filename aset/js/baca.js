@@ -2,7 +2,7 @@
 // kabar yang baru terbit (belum ikut build) dibuka lewat 404.html dan
 // dirender di sini dari Firestore.
 import { $, BASE, roti } from './inti.js';
-import { ambilKabar, daftarKabar } from './publik.js';
+import { ambilKabar, daftarKabar, diubahKabar } from './publik.js';
 import { susunArtikel } from './artikel.js';
 import { kartuKabar } from './kartu.js';
 
@@ -61,6 +61,16 @@ function tampilTakDitemukan() {
   document.title = 'Halaman tidak ditemukan — Yayasan Cahaya Teratai Putih';
 }
 
+async function segarkanDariData(slug) {
+  try {
+    const data = await ambilKabar(slug);
+    if (!data) return;
+    artikel.innerHTML = susunArtikel({ ...data, base: BASE, urlHalaman: location.origin + location.pathname });
+    pasangBagikan();
+    pasangGaleri();
+  } catch (e) { console.error(e); }
+}
+
 async function renderDariData(slug) {
   artikel.innerHTML = `<div aria-busy="true"><div class="kerangka" style="height:14px;width:30%"></div><div class="kerangka" style="height:44px;width:90%;margin-top:18px"></div><div class="kerangka" style="height:44px;width:70%;margin-top:10px"></div><div class="kerangka" style="aspect-ratio:16/9;margin-top:32px"></div></div>`;
   try {
@@ -83,6 +93,11 @@ if (utama.dataset.prerender === '1') {
   pasangBagikan();
   pasangGaleri();
   kabarLain(utama.dataset.slug);
+  // Sampul/isi diubah pengurus sesudah build? tampilkan versi terbaru langsung dari data.
+  const versiBuild = Number(utama.dataset.diubah) || 0;
+  diubahKabar(utama.dataset.slug)
+    .then((t) => { if (versiBuild && t > versiBuild + 1000) segarkanDariData(utama.dataset.slug); })
+    .catch(() => {});
 } else {
   const m = location.pathname.slice(BASE.length - 1).match(/^\/kabar\/([a-z0-9-]{1,90})\/?$/);
   if (m) renderDariData(m[1]);

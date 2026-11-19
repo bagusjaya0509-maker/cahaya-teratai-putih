@@ -74,6 +74,13 @@ export async function ambilKabar(slug) {
   return null;
 }
 
+/** Waktu terakhir kabar diubah (dokumen ringkas saja), untuk menyegarkan halaman statis yang tertinggal. */
+export async function diubahKabar(slug) {
+  if (MODE !== 'firebase' || !/^[a-z0-9-]{1,90}$/.test(slug)) return 0;
+  const k = await ambilDokumen({ ...fb(), jalur: `kabar/${slug}` });
+  return Number(k?.diubah) || 0;
+}
+
 /** Testimoni yang sudah ditampilkan pengurus, terbaru dulu. */
 export async function daftarTestimoni() {
   if (MODE === 'demo') {

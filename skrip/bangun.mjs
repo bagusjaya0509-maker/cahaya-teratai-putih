@@ -248,7 +248,7 @@ await tulis(
     meta: { ...templatBaca.meta, judul: 'Halaman tidak ditemukan', path: '404.html', robots: 'noindex' },
     badan: templatBaca.badan,
     nama: '404',
-    sisip: { slug: '', prerender: '0', __mentah: { '@@ARTIKEL@@': '' } },
+    sisip: { slug: '', prerender: '0', diubah: '0', __mentah: { '@@ARTIKEL@@': '' } },
   }),
 );
 
@@ -344,7 +344,7 @@ let jumlahKabar = 0;
           },
           badan: templatBaca.badan,
           nama: `kabar/${slug}`,
-          sisip: { slug, prerender: '1', __mentah: { '@@ARTIKEL@@': html } },
+          sisip: { slug, prerender: '1', diubah: String(kabar.diubah || 0), __mentah: { '@@ARTIKEL@@': html } },
         }),
       );
       peta.push({ loc: urlHalaman, prioritas: '0.7', lastmod: (kabar.diubah || kabar.terbitPada) && new Date(kabar.diubah || kabar.terbitPada).toISOString().slice(0, 10) });
