@@ -423,7 +423,7 @@ const fbMesin = {
   async semuaKas() {
     wajibAdmin();
     const { F, db } = await fb();
-    const s = await F.getDocs(F.query(F.collection(db, 'kas'), F.limit(20000)));
+    const s = await F.getDocs(F.query(F.collection(db, 'kas'), F.limit(10000)));
     return s.docs.map(rapikan);
   },
   /** foto: data URL baru, '' untuk menghapus bukti, undefined bila tidak berubah. Mengembalikan id. */
