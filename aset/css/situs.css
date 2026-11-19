@@ -1194,7 +1194,7 @@ dialog.dialog-video::backdrop { background: rgb(5 12 14 / .82); backdrop-filter:
 .belah-navigasi .belah-titik { position: static; flex-wrap: wrap; justify-content: center; }
 .belah-arah { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border: 1px solid var(--garis-2, rgb(0 0 0/.18)); border-radius: 999px; background: var(--kelopak, #fff); color: var(--tinta); font: inherit; font-size: .85rem; cursor: pointer; transition: background .2s, border-color .2s; }
 .belah-arah:hover, .belah-arah:focus-visible { border-color: var(--tinta); background: var(--embun-2, #f1f5f3); }
-@media (max-width: 420px) { .belah-arah span { display: none; } .belah-arah { padding: 10px; } }
+@media (max-width: 420px) { .belah-arah { padding: 8px 11px; font-size: .8rem; } .belah-titik button { padding: 4px; } }
 .belah.tanpa-foto .belah-kanan { display: none; }
 .belah.tanpa-foto .belah-kutipan { max-width: 60ch; }
 
