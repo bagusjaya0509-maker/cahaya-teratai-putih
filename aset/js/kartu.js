@@ -7,6 +7,10 @@ export const urlKabar = (k) => `${BASE}kabar/${k.id || k.slug}/`;
 const urlSampul = (s) => (/^[a-z]+$/.test(s) ? `${BASE}aset/img/kegiatan/${s}.webp` : s);
 
 export function sampul(k, kelas = '') {
+  const galeri = (Array.isArray(k.galeriKecil) ? k.galeriKecil : []).filter((g) => typeof g === 'string' && g);
+  if (galeri.length > 1) {
+    return `<div class="sampul sampul-putar ${kelas}">${galeri.map((g, i) => `<img src="${esc(urlSampul(g))}" alt="" loading="lazy" decoding="async"${i ? '' : ' class="aktif"'}>`).join('')}</div>`;
+  }
   if (k.sampulKecil) return `<div class="sampul ${kelas}"><img src="${esc(urlSampul(k.sampulKecil))}" alt="" loading="lazy" decoding="async"></div>`;
   return `<div class="sampul sampul-kosong ${kelas}" aria-hidden="true"><span class="sampul-kat">${esc(k.kategori || 'Kabar')}</span></div>`;
 }
@@ -52,3 +56,17 @@ export const kerangkaKartu = (n = 3) => Array.from({ length: n }, () => `
   <div class="kerangka" style="height:22px;width:92%;margin-bottom:8px"></div>
   <div class="kerangka" style="height:22px;width:70%"></div>
 </div>`).join('');
+
+// Sampul kartu yang berisi beberapa foto berganti setiap 3,5 detik
+// (berhenti bila pengguna memilih gerak dikurangi atau tab tidak terlihat).
+function putarSampul() {
+  if (typeof document === 'undefined' || document.hidden) return;
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+  document.querySelectorAll('.sampul-putar').forEach((w) => {
+    const img = [...w.querySelectorAll('img')];
+    const i = img.findIndex((x) => x.classList.contains('aktif'));
+    img[i]?.classList.remove('aktif');
+    img[(i + 1) % img.length].classList.add('aktif');
+  });
+}
+if (typeof window !== 'undefined') setInterval(putarSampul, 3500);

@@ -369,7 +369,7 @@ const fbMesin = {
     const b = F.writeBatch(db);
     const m = potongKabar(k);
     b.set(F.doc(db, 'kabar', k.slug), {
-      judul: m.judul, kategori: m.kategori, ringkasan: m.ringkasan, penulis: m.penulis, sampulKecil: m.sampulKecil, unggulan: m.unggulan,
+      judul: m.judul, kategori: m.kategori, ringkasan: m.ringkasan, penulis: m.penulis, sampulKecil: m.sampulKecil, galeriKecil: m.galeriKecil, unggulan: m.unggulan,
       terbitPada: F.Timestamp.fromMillis(k.terbitPada || Date.now()), diubah: F.serverTimestamp(),
     });
     b.set(F.doc(db, 'kabarIsi', k.slug), { delta: m.delta, sampul: m.sampul, keteranganSampul: m.keteranganSampul, diubah: F.serverTimestamp() });
@@ -766,7 +766,7 @@ const demoMesin = {
     const d = await demo();
     const m = potongKabar(k);
     d.ubahDemo((s) => {
-      s.kabar[k.slug] = { slug: k.slug, judul: m.judul, kategori: m.kategori, ringkasan: m.ringkasan, penulis: m.penulis, sampulKecil: m.sampulKecil, unggulan: m.unggulan, terbitPada: k.terbitPada || Date.now(), diubah: Date.now() };
+      s.kabar[k.slug] = { slug: k.slug, judul: m.judul, kategori: m.kategori, ringkasan: m.ringkasan, penulis: m.penulis, sampulKecil: m.sampulKecil, galeriKecil: m.galeriKecil, unggulan: m.unggulan, terbitPada: k.terbitPada || Date.now(), diubah: Date.now() };
       s.kabarIsi[k.slug] = { delta: m.delta, sampul: m.sampul, keteranganSampul: m.keteranganSampul, diubah: Date.now() };
       delete s.draf[k.slug];
     });
@@ -846,7 +846,8 @@ const demoMesin = {
 function potongKabar(k) {
   return {
     slug: k.slug, judul: k.judul || '', kategori: k.kategori || 'Kegiatan', ringkasan: k.ringkasan || '', penulis: k.penulis || '',
-    unggulan: Boolean(k.unggulan), sampul: k.sampul || '', sampulKecil: k.sampulKecil || '', keteranganSampul: k.keteranganSampul || '',
+    unggulan: Boolean(k.unggulan), sampul: k.sampul || '', sampulKecil: k.sampulKecil || '',
+    galeriKecil: (Array.isArray(k.galeriKecil) ? k.galeriKecil : []).filter((g) => typeof g === 'string').slice(0, 5), keteranganSampul: k.keteranganSampul || '',
     delta: typeof k.delta === 'string' ? k.delta : JSON.stringify(k.delta || []),
   };
 }

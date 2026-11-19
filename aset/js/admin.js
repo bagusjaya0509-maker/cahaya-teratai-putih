@@ -784,6 +784,19 @@ function muatQuill() {
   });
 }
 
+/** Foto kecil untuk sampul kartu yang berganti otomatis (bila isi kabar memuat 2 foto atau lebih). */
+async function buatGaleriKecil(delta) {
+  let ops = [];
+  try { ops = JSON.parse(delta); } catch { return []; }
+  const src = ops.filter((o) => o.insert && typeof o.insert === 'object' && o.insert.image).map((o) => o.insert.image).slice(0, 5);
+  if (src.length < 2) return [];
+  const hasil = [];
+  for (const s of src) {
+    try { hasil.push(await kompres(await (await fetch(s)).blob(), { maks: 480, mutu: 0.66, rasio: 16 / 10 })); } catch { /* lewati */ }
+  }
+  return hasil.length > 1 ? hasil : [];
+}
+
 const BATAS_ISI = 900_000; // bita; batas dokumen Firestore 1 MiB
 
 async function rampingkanGambar(ops) {
@@ -1006,6 +1019,7 @@ async function vEditor(slug) {
   $('[data-terbit]').addEventListener('click', (e) => denganMemuat(e.currentTarget, async () => {
     try {
       const d = await siapkan(true);
+      d.galeriKecil = await buatGaleriKecil(d.delta);
       await L.terbitkan(d);
       sesudahSimpan(d, true);
       roti('Kabar terbit dan sudah tampil di situs.', 'berhasil');
