@@ -8,9 +8,6 @@ import { kartuKabar } from './kartu.js';
 
 const utama = $('main.baca');
 const artikel = $('#artikel');
-// Kabar video (Dharma Wacana) tidak punya halaman sendiri: alihkan ke galeri.
-const alihAwal = artikel?.querySelector('[data-alih]');
-if (alihAwal) location.replace(alihAwal.href);
 const tak = $('#tak-ditemukan');
 
 function pasangBagikan() {
