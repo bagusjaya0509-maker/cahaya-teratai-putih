@@ -2,6 +2,7 @@ import { $, BASE, esc, param, denganMemuat } from './inti.js';
 import { daftarKabar } from './publik.js';
 import { kartuKabar, kerangkaKartu } from './kartu.js';
 import { KATEGORI_KABAR } from './isi.js';
+import { pasangAgenda } from './agenda.js';
 
 const UKURAN = 12;
 const kisi = $('[data-kisi]');
@@ -63,3 +64,5 @@ tLagi.addEventListener('click', () => denganMemuat(tLagi, () => muat(true)));
 
 chip();
 muat();
+
+pasangAgenda();

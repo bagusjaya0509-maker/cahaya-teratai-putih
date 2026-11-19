@@ -1314,7 +1314,20 @@ let ctlJadwal;
 async function vJadwal() {
   setJudul('Jadwal & produk');
   const a = await ambilPengaturan();
-  const d = { hariBuka: [...a.hariBuka], sesi: a.sesi.map((s) => ({ ...s })), libur: [...a.libur], produk: [...a.produk], catatanBooking: a.catatanBooking || '' };
+  const d = { hariBuka: [...a.hariBuka], sesi: a.sesi.map((s) => ({ ...s })), libur: [...a.libur], produk: [...a.produk], catatanBooking: a.catatanBooking || '',
+    agendaRutin: (a.agendaRutin || []).map((x) => ({ ...x })), agendaKhusus: (a.agendaKhusus || []).map((x) => ({ ...x })) };
+  const HARI_AGENDA = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+  const medanAgenda = (jenis, i, x) => `<div class="adm-agenda-baris">
+      ${jenis === 'rutin'
+    ? `<div class="medan"><label>Hari</label><select data-ag="${jenis}" data-i="${i}" data-k="hari">${HARI_AGENDA.map((h, n) => `<option value="${n}" ${Number(x.hari) === n ? 'selected' : ''}>${h}</option>`).join('')}</select></div>`
+    : `<div class="medan"><label>Tanggal</label><input type="date" data-ag="${jenis}" data-i="${i}" data-k="tanggal" value="${esc(x.tanggal || '')}"></div>`}
+      <div class="medan"><label>Jam (WITA)</label><input type="text" maxlength="11" placeholder="20.00" data-ag="${jenis}" data-i="${i}" data-k="jam" value="${esc(x.jam || '')}"></div>
+      <div class="medan lebar"><label>Nama kegiatan</label><input type="text" maxlength="80" data-ag="${jenis}" data-i="${i}" data-k="judul" value="${esc(x.judul || '')}"></div>
+      <div class="medan lebar"><label>Tempat</label><input type="text" maxlength="160" data-ag="${jenis}" data-i="${i}" data-k="tempat" value="${esc(x.tempat || '')}"></div>
+      <div class="medan lebar"><label>Keterangan singkat</label><input type="text" maxlength="200" data-ag="${jenis}" data-i="${i}" data-k="ket" value="${esc(x.ket || '')}"></div>
+      <div class="medan lebar"><label>Tautan kabar/pengumuman (opsional)</label><input type="text" maxlength="200" placeholder="/kabar/..." data-ag="${jenis}" data-i="${i}" data-k="tautan" value="${esc(x.tautan || '')}"></div>
+      <button class="tombol-teks" type="button" data-hapus-agenda="${jenis}" data-i="${i}">${ikon('x')}Hapus</button>
+    </div>`;
   const kunciSesi = (nama, i) => buatSlug(nama).slice(0, 18) || `sesi-${i + 1}`;
   const gambar = () => {
     isi.innerHTML = `
@@ -1339,6 +1352,17 @@ async function vJadwal() {
         <div class="medan"><label for="a-catatan">Tampil di samping formulir</label><textarea id="a-catatan" data-catatan-booking rows="4" maxlength="400" placeholder="Contoh: bawa kain dan selendang bila datang untuk upacara.">${esc(d.catatanBooking)}</textarea></div>
         <button class="tombol tombol-utama" type="submit">${ikon('check')}Simpan pengaturan</button>
       </section>
+      <section class="adm-kartu medan-kecil adm-tumpuk" style="grid-column:1/-1">
+        <h2>Agenda kegiatan</h2>
+        <p class="petunjuk" style="margin:0">Tampil otomatis di beranda dan halaman Kabar. Kegiatan rutin dihitung sendiri untuk minggu-minggu berikutnya; kegiatan khusus hilang sendiri setelah tanggalnya lewat. Klik Simpan pengaturan setelah mengubah.</p>
+        <h3>Kegiatan rutin mingguan</h3>
+        ${d.agendaRutin.map((x, i) => medanAgenda('rutin', i, x)).join('') || '<p class="kosong-kecil">Belum ada</p>'}
+        <div><button class="tombol tombol-garis kecil" type="button" data-tambah-agenda="rutin">${ikon('plus')}Tambah kegiatan rutin</button></div>
+        <h3>Kegiatan khusus</h3>
+        ${d.agendaKhusus.map((x, i) => medanAgenda('khusus', i, x)).join('') || '<p class="kosong-kecil">Belum ada</p>'}
+        <div><button class="tombol tombol-garis kecil" type="button" data-tambah-agenda="khusus">${ikon('plus')}Tambah kegiatan khusus</button></div>
+        <div><button class="tombol tombol-utama" type="submit">${ikon('check')}Simpan pengaturan</button></div>
+      </section>
     </form>`;
   };
   gambar();
@@ -1346,6 +1370,11 @@ async function vJadwal() {
     d.hariBuka = $$('[name=hari]:checked', isi).map((c) => Number(c.value));
     d.sesi.forEach((s, i) => { s.nama = $(`[data-sesi-nama="${i}"]`).value.trim(); s.jam = $(`[data-sesi-jam="${i}"]`).value.trim(); });
     d.catatanBooking = $('[data-catatan-booking]').value.trim();
+    $$('[data-ag]', isi).forEach((el) => {
+      const daftar = el.dataset.ag === 'rutin' ? d.agendaRutin : d.agendaKhusus;
+      const x = daftar[Number(el.dataset.i)];
+      if (x) x[el.dataset.k] = el.dataset.k === 'hari' ? Number(el.value) : el.value.trim();
+    });
   };
   // Pendengar dipasang pada wadah yang dipakai semua menu; yang lama dicabut tiap kali halaman ini dibuka.
   ctlJadwal?.abort();
@@ -1360,6 +1389,8 @@ async function vJadwal() {
     else if (t.dataset.tambahLibur !== undefined) { const v = $('[data-libur-baru]').value; if (v) { bacaIsian(); d.libur = [...new Set([...d.libur, v])].sort(); gambar(); } }
     else if (t.dataset.hapusLibur !== undefined) { bacaIsian(); d.libur.splice(Number(t.dataset.hapusLibur), 1); gambar(); }
     else if (t.dataset.tambahProduk !== undefined) { const v = $('[data-produk-baru]').value.trim(); if (v) { bacaIsian(); d.produk = [...new Set([...d.produk, v])]; gambar(); } }
+    else if (t.dataset.tambahAgenda !== undefined) { bacaIsian(); (t.dataset.tambahAgenda === 'rutin' ? d.agendaRutin : d.agendaKhusus).push(t.dataset.tambahAgenda === 'rutin' ? { judul: '', hari: 6, jam: '', tempat: '', ket: '', tautan: '' } : { judul: '', tanggal: '', jam: '', tempat: '', ket: '', tautan: '' }); gambar(); }
+    else if (t.dataset.hapusAgenda !== undefined) { bacaIsian(); (t.dataset.hapusAgenda === 'rutin' ? d.agendaRutin : d.agendaKhusus).splice(Number(t.dataset.i), 1); gambar(); }
     else if (t.dataset.hapusProduk !== undefined) { bacaIsian(); d.produk.splice(Number(t.dataset.hapusProduk), 1); gambar(); }
   }, { signal });
   isi.addEventListener('submit', (e) => {
@@ -1367,6 +1398,8 @@ async function vJadwal() {
     e.preventDefault();
     bacaIsian();
     if (!d.hariBuka.length || !d.sesi.length || d.sesi.some((s) => !s.nama)) return roti('Pilih minimal satu hari buka dan satu sesi bernama.', 'galat');
+    d.agendaRutin = d.agendaRutin.filter((x) => x.judul);
+    d.agendaKhusus = d.agendaKhusus.filter((x) => x.judul && x.tanggal).sort((p, q) => p.tanggal.localeCompare(q.tanggal));
     const simpan = { ...d, sesi: d.sesi.map((s, i) => ({ kunci: s.kunci || kunciSesi(s.nama, i), nama: s.nama, jam: s.jam })) };
     denganMemuat($('[type=submit]', e.target), async () => {
       try { await L.simpanPengaturan(simpan); roti('Pengaturan disimpan. Formulir booking langsung mengikuti.', 'berhasil'); } catch (err) { roti(pesanGalat(err), 'galat'); }

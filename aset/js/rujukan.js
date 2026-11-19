@@ -33,6 +33,11 @@ export const PENGATURAN_BAWAAN = {
   libur: [],
   produk: [],
   catatanBooking: '',
+  // Agenda: kegiatan rutin mingguan (hari 0 = Minggu ... 6 = Sabtu) dan kegiatan khusus bertanggal.
+  agendaRutin: [
+    { judul: 'Meditasi bersama', hari: 6, jam: '20.00', tempat: 'Sekretariat yayasan, Jl. Gora Gang Markisa No. 3, Cakranegara Utara', ket: 'Terbuka untuk umum, tanpa biaya. Pakaian bebas rapi + adat madya.', tautan: '' },
+  ],
+  agendaKhusus: [],
 };
 
 export const KOTA_NTB = [

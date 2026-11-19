@@ -1061,3 +1061,23 @@ body { overflow-wrap: break-word; }
 .sampul-putar img:not(:first-child) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .sampul-putar img:not(.aktif) { opacity: 0; }
 @media (prefers-reduced-motion: reduce) { .sampul-putar img { transition: none; } }
+
+/* Agenda kegiatan otomatis (beranda dan halaman Kabar) */
+.agenda-garis { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.agenda-butir { display: grid; grid-template-columns: 64px 1fr; gap: 16px; align-items: start; padding: 14px 16px; border: 1px solid var(--garis); border-radius: var(--radius); background: var(--kelopak); color: inherit; text-decoration: none; }
+a.agenda-butir:hover { border-color: var(--daun); }
+.agenda-tgl { display: grid; justify-items: center; padding: 8px 0; border-radius: 10px; background: var(--telaga, #0f3437); color: #fff; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.agenda-tgl b { font-size: 1.6rem; line-height: 1; letter-spacing: 0; }
+.agenda-isi { display: grid; gap: 3px; min-width: 0; }
+.agenda-label { justify-self: start; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--daun); }
+.agenda-label.pertama { color: #b4540a; }
+.agenda-label.khusus { color: #8a1c10; }
+.agenda-judul { font-size: 1.08rem; }
+.agenda-meta { display: flex; gap: 6px; align-items: flex-start; color: var(--tinta-2); font-size: 0.92rem; }
+.agenda-meta .ikon { flex: none; width: 16px; height: 16px; margin-top: 3px; }
+.agenda-ket { font-size: 0.9rem; color: var(--tinta-2); }
+.agenda-kabar { margin-bottom: 32px; }
+.agenda-kabar-judul { font-size: 1.3rem; margin-bottom: 12px; }
+.adm-agenda-baris { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 12px; padding: 12px; border: 1px solid var(--garis); border-radius: 10px; }
+.adm-agenda-baris .lebar { grid-column: 1 / -1; }
+.adm-agenda-baris .tombol-teks { justify-self: start; }
