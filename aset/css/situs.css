@@ -1083,5 +1083,5 @@ a.agenda-butir:hover { border-color: var(--daun); }
 .adm-agenda-baris .tombol-teks { justify-self: start; }
 
 /* Motif batik di latar biru kepala halaman */
-.kepala-halaman::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: currentColor; opacity: 0.1;
-  -webkit-mask: url('../img/motif-batik.webp') center / cover no-repeat; mask: url('../img/motif-batik.webp') center / cover no-repeat; }
+.kepala-halaman::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: currentColor; opacity: 0.05;
+  -webkit-mask: url('../img/motif-batik.webp') center / 420px auto repeat; mask: url('../img/motif-batik.webp') center / 420px auto repeat; }
