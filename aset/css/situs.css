@@ -1085,3 +1085,8 @@ a.agenda-butir:hover { border-color: var(--daun); }
 /* Motif batik di latar biru kepala halaman */
 .kepala-halaman::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: currentColor; opacity: 0.05;
   -webkit-mask: url('../img/motif-batik.webp') center / 420px auto repeat; mask: url('../img/motif-batik.webp') center / 420px auto repeat; }
+
+/* Motif batik samar di kaki halaman (sama dengan kepala halaman) */
+.kaki { position: relative; isolation: isolate; }
+.kaki::before { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: #fff; opacity: 0.04;
+  -webkit-mask: url('../img/motif-batik.webp') center / 420px auto repeat; mask: url('../img/motif-batik.webp') center / 420px auto repeat; }
