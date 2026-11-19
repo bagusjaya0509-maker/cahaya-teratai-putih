@@ -1223,4 +1223,4 @@ dialog.dialog-video::backdrop { background: rgb(5 12 14 / .82); backdrop-filter:
 /* Animasi tanpa bingkai/latar: lambang tampil langsung di atas latar halaman */
 .belah-gambar:has(.animasi-teratai) { background: none; border: 0; overflow: visible; }
 .kolom-foto:has(.animasi-teratai) { background: none; }
-@media (max-width: 640px) { .belah-navigasi { margin-left: auto; gap: 14px; } }
+@media (max-width: 640px) { .belah-navigasi { margin-left: 0; width: 100%; gap: 14px; } .belah-navigasi [data-arah="-1"] { margin-left: auto; } }
