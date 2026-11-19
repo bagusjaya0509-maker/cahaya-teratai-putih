@@ -1,7 +1,7 @@
 import { $, $$, BASE, MODE } from './inti.js';
 import { daftarKabar, daftarTestimoni } from './publik.js';
 import { utamaKabar, barisKabar, slideKegiatan } from './kartu.js';
-import { kartuTestimoni } from './testimoni.js';
+import { pasangTestimoniBelah } from './testimoni-belah.js';
 
 const wadah = $('[data-kabar-portal]');
 
@@ -30,8 +30,7 @@ const tWadah = $('[data-testimoni-beranda]');
 if (tWadah && MODE !== 'mati') {
   daftarTestimoni().then((d) => {
     if (!d.length) return;
-    tWadah.innerHTML = d.slice(0, 3).map(kartuTestimoni).join('');
-    tWadah.classList.add('kisi-testimoni');
+    pasangTestimoniBelah(tWadah, d.slice(0, 8));
   }).catch((e) => console.warn(e));
 }
 

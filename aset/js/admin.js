@@ -1241,7 +1241,7 @@ async function vDetailBooking(id) {
 // ======================================================================
 // TESTIMONI
 // ======================================================================
-const saringTesti = { status: 'menunggu' };
+const saringTesti = { status: '' };
 
 function tandaiKlaim(teks) {
   const pola = new RegExp(`(^|[^a-z])(${KATA_KLAIM.map((k) => k.replace('%', '\\%')).join('|')})`, 'gi');
@@ -1255,7 +1255,7 @@ async function vTestimoni(paksa = false) {
   const s = saringTesti;
   const gambar = () => {
     const h = semua.filter((t) => !s.status || t.status === s.status);
-    $('[data-pilih-status]').innerHTML = [['', 'Semua'], ...Object.entries(STATUS_TESTIMONI)].map(([k, v]) => `<button class="chip" type="button" data-st="${k}" aria-pressed="${s.status === k}">${v} (${k ? semua.filter((t) => t.status === k).length : semua.length})</button>`).join('');
+    $('[data-pilih-status]').innerHTML = `<span class="meta-kecil">${semua.length} testimoni tampil di situs</span>`;
     $('[data-tabel]').innerHTML = h.length
       ? `<ul class="adm-testimoni">${h.map((t) => {
         const klaim = kataKlaim(t.isi);

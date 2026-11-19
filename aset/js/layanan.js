@@ -46,7 +46,7 @@ export function samarkanEmail(email) {
   if (!lokal || !domain) return '';
   const depan = lokal.slice(0, Math.min(2, Math.max(1, lokal.length - 2)));
   const ekor = lokal.length > 4 ? lokal.slice(-1) : '';
-  return `${depan}${'*'.repeat(Math.max(3, lokal.length - depan.length - ekor.length))}${ekor}@${domain}`;
+  return `${depan}${'*'.repeat(Math.min(6, Math.max(3, lokal.length - depan.length - ekor.length)))}${ekor}@${domain}`;
 }
 const identitasAkun = (p) => (p && !p.tamu && p.email ? { akunEmail: samarkanEmail(p.email), akunFoto: p.foto || '' } : { akunEmail: '', akunFoto: '' });
 function wajibMasuk() {
