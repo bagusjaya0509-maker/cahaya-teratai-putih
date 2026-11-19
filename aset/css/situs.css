@@ -1194,20 +1194,20 @@ dialog.dialog-video::backdrop { background: rgb(5 12 14 / .82); backdrop-filter:
 .belah.tanpa-foto .belah-kutipan { max-width: 60ch; }
 
 /* ---------- Animasi lambang teratai (pengganti foto testimoni akun yayasan) ---------- */
-.animasi-teratai { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(120% 90% at 50% 62%, #1d4a50 0%, #10292d 55%, #0a1b1e 100%); color: #EFB30F; }
+.animasi-teratai { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(120% 95% at 50% 58%, #f7cf4f 0%, #e9ac12 48%, #c98a06 100%); color: #fff; }
 .kolom-foto > .animasi-teratai { position: relative; height: 100%; border-radius: inherit; }
 .kolom-foto:has(.animasi-teratai) { position: relative; overflow: hidden; }
-.at-cahaya { position: absolute; left: 50%; top: 52%; width: 120%; aspect-ratio: 1; transform: translate(-50%, -50%); background: radial-gradient(circle, rgb(239 179 15 / .38) 0%, rgb(239 179 15 / .12) 34%, transparent 62%); animation: at-denyut 5s ease-in-out infinite; }
+.at-cahaya { position: absolute; left: 50%; top: 52%; width: 120%; aspect-ratio: 1; transform: translate(-50%, -50%); background: radial-gradient(circle, rgb(255 255 255 / .55) 0%, rgb(255 248 220 / .18) 34%, transparent 62%); animation: at-denyut 5s ease-in-out infinite; }
 .at-lambang { position: absolute; left: 50%; top: 52%; width: 78%; aspect-ratio: 1; transform: translate(-50%, -50%); }
 .at-lambang svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 .at-surya { animation: at-goyang 9s ease-in-out infinite, at-sinar 5s ease-in-out infinite; transform-origin: 50% 62%; }
-.at-teratai { animation: at-mekar 5s ease-in-out infinite; transform-origin: 50% 78%; filter: drop-shadow(0 0 10px rgb(239 179 15 / .35)); }
+.at-teratai { animation: at-mekar 5s ease-in-out infinite; transform-origin: 50% 78%; filter: drop-shadow(0 2px 8px rgb(140 90 0 / .35)); }
 .at-sosok { animation: at-sinar-sosok 5s ease-in-out infinite; }
-.at-partikel { position: absolute; bottom: -6%; left: calc(12% + var(--i) * 12.5%); width: 4px; height: 4px; border-radius: 50%; background: #f7d36b; box-shadow: 0 0 8px 2px rgb(247 211 107 / .6); opacity: 0; animation: at-naik calc(6s + var(--i) * .7s) linear infinite; animation-delay: calc(var(--i) * -1.3s); }
+.at-partikel { position: absolute; bottom: -6%; left: calc(12% + var(--i) * 12.5%); width: 4px; height: 4px; border-radius: 50%; background: #fff; box-shadow: 0 0 8px 2px rgb(255 255 255 / .7); opacity: 0; animation: at-naik calc(6s + var(--i) * .7s) linear infinite; animation-delay: calc(var(--i) * -1.3s); }
 @keyframes at-goyang { 0%, 100% { transform: rotate(-4deg) scale(.98); } 50% { transform: rotate(4deg) scale(1.03); } }
 @keyframes at-sinar { 0%, 100% { opacity: .75; } 50% { opacity: 1; } }
 @keyframes at-mekar { 0%, 100% { transform: scale(.96); } 50% { transform: scale(1.04); } }
-@keyframes at-sinar-sosok { 0%, 100% { filter: drop-shadow(0 0 4px rgb(255 236 170 / .35)); } 50% { filter: drop-shadow(0 0 14px rgb(255 236 170 / .8)); } }
+@keyframes at-sinar-sosok { 0%, 100% { filter: drop-shadow(0 0 4px rgb(255 255 255 / .45)); } 50% { filter: drop-shadow(0 0 16px rgb(255 255 255 / .95)); } }
 @keyframes at-denyut { 0%, 100% { opacity: .7; transform: translate(-50%, -50%) scale(.94); } 50% { opacity: 1; transform: translate(-50%, -50%) scale(1.06); } }
 @keyframes at-naik { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: .9; } 85% { opacity: .5; } 100% { transform: translateY(-120cqh); opacity: 0; } }
 .animasi-teratai { container-type: size; }
