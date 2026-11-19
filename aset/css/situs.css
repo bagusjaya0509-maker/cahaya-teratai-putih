@@ -1119,3 +1119,7 @@ dialog.dialog-video::backdrop { background: rgb(5 12 14 / .82); backdrop-filter:
 .dialog-video-tutup { flex: none; width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgb(255 255 255 / .14); color: #fff; font-size: 1.7rem; line-height: 1; cursor: pointer; }
 .dialog-video-tutup:hover, .dialog-video-tutup:focus-visible { background: var(--sari, #c79a2b); }
 .dialog-video .tautan-yt { color: rgb(255 255 255 / .8); }
+
+/* Tulisan kabar: rata kiri-kanan, awal paragraf menjorok (permintaan pengurus, 19 Nov 2026) */
+.prosa > p { text-align: justify; text-indent: 2em; hyphens: auto; -webkit-hyphens: auto; }
+.prosa > p:has(> strong:only-child) { text-indent: 0; }
