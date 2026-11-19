@@ -280,8 +280,8 @@ const FOLDER_BERKAS = [
   },
   {
     judul: 'Proposal bantuan', id: '1RlIm_MJFj8g03jazHK-iM-VhkaZVwkD2', ikon: 'file-text',
-    isi: ['Proposal Pembinaan Umat Hindu Berbasis Tri Hita Karana TA 2027 (PDF dan Word)',
-      'Proposal Kesehatan Holistik Masyarakat Hindu TA 2027 (PDF dan Word)', 'RAB kedua proposal (Excel)'],
+    isi: ['Proposal Pembinaan Umat Hindu dan Kesehatan Holistik Berbasis Tri Hita Karana TA 2027 (PDF dan Word), gabungan dua proposal sebelumnya',
+      'RAB proposal (Excel)'],
   },
 ];
 
