@@ -1148,7 +1148,8 @@ dialog.dialog-video::backdrop { background: rgb(5 12 14 / .82); backdrop-filter:
 .belah-kutipan.kecil { font-size: clamp(.95rem, 1.3vw, 1.05rem); line-height: 1.65; }
 .belah-penulis { display: flex; align-items: center; gap: 14px; }
 .belah-garis-nama { width: 40px; height: 1px; background: var(--tinta); opacity: .2; flex: none; }
-.belah-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex: none; }
+.belah-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; flex: none; box-shadow: 0 0 0 2px #fff, 0 0 0 3px rgb(0 0 0 / .08); }
+.belah.akun-yayasan .belah-avatar { box-shadow: none; }
 .belah-nama { margin: 0; font-size: .92rem; font-weight: 600; color: var(--tinta); }
 .belah-peran { margin: 2px 0 0; font-size: .8rem; color: var(--tinta-2); display: inline-flex; align-items: center; gap: 4px; word-break: break-all; }
 .belah-peran .ikon { width: 14px; height: 14px; color: #1a73e8; flex: none; }
