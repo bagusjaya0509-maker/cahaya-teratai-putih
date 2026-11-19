@@ -2,6 +2,7 @@
 // Klik area untuk testimoni berikutnya; titik di bawah untuk memilih langsung.
 // Diadaptasi dari komponen React "split-testimonial" ke JavaScript biasa (situs ini tanpa React/Tailwind).
 import { BASE, esc } from './inti.js';
+import { htmlAnimasiTeratai, pakaiAnimasi } from './animasi-teratai.js';
 
 const GERAK_PELAN = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 const EASE = 'cubic-bezier(0.22, 1, 0.36, 1)';
@@ -20,7 +21,7 @@ function isiSlide(t) {
     ukuran: ukuranKutipan(t.isi || ''),
     penulis: `${t.akunFoto ? `<img class="belah-avatar" src="${esc(t.akunFoto)}" alt="" referrerpolicy="no-referrer" width="40" height="40">` : '<span class="belah-garis-nama" aria-hidden="true"></span>'}
       <div><p class="belah-nama">${esc(t.nama)}</p>${peran.length ? `<p class="belah-peran">${t.akunEmail ? `<svg class="ikon" aria-hidden="true"><use href="${BASE}aset/img/ikon.svg#i-badge-check"/></svg>` : ''}${esc(peran.join(' · '))}</p>` : ''}</div>`,
-    gambar: t.foto
+    gambar: pakaiAnimasi(t) ? htmlAnimasiTeratai() : t.foto
       ? `<img src="${esc(t.foto)}" alt="Foto dari ${esc(t.nama)}">`
       : `<div class="belah-tanpa-foto"><img src="${LAMBANG}" alt="" aria-hidden="true"><span>${esc((t.nama || '?').trim()[0].toUpperCase())}</span></div>`,
   };
@@ -53,7 +54,7 @@ export function pasangTestimoniBelah(wadah, daftar) {
     el('penulis').innerHTML = s.penulis;
     el('gambar').innerHTML = s.gambar;
     // Panel foto hanya muncul bila pengirim mengunggah foto.
-    akar.classList.toggle('tanpa-foto', !daftar[i].foto);
+    akar.classList.toggle('tanpa-foto', !daftar[i].foto && !pakaiAnimasi(daftar[i]));
     akar.querySelectorAll('[data-ke]').forEach((b, n) => b.setAttribute('aria-current', String(n === i)));
   }
 

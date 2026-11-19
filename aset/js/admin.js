@@ -1264,7 +1264,7 @@ async function vTestimoni(paksa = false) {
           <p class="adm-testimoni-isi">${tandaiKlaim(t.isi)}</p>
           ${t.foto ? `<img src="${esc(t.foto)}" alt="Foto dari ${esc(t.nama)}" loading="lazy">` : ''}
           ${klaim.length ? `<p class="pesan pesan-peringatan">${ikon('triangle-alert')}<span>Menyebut ${esc(klaim.join(', '))}. Bila terbaca sebagai janji kesembuhan, sebaiknya dihapus.</span></p>` : ''}
-          <div class="aksi-formulir"><button class="tombol tombol-hapus kecil" type="button" data-hapus-testi="${t.id}">${ikon('trash-2')}Hapus testimoni</button><span class="meta-kecil">${esc(waktuLalu(t.dibuat))}</span></div></li>`;
+          <div class="aksi-formulir"><button class="tombol tombol-garis kecil" type="button" data-animasi-testi="${t.id}" aria-pressed="${t.gambarAnimasi === 'teratai'}">${ikon('flower-2')}${t.gambarAnimasi === 'teratai' ? 'Animasi teratai: aktif' : 'Animasi teratai'}</button><button class="tombol tombol-hapus kecil" type="button" data-hapus-testi="${t.id}">${ikon('trash-2')}Hapus testimoni</button><span class="meta-kecil">${esc(waktuLalu(t.dibuat))}</span></div></li>`;
       }).join('')}</ul>`
       : `<div class="kosong"><h3>${semua.length ? 'Tidak ada di kelompok ini' : 'Belum ada testimoni'}</h3><p>${semua.length ? 'Pilih kelompok lain di atas.' : 'Testimoni yang ditulis pengunjung langsung tampil di situs dan tercatat di sini.'}</p></div>`;
   };
@@ -1275,6 +1275,19 @@ async function vTestimoni(paksa = false) {
   gambar();
   $('[data-pilih-status]').addEventListener('click', (e) => { const b = e.target.closest('[data-st]'); if (b) { s.status = b.dataset.st; gambar(); } });
   $('[data-tabel]').addEventListener('click', (e) => {
+    const a = e.target.closest('[data-animasi-testi]');
+    if (a) {
+      const t = semua.find((x) => x.id === a.dataset.animasiTesti);
+      const nyala = t.gambarAnimasi !== 'teratai';
+      denganMemuat(a, async () => {
+        try {
+          await L.aturAnimasiTestimoni(t.id, nyala);
+          roti(nyala ? 'Gambar testimoni diganti animasi teratai.' : 'Gambar testimoni kembali ke foto asli.', 'berhasil');
+          vTestimoni(true);
+        } catch (err) { roti(pesanGalat(err), 'galat'); }
+      });
+      return;
+    }
     const b = e.target.closest('[data-hapus-testi]');
     if (!b) return;
     const t = semua.find((x) => x.id === b.dataset.hapusTesti);

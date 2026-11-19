@@ -281,8 +281,10 @@ const fbMesin = {
   async semuaTestimoni() {
     wajibAdmin();
     const { F, db } = await fb();
+    const pub = await F.getDocs(F.collection(db, 'testimoniPublik')).catch(() => null);
+    const animasi = new Set((pub?.docs || []).filter((d) => d.data().gambarAnimasi === 'teratai').map((d) => d.id));
     const s = await F.getDocs(F.query(F.collection(db, 'testimoni'), F.orderBy('dibuat', 'desc'), F.limit(1000)));
-    return s.docs.map(rapikan);
+    return s.docs.map(rapikan).map((t) => ({ ...t, gambarAnimasi: animasi.has(t.id) ? 'teratai' : '' }));
   },
   /** Salinan tanpa data kontak masuk ke testimoniPublik; aslinya tetap privat. */
   async tampilkanTestimoni(t, isi) {
@@ -292,6 +294,12 @@ const fbMesin = {
     b.update(F.doc(db, 'testimoni', t.id), { status: 'tampil', isi, diputuskan: F.serverTimestamp(), oleh: p.nama });
     b.set(F.doc(db, 'testimoniPublik', t.id), { ...potongTestimoni({ ...t, isi }), tampilPada: F.serverTimestamp() });
     await b.commit();
+  },
+  /** Ganti gambar testimoni di situs dengan animasi lambang teratai (atau kembali ke foto). */
+  async aturAnimasiTestimoni(id, nyala) {
+    wajibAdmin();
+    const { F, db } = await fb();
+    await F.updateDoc(F.doc(db, 'testimoniPublik', id), { gambarAnimasi: nyala ? 'teratai' : '' });
   },
   /** Turunkan dari situs dan hapus permanen (asli + salinan publik). */
   async hapusTestimoni(id) {

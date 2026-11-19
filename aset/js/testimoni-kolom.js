@@ -2,6 +2,7 @@
 // ujung atas-bawah memudar. Diadaptasi dari komponen React "testimonials-6" ke JavaScript biasa.
 import { BASE, esc } from './inti.js';
 import { bintangHtml } from './booking-tampil.js';
+import { htmlAnimasiTeratai, pakaiAnimasi } from './animasi-teratai.js';
 
 const GERAK_PELAN = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 const KECEPATAN = [30, 50, 35]; // detik per putaran, sama dengan versi asli
@@ -13,7 +14,7 @@ export function kartuKolom(t) {
     ? `<img class="kolom-avatar" src="${esc(t.akunFoto)}" alt="Foto profil ${esc(t.nama)}" referrerpolicy="no-referrer" loading="lazy" width="36" height="36">`
     : `<span class="kolom-avatar kolom-inisial" aria-hidden="true">${esc((t.nama || '?').trim()[0].toUpperCase())}</span>`;
   return `<figure class="kartu-kolom">
-  ${t.foto ? `<img class="kolom-foto" src="${esc(t.foto)}" alt="Foto dari ${esc(t.nama)}" loading="lazy" decoding="async">` : ''}
+  ${pakaiAnimasi(t) ? `<div class="kolom-foto">${htmlAnimasiTeratai()}</div>` : t.foto ? `<img class="kolom-foto" src="${esc(t.foto)}" alt="Foto dari ${esc(t.nama)}" loading="lazy" decoding="async">` : ''}
   ${bintangHtml(t.bintang)}
   <blockquote>${esc(t.isi)}</blockquote>
   <figcaption>${avatar}<div><cite>${esc(t.nama)}</cite>${t.akunEmail ? `<span class="kolom-email"><svg class="ikon" aria-hidden="true"><use href="${BASE}aset/img/ikon.svg#i-badge-check"/></svg>${esc(t.akunEmail)}</span>` : ''}<span>${esc(peran)}</span></div></figcaption>
