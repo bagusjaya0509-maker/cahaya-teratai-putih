@@ -1,6 +1,7 @@
 // Potongan HTML kabar yang dipakai beranda, daftar kabar, dan "baca juga".
 import { BASE, esc, ikon, tanggal } from './inti.js';
 import { gambarYoutube, htmlPemutar } from './isi.js';
+import { pasangSubtitle } from './subtitle-video.js';
 
 export const urlKabar = (k) => `${BASE}kabar/${k.id || k.slug}/`;
 
@@ -25,6 +26,7 @@ export function bukaPemutar({ video, tegak, judul, latar }) {
   ${htmlPemutar({ id: video, tegak, judul, latar, otomatis: true })}
 </div>`;
   d.showModal();
+  pasangSubtitle(d);
 }
 if (typeof document !== 'undefined') {
   document.addEventListener('click', (e) => {

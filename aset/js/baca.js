@@ -5,6 +5,7 @@ import { $, BASE, roti } from './inti.js';
 import { ambilKabar, daftarKabar, diubahKabar } from './publik.js';
 import { susunArtikel } from './artikel.js';
 import { kartuKabar } from './kartu.js';
+import { pasangSubtitle } from './subtitle-video.js';
 
 const utama = $('main.baca');
 const artikel = $('#artikel');
@@ -68,6 +69,7 @@ async function segarkanDariData(slug) {
     artikel.innerHTML = susunArtikel({ ...data, base: BASE, urlHalaman: location.origin + location.pathname });
     pasangBagikan();
     pasangGaleri();
+    pasangSubtitle();
   } catch (e) { console.error(e); }
 }
 
@@ -82,6 +84,7 @@ async function renderDariData(slug) {
     $('meta[name="robots"]')?.setAttribute('content', 'index,follow');
     pasangBagikan();
     pasangGaleri();
+    pasangSubtitle();
     kabarLain(slug);
   } catch (e) {
     console.error(e);
@@ -92,6 +95,7 @@ async function renderDariData(slug) {
 if (utama.dataset.prerender === '1') {
   pasangBagikan();
   pasangGaleri();
+    pasangSubtitle();
   kabarLain(utama.dataset.slug);
   // Sampul/isi diubah pengurus sesudah build? tampilkan versi terbaru langsung dari data.
   const versiBuild = Number(utama.dataset.diubah) || 0;

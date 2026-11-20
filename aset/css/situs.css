@@ -1226,3 +1226,7 @@ dialog.dialog-video::backdrop { background: rgb(5 12 14 / .82); backdrop-filter:
 @media (max-width: 640px) { .belah-navigasi { margin-left: 0; width: 100%; gap: 14px; } .belah-navigasi [data-arah="-1"] { margin-left: auto; } }
 /* Tombol putar video di deret kabar lain (thumbnail kecil) diperkecil khusus di ponsel */
 @media (max-width: 640px) { [data-kabar-lain] .tanda-putar svg, .kabar-baris .tanda-putar svg { width: 30px; height: 30px; padding: 7px 6px 7px 8px; box-shadow: 0 0 0 1.5px rgb(255 255 255 / .55); } }
+
+/* Subtitle terjemahan video (bahasa pilihan pengunjung selain Indonesia) */
+.sub-terjemah { min-height: 3.1em; margin: 10px auto 0; max-width: 46rem; padding: 8px 14px; border-radius: 8px; background: rgb(11 20 22 / .88); color: #fff; font-size: 1rem; line-height: 1.5; text-align: center; }
+.sub-terjemah:empty { visibility: hidden; }

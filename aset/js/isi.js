@@ -172,11 +172,13 @@ export function idYoutube(teks) {
 export function htmlPemutar({ id, tegak = false, judul = '', latar = '', otomatis = false }) {
   if (!/^[\w-]{11}$/.test(id || '')) return '';
   const gambar = latar || `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
-  const q = `rel=0&amp;modestbranding=1&amp;playsinline=1${otomatis ? '&amp;autoplay=1' : ''}`;
-  return `<div class="pemutar-video${tegak ? ' tegak' : ''}">
+  const q = `rel=0&amp;modestbranding=1&amp;playsinline=1&amp;enablejsapi=1${otomatis ? '&amp;autoplay=1' : ''}`;
+  // .sub-terjemah: subtitle bahasa pilihan pengunjung (bukan Indonesia), diisi aset/js/subtitle-video.js
+  return `<div class="pemutar-wadah"><div class="pemutar-video${tegak ? ' tegak' : ''}">
   <img class="latar-blur" src="${esc(gambar)}" alt="" aria-hidden="true">
   <iframe src="https://www.youtube-nocookie.com/embed/${id}?${q}" title="${esc(judul)}" ${otomatis ? '' : 'loading="lazy" '}allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </div>
+<p class="sub-terjemah notranslate" translate="no" data-sub-video="${id}" aria-live="off" hidden></p></div>
 <p class="tautan-yt"><a href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener">Tonton di YouTube</a> · <a href="https://youtu.be/${id}" data-salin-yt>https://youtu.be/${id}</a></p>`;
 }
 /** Gambar mini video YouTube. */
