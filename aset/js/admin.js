@@ -10,6 +10,7 @@ import { buatXlsx, unduhBlob } from './xlsx.js';
 import { KABAR_AWAL } from './kabar-awal.js';
 import { ambilPengaturan } from './publik.js';
 import { kartuMati } from './gerbang.js';
+import { pasangLonceng } from './admin-hari-raya.js';
 
 const isi = $('[data-adm-isi]');
 const judul = $('[data-adm-judul]');
@@ -52,6 +53,7 @@ if (MODE === 'mati') {
       rute();
       segarkanLencana();
       sinkronSurat();
+      pasangLonceng({ bukaModal });
     }
   });
 }

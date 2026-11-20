@@ -198,3 +198,101 @@ mark { background: var(--sari-muda); color: inherit; padding: 0 2px; border-radi
 .adm-kas-akun { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: -4px 0 16px; color: var(--tinta-2); font-size: 0.88rem; }
 .adm-kas-akun b { color: var(--tinta); font-variant-numeric: tabular-nums; }
 .adm-kas-bukti { margin-bottom: 8px; }
+
+/* ---------- lonceng hari raya (panel pengurus) ---------- */
+.adm-lonceng { position: relative; }
+.adm-lonceng > .tombol-ikon { position: relative; width: 42px; height: 42px; }
+.adm-lonceng > .tombol-ikon[aria-expanded="true"] { background: var(--embun-2); color: var(--tinta); }
+.adm-lonceng .adm-lencana { position: absolute; top: 1px; right: 0; margin: 0; min-width: 19px; height: 19px; padding: 0 5px; font-size: 0.68rem; box-shadow: 0 0 0 2px rgb(243 247 244); }
+.lonceng-panel { position: absolute; right: 0; top: calc(100% + 10px); z-index: 40; width: min(400px, calc(100vw - 32px)); max-height: min(72vh, 620px); overflow: auto; background: var(--kelopak); border: 1px solid var(--garis); border-radius: 12px; box-shadow: 0 24px 60px -24px rgb(7 26 36 / 0.45); }
+.hr-kepala { position: sticky; top: 0; z-index: 1; padding: 16px 18px 12px; background: var(--kelopak); border-bottom: 1px solid var(--garis); }
+.hr-kepala h2 { font-family: var(--f-judul); font-size: 1.15rem; font-weight: 500; }
+.hr-kepala small, .hr-acara small { display: block; color: var(--tinta-2); font-size: 0.78rem; }
+.hr-daftar { list-style: none; margin: 0; padding: 4px 0; }
+.hr-hari { display: grid; grid-template-columns: 52px 1fr; gap: 14px; padding: 12px 18px; }
+.hr-hari + .hr-hari { border-top: 1px dashed var(--garis); }
+.hr-tanggal { display: grid; justify-items: center; align-content: start; padding: 6px 0 7px; border-radius: 9px; background: var(--embun); color: var(--tinta-2); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.2; }
+.hr-tanggal b { font-family: var(--f-judul); font-size: 1.5rem; font-weight: 500; color: var(--tinta); letter-spacing: 0; line-height: 1.1; }
+.hr-dekat .hr-tanggal { background: var(--telaga); color: var(--sari-muda); }
+.hr-dekat .hr-tanggal b { color: var(--kelopak); }
+.hr-isi { min-width: 0; display: grid; gap: 6px; }
+.hr-mundur { font-size: 0.74rem; font-weight: 700; color: var(--daun-tua); text-transform: uppercase; letter-spacing: 0.05em; }
+.hr-dekat .hr-mundur { color: var(--sari-tua); }
+.hr-isi ul, .hr-rinci { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.hr-acara { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.hr-acara { flex-wrap: wrap; }
+.hr-acara > div { min-width: 0; flex: 1 1 170px; }
+.hr-acara b { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
+[data-agama="hindu"] { --ag: #8f6700; --ag-bg: #fbe7a6; }
+[data-agama="islam"] { --ag: #1f6b50; --ag-bg: #d9eee1; }
+[data-agama="kristiani"] { --ag: #1f4e79; --ag-bg: #dde8f5; }
+[data-agama="buddha"] { --ag: #9a4a0c; --ag-bg: #fae3cf; }
+[data-agama="konghucu"] { --ag: #a3312b; --ag-bg: #f8dfdd; }
+[data-agama="nasional"] { --ag: #4b5a5c; --ag-bg: #e7ecec; }
+.hr-agama { display: inline-flex; align-items: center; gap: 4px; margin-right: 6px; font-weight: 700; color: var(--ag); }
+.hr-agama::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--ag); }
+.hr-agama::after { content: '·'; margin-left: 2px; color: var(--tinta-2); font-weight: 400; }
+.hr-acara:is([data-jenis="raya"], [data-jenis="besar"]) b { font-family: var(--f-judul); font-size: 1.08rem; font-weight: 600; }
+.hr-acara:is([data-jenis="raya"], [data-jenis="besar"]) b::before { content: ''; width: 4px; height: 1.05em; border-radius: 2px; background: var(--ag); }
+.hr-acara[data-jenis="raya"] b::before { background: var(--sari); }
+.hr-acara[data-selesai] b, .hr-acara[data-selesai] small { opacity: 0.55; }
+.hr-cek { flex: none; display: inline-flex; align-items: center; gap: 5px; min-height: 32px; padding: 0 10px; border: 1px solid var(--garis-2); border-radius: 999px; background: none; color: var(--tinta-2); font: inherit; font-size: 0.76rem; font-weight: 600; cursor: pointer; }
+.hr-cek .ikon { width: 14px; height: 14px; opacity: 0.35; }
+.hr-cek:hover { border-color: var(--daun); color: var(--tinta); }
+.hr-cek[aria-pressed="true"] { background: var(--hijau-bg); border-color: transparent; color: var(--hijau); }
+.hr-cek[aria-pressed="true"] .ikon { opacity: 1; }
+.hr-kosong { padding: 18px; color: var(--tinta-2); font-size: 0.9rem; }
+.hr-habis { margin: 8px 18px; font-size: 0.82rem; }
+.hr-kaki { position: sticky; bottom: 0; padding: 12px 18px; border-top: 1px solid var(--garis); background: var(--embun); display: flex; justify-content: flex-end; }
+
+/* glif bulan: purnama = bulatan bercahaya, tilem = bulatan gelap */
+.hr-bulan { display: inline-block; flex: none; width: 11px; height: 11px; border-radius: 50%; vertical-align: -1px; }
+.hr-purnama { background: var(--sari-muda); box-shadow: 0 0 0 1.5px var(--sari), 0 0 7px var(--sari); }
+.hr-tilem { background: var(--telaga); box-shadow: 0 0 0 1.5px var(--telaga-2); }
+
+/* kalender bulanan */
+.hr-kalender { display: grid; gap: 14px; }
+.hr-kal-atas { display: flex; align-items: center; gap: 6px; }
+.hr-kal-atas h3 { font-family: var(--f-judul); font-size: 1.35rem; font-weight: 500; min-width: 190px; text-align: center; text-transform: capitalize; }
+.hr-kal-atas .tombol { margin-left: auto; }
+.hr-kal-atas .tombol-ikon:disabled { opacity: 0.3; cursor: default; }
+.hr-kisi { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.hr-nama-hari { padding: 2px 6px 4px; font-size: 0.72rem; font-weight: 700; color: var(--tinta-2); text-transform: uppercase; letter-spacing: 0.05em; }
+.hr-nama-hari:first-child { color: var(--merah); }
+.hr-sel { min-height: 84px; display: flex; flex-direction: column; align-items: stretch; gap: 3px; padding: 6px; border: 1px solid var(--garis); border-radius: 8px; background: var(--kelopak); color: var(--tinta); font: inherit; text-align: left; cursor: pointer; min-width: 0; }
+.hr-kosong-sel { border: 0; background: none; cursor: default; }
+.hr-sel:hover { border-color: var(--garis-2); background: var(--embun); }
+.hr-sel-raya { background: linear-gradient(180deg, #fdf6dd, var(--kelopak) 70%); border-color: #efdcae; }
+.hr-sel-kini { box-shadow: inset 0 0 0 2px var(--daun); }
+.hr-sel[aria-pressed="true"] { border-color: var(--telaga); box-shadow: 0 0 0 2px var(--telaga); }
+.hr-angka { display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 0.9rem; }
+.hr-label { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 1px 5px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; line-height: 1.4; }
+.hr-label { background: var(--ag-bg); color: var(--ag); }
+.hr-label[data-jenis="raya"] { background: var(--sari); color: var(--telaga-gelap); }
+.hr-label[data-jenis="rahina"] { background: none; box-shadow: inset 0 0 0 1px #ecd58f; }
+.hr-saring { display: flex; flex-wrap: wrap; gap: 6px; }
+.hr-saring button { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 12px; border: 1px solid var(--garis-2); border-radius: 999px; background: var(--kelopak); color: var(--tinta-2); font: inherit; font-size: 0.8rem; font-weight: 600; cursor: pointer; }
+.hr-saring button i { width: 8px; height: 8px; border-radius: 50%; background: var(--ag); }
+.hr-saring button[aria-pressed="true"] { background: var(--telaga); border-color: var(--telaga); color: var(--kelopak); }
+.hr-saring button[aria-pressed="true"] i { box-shadow: 0 0 0 1.5px var(--kelopak); }
+.hr-titik { margin-top: auto; color: var(--tinta-2); font-size: 0.8rem; letter-spacing: 1px; line-height: 1; }
+.hr-legenda { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.78rem; color: var(--tinta-2); }
+.hr-legenda span { display: inline-flex; align-items: center; gap: 6px; }
+.hr-legenda .hr-titik { margin: 0; }
+.hr-rincian:empty { display: none; }
+.hr-rincian { padding: 14px 16px; border-radius: 10px; background: var(--embun); display: grid; gap: 10px; }
+.hr-rincian h3 { font-family: var(--f-judul); font-size: 1.1rem; font-weight: 500; }
+.hr-jenis { flex: none; font-size: 0.72rem; color: var(--tinta-2); }
+
+@media (max-width: 560px) {
+  .lonceng-panel { position: fixed; left: 16px; right: 16px; top: 72px; width: auto; }
+  .hr-kal-atas h3 { min-width: 0; flex: 1; font-size: 1.15rem; }
+  .hr-kisi { gap: 2px; }
+  .hr-sel { min-height: 48px; padding: 4px; gap: 2px; border-radius: 6px; }
+  .hr-label { padding: 0; height: 4px; font-size: 0; border-radius: 2px; }
+  .hr-label, .hr-label[data-jenis="rahina"] { background: var(--ag); box-shadow: none; }
+  .hr-label[data-jenis="raya"] { background: var(--sari); }
+  .hr-nama-hari { padding: 2px 2px 4px; font-size: 0.64rem; text-align: center; }
+  .hr-angka { font-size: 0.8rem; }
+  .hr-bulan { width: 9px; height: 9px; }
+}

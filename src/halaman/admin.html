@@ -36,6 +36,10 @@
     <header class="adm-atas">
       <button class="tombol-ikon adm-tombol-menu" type="button" data-adm-menu aria-label="Buka menu panel"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-menu"/></svg></button>
       <h1 data-adm-judul>Ringkasan</h1>
+      <div class="adm-lonceng" data-lonceng hidden>
+        <button class="tombol-ikon" type="button" data-lonceng-tombol aria-expanded="false" aria-controls="lonceng-panel" aria-label="Hari raya mendatang"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-bell"/></svg><span class="adm-lencana" data-lonceng-angka hidden></span></button>
+        <div class="lonceng-panel" id="lonceng-panel" data-lonceng-panel hidden></div>
+      </div>
       <div class="adm-atas-aksi" data-adm-aksi></div>
     </header>
     <div class="adm-isi" data-adm-isi tabindex="-1"></div>
