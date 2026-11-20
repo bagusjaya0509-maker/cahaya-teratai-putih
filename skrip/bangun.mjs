@@ -49,6 +49,7 @@ const konfigPublik = {
   firebase: konfig.firebase,
   adminUtama: konfig.adminUtama,
   notifikasi: konfig.notifikasi,
+  suratMasuk: konfig.suratMasuk,
   base: BASE,
   asal: ASAL,
   versi: '',

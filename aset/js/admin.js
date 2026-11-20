@@ -51,8 +51,14 @@ if (MODE === 'mati') {
       mulaiSekali = true;
       rute();
       segarkanLencana();
+      sinkronSurat();
     }
   });
+}
+
+// Daftar penerima email yayasan@ di penerus VPS ikut daftar pengurus (lihat administrasi/surat-masuk).
+function sinkronSurat() {
+  L.sinkronPenerimaSurat?.().catch(() => {});
 }
 
 $('[data-adm-keluar]').addEventListener('click', async () => {
@@ -1480,12 +1486,12 @@ async function vPengguna() {
   });
   $$('[data-cabut]').forEach((b) => b.addEventListener('click', () => {
     if (!confirm('Cabut akses panel pengurus untuk akun ini?')) return;
-    denganMemuat(b, async () => { try { await L.hapusAdmin(b.dataset.cabut); roti('Akses dicabut.', 'berhasil'); vPengguna(); } catch (err) { roti(pesanGalat(err), 'galat'); } });
+    denganMemuat(b, async () => { try { await L.hapusAdmin(b.dataset.cabut); roti('Akses dicabut.', 'berhasil'); sinkronSurat(); vPengguna(); } catch (err) { roti(pesanGalat(err), 'galat'); } });
   }));
   $('[data-tambah-admin]').addEventListener('submit', (e) => {
     e.preventDefault();
     const f = e.currentTarget;
-    denganMemuat($('[type=submit]', f), async () => { try { await L.tambahAdmin(f.email.value); roti('Akses pengurus diberikan.', 'berhasil'); vPengguna(); } catch (err) { roti(pesanGalat(err), 'galat'); } });
+    denganMemuat($('[type=submit]', f), async () => { try { await L.tambahAdmin(f.email.value); roti('Akses pengurus diberikan.', 'berhasil'); sinkronSurat(); vPengguna(); } catch (err) { roti(pesanGalat(err), 'galat'); } });
   });
   $('[data-unduh]').addEventListener('click', () => unduhBlob(buatXlsx([{ nama: 'Pengguna', kolom: ['Nama', 'Email', 'WhatsApp', 'Kab/Kota', 'Daftar', 'Pengurus', 'Diblokir'].map((judul) => ({ judul, lebar: 24 })), baris: pengguna.map((u) => [u.nama, u.email, u.wa || '', u.kota || '', tanggalJam(u.dibuat), u.admin ? 'Ya' : '', u.diblokir ? 'Ya' : '']) }]), `pengguna-cahaya-teratai-putih-${new Date().toISOString().slice(0, 10)}.xlsx`));
 }

@@ -386,6 +386,16 @@ const fbMesin = {
     const s = await F.getDocs(F.collection(db, 'admin'));
     return s.docs.map(rapikan);
   },
+  /** Kirim ID token pengurus ke penerus email VPS; VPS sendiri yang membaca koleksi admin dengan token itu. */
+  async sinkronPenerimaSurat() {
+    wajibAdmin();
+    const url = KONFIG.suratMasuk;
+    if (!url) return null;
+    const { auth } = await fb();
+    const token = await auth.currentUser.getIdToken();
+    const r = await fetch(url, { method: 'POST', headers: { Authorization: `Bearer ${token}` } });
+    return r.ok ? r.json() : null;
+  },
   async tambahAdmin(email) {
     const p = wajibAdmin();
     const { F, db } = await fb();
