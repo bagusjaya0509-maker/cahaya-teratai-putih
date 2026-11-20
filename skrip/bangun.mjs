@@ -39,6 +39,8 @@ const { kueriKabar, ambilDokumen } = await import(pathToFileURL(path.join(AKAR, 
 await fs.rm(KELUAR, { recursive: true, force: true });
 await fs.mkdir(KELUAR, { recursive: true });
 await fs.cp(path.join(AKAR, 'aset'), path.join(KELUAR, 'aset'), { recursive: true });
+// Pembantu login Firebase di domain sendiri (/__/auth/...): login Google jalan di iPhone/Safari yang memblokir data lintas situs.
+await fs.cp(path.join(AKAR, 'statis'), KELUAR, { recursive: true });
 
 const konfigPublik = {
   situs: konfig.situs,

@@ -48,6 +48,7 @@ export function pantauSesiNanti(fn, pemicu) {
   if (penggunaKini !== undefined) { fn(penggunaKini); return () => pendengar.delete(fn); }
   if (sudahMulai) return () => pendengar.delete(fn);
   const sekali = () => mulai();
+  try { if (sessionStorage.getItem('ctp.masukRedirect')) { mulai(); return () => pendengar.delete(fn); } } catch { /* abaikan */ }
   ['pointerdown', 'focusin', 'keydown'].forEach((ev) => pemicu?.addEventListener(ev, sekali, { once: true, passive: true }));
   // Sesudah halaman tenang (±3 dtk, saat peramban senggang) supaya tombol masuk Google siap tanpa diblokir popup.
   const santai = window.requestIdleCallback || ((f) => setTimeout(f, 1500));
@@ -109,8 +110,15 @@ function rapikan(snap) {
 
 async function fbMulai() {
   const { A, auth } = await fb();
+  // Kembali dari masuk Google cara redirect (ponsel): ambil hasilnya supaya galat terlihat.
+  if (sessionStorage.getItem('ctp.masukRedirect')) {
+    sessionStorage.removeItem('ctp.masukRedirect');
+    A.getRedirectResult(auth).catch((e) => console.warn('masuk Google:', e?.code || e));
+  }
   A.onAuthStateChanged(auth, (u) => fbMuatProfil(u));
 }
+/** Ponsel/tablet (termasuk iPad yang mengaku Mac): pakai redirect, bukan pop-up yang sering diblokir. */
+const pakaiRedirect = () => /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
 
 async function fbMuatProfil(u) {
   const { F, db } = await fb();
@@ -179,7 +187,22 @@ const fbMesin = {
     const { A, auth } = await fb();
     const p = new A.GoogleAuthProvider();
     p.setCustomParameters({ prompt: 'select_account' });
-    await A.signInWithPopup(auth, p);
+    if (pakaiRedirect()) {
+      try { sessionStorage.setItem('ctp.masukRedirect', '1'); } catch { /* abaikan */ }
+      await A.signInWithRedirect(auth, p);
+      return;
+    }
+    try {
+      await A.signInWithPopup(auth, p);
+    } catch (e) {
+      // Pop-up diblokir peramban: pakai redirect sebagai cadangan.
+      if (e?.code === 'auth/popup-blocked') {
+        try { sessionStorage.setItem('ctp.masukRedirect', '1'); } catch { /* abaikan */ }
+        await A.signInWithRedirect(auth, p);
+        return;
+      }
+      throw e;
+    }
   },
   async keluar() {
     const { A, auth } = await fb();
