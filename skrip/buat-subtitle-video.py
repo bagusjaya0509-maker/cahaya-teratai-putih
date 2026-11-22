@@ -12,6 +12,7 @@ VIDEO = {   # id YouTube -> folder proyek edit
     'DVCFYLU7G0Y': '03-tanya-2', 'm9IAaGf4hbQ': '03-tanya-3', 'ZM0gEG0JHdc': '03-tanya-4',
     'b8r6XS8Lm5s': '04-biru-1', 'WzBvXJ5jgys': '04-biru-2', 'Ha4if9kLQyw': '04-biru-3',
     'BRkV_IdvBhg': '04-biru-4', 'G_ZiAb9_PVA': '04-biru-5', 'HADxd7LiaEM': '04-biru-6',
+    '1WHLouoTg7Y': '05-hitam-2',
 }
 
 def cue_dari(proyek):
