@@ -665,8 +665,9 @@ body.papan-foto-aktif .kepala:not(.tergulir):not(:has(.nav.terbuka)) { backgroun
 .papan-foto { position: absolute; left: 0; right: 0; bottom: 0; top: var(--tinggi-kepala); width: 100%; height: calc(100% - var(--tinggi-kepala)); object-fit: cover; }
 .papan-foto-kosong { display: grid; place-items: center; background: linear-gradient(180deg, var(--l-atas, #232c5c), var(--l-bawah, #ec8a47)); }
 .papan-foto-kosong img { width: min(30%, 220px); }
-.papan-keterangan { position: absolute; left: clamp(16px, 2vw, 32px); bottom: clamp(44px, 6vw, 72px); max-width: min(780px, calc(100% - 32px)); padding: clamp(12px, 1.6vw, 20px) clamp(16px, 2vw, 28px); background: rgb(38 38 38 / 0.78); display: grid; gap: 6px; }
-.papan-kat { justify-self: start; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #f2c14e; }
+.papan-keterangan { position: absolute; left: clamp(16px, 2vw, 32px); bottom: clamp(44px, 6vw, 72px); max-width: min(780px, calc(100% - 32px)); padding: clamp(12px, 1.6vw, 20px) clamp(16px, 2vw, 28px); background: var(--sari); color: var(--telaga); z-index: 1; box-shadow: 0 6px 24px rgb(0 0 0 / 0.25); display: grid; gap: 6px; }
+.papan-slide::after { content: ''; position: absolute; inset: 0; background: rgb(0 0 0 / 0.2); pointer-events: none; }
+.papan-kat { justify-self: start; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--telaga); opacity: 0.8; }
 .papan-judul { font-family: var(--f-judul); font-weight: 400; font-size: clamp(1.3rem, 2.8vw, 2.5rem); line-height: 1.2; }
 .papan-slide:focus-visible { outline: 3px solid #f2c14e; outline-offset: -6px; }
 .papan-panah { position: absolute; top: 50%; transform: translateY(-50%); z-index: 3; width: 52px; height: 52px; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: #fff; cursor: pointer; filter: drop-shadow(0 1px 3px rgb(0 0 0 / 0.6)); transition: background-color 0.2s; }
