@@ -12,7 +12,7 @@ VIDEO = {   # id YouTube -> folder proyek edit
     'DVCFYLU7G0Y': '03-tanya-2', 'm9IAaGf4hbQ': '03-tanya-3', 'ZM0gEG0JHdc': '03-tanya-4',
     'b8r6XS8Lm5s': '04-biru-1', 'WzBvXJ5jgys': '04-biru-2', 'Ha4if9kLQyw': '04-biru-3',
     'BRkV_IdvBhg': '04-biru-4', 'G_ZiAb9_PVA': '04-biru-5', 'HADxd7LiaEM': '04-biru-6',
-    '1WHLouoTg7Y': '05-hitam-2', 'yTf_vJ7BmPE': '05-hitam-1', 'iqe6JYYxJxc': '05-hitam-7', 'PwOcpmOmD6A': '05-hitam-3', '31Ejpol_VXs': '05-hitam-4', 'V0lU7jzZ5jI': '05-hitam-5', 'Y7DxQRI95o8': '05-hitam-6', 'FgfQq4DN4Oc': '05-hitam-8',
+    '1WHLouoTg7Y': '05-hitam-2', 'yTf_vJ7BmPE': '05-hitam-1', 'iqe6JYYxJxc': '05-hitam-7', 'PwOcpmOmD6A': '05-hitam-3', '31Ejpol_VXs': '05-hitam-4', 'V0lU7jzZ5jI': '05-hitam-5', 'Y7DxQRI95o8': '05-hitam-6', 'FgfQq4DN4Oc': '05-hitam-8', 'FnEUX3GTj-4': '05-hitam-9',
 }
 
 def cue_dari(proyek):
