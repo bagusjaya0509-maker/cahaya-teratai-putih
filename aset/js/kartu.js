@@ -64,7 +64,7 @@ export const slidePengumuman = (k, i, n) => {
   const gambar = foto ? urlSampul(foto) : (k.video ? gambarYoutube(k.video) : '');
   return `
 <a class="papan-slide" href="${urlKabar(k)}" role="group" aria-roledescription="slide" aria-label="${i + 1} dari ${n}: ${esc(k.judul)}"${i ? ' tabindex="-1"' : ''}>
-  ${gambar ? `<img class="papan-foto" src="${esc(gambar)}" alt="" loading="${i ? 'lazy' : 'eager'}" decoding="async">` : `<span class="papan-foto papan-foto-kosong"><img src="${BASE}aset/img/lambang-emas.svg" alt=""></span>`}
+  ${gambar ? `<img class="papan-latar" src="${esc(gambar)}" alt="" aria-hidden="true" loading="lazy" decoding="async"><img class="papan-foto" src="${esc(gambar)}" alt="" loading="${i ? 'lazy' : 'eager'}" decoding="async">` : `<span class="papan-foto papan-foto-kosong"><img src="${BASE}aset/img/lambang-emas.svg" alt=""></span>`}
   <span class="papan-keterangan">
     <span class="papan-kat">${esc(k.kategori || 'Pengumuman')}</span>
     <strong class="papan-judul">${esc(k.judul)}</strong>
