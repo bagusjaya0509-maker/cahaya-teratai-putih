@@ -1,6 +1,6 @@
 import { $, $$, BASE, MODE } from './inti.js';
 import { daftarKabar, daftarTestimoni } from './publik.js';
-import { utamaKabar, barisKabar, slideKegiatan } from './kartu.js';
+import { utamaKabar, barisKabar, slideKegiatan, slidePengumuman } from './kartu.js';
 import { pasangTestimoniBelah } from './testimoni-belah.js';
 
 const wadah = $('[data-kabar-portal]');
@@ -84,3 +84,68 @@ if (jalur) {
     .catch((e) => console.warn(e));
 }
 
+
+// Papan pengumuman utama di pembuka beranda: kabar berkategori Pengumuman, yang ditandai
+// unggulan didahulukan. Berganti sendiri tiap 7 detik, berhenti saat disentuh/difokus,
+// dan tidak bergerak sendiri bila pengunjung memilih gerak dikurangi.
+const papan = $('[data-papan]');
+if (papan) {
+  daftarKabar({ kategori: 'Pengumuman', batas: 8 })
+    .then((d) => {
+      const ada = d.filter((k) => k.judul).sort((a, b) => (b.unggulan ? 1 : 0) - (a.unggulan ? 1 : 0)).slice(0, 6);
+      if (!ada.length) return;
+      const jalurP = $('[data-papan-jalur]', papan);
+      const titik = $('[data-papan-titik]', papan);
+      const hitungP = $('[data-papan-hitung]', papan);
+      const n = ada.length;
+      jalurP.innerHTML = ada.map((k, i) => slidePengumuman(k, i, n)).join('');
+      titik.innerHTML = n > 1 ? ada.map((k, i) => `<button type="button" aria-label="Tampilkan pengumuman ${i + 1}"></button>`).join('') : '';
+      $('[data-papan-kendali]', papan).hidden = n < 2;
+      papan.hidden = false;
+      const slide = () => [...jalurP.children];
+      const halusP = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let aktif = 0;
+      const tandai = (i) => {
+        aktif = i;
+        hitungP.textContent = `${i + 1} / ${n}`;
+        slide().forEach((s, j) => (j === i ? s.removeAttribute('tabindex') : s.setAttribute('tabindex', '-1')));
+        [...titik.children].forEach((b, j) => b.setAttribute('aria-current', j === i ? 'true' : 'false'));
+      };
+      const ke = (i) => {
+        const j = (i + n) % n;
+        jalurP.scrollTo({ left: slide()[j].offsetLeft - slide()[0].offsetLeft, behavior: halusP ? 'smooth' : 'auto' });
+        tandai(j);
+      };
+      $('[data-papan-mundur]', papan).addEventListener('click', () => { ke(aktif - 1); mulai(); });
+      $('[data-papan-maju]', papan).addEventListener('click', () => { ke(aktif + 1); mulai(); });
+      titik.addEventListener('click', (e) => {
+        const b = e.target.closest('button');
+        if (b) { ke([...titik.children].indexOf(b)); mulai(); }
+      });
+      let tunda;
+      jalurP.addEventListener('scroll', () => {
+        clearTimeout(tunda);
+        tunda = setTimeout(() => {
+          const i = Math.round(jalurP.scrollLeft / jalurP.clientWidth);
+          if (i !== aktif && i >= 0 && i < n) tandai(i);
+        }, 90);
+      }, { passive: true });
+      addEventListener('resize', () => jalurP.scrollTo({ left: slide()[aktif].offsetLeft - slide()[0].offsetLeft }));
+      // putar otomatis
+      let jam = null;
+      let diam = false;
+      const henti = () => { clearInterval(jam); jam = null; };
+      function mulai() {
+        henti();
+        if (n > 1 && halusP && !diam && !document.hidden) jam = setInterval(() => ke(aktif + 1), 7000);
+      }
+      papan.addEventListener('pointerenter', () => { diam = true; henti(); });
+      papan.addEventListener('pointerleave', () => { diam = false; mulai(); });
+      papan.addEventListener('focusin', () => { diam = true; henti(); });
+      papan.addEventListener('focusout', (e) => { if (!papan.contains(e.relatedTarget)) { diam = false; mulai(); } });
+      document.addEventListener('visibilitychange', mulai);
+      tandai(0);
+      mulai();
+    })
+    .catch((e) => console.warn(e));
+}
