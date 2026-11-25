@@ -86,7 +86,7 @@ if (jalur) {
 
 
 // Papan sorotan di pembuka beranda: slide pertama = sapaan yayasan (langit), lalu kabar berkategori
-// Pengumuman (unggulan didahulukan) selebar dan setinggi pembuka. Berganti tiap 2 detik (permintaan
+// Pengumuman (unggulan didahulukan) selebar dan setinggi pembuka. Sapaan tampil 5 detik, pengumuman 3 detik (permintaan
 // pemilik), berhenti saat difokus papan ketik, dan tidak bergerak sendiri bila gerak dikurangi.
 const papan = $('[data-papan]');
 if (papan) {
@@ -114,8 +114,6 @@ if (papan) {
         jalurP.scrollTo({ left: slide()[j].offsetLeft - slide()[0].offsetLeft, behavior: halusP ? 'smooth' : 'auto' });
         tandai(j);
       };
-      $('[data-papan-mundur]', papan).addEventListener('click', () => { ke(aktif - 1); mulai(); });
-      $('[data-papan-maju]', papan).addEventListener('click', () => { ke(aktif + 1); mulai(); });
       titik.addEventListener('click', (e) => {
         const b = e.target.closest('button');
         if (b) { ke([...titik.children].indexOf(b)); mulai(); }
@@ -125,16 +123,17 @@ if (papan) {
         clearTimeout(tunda);
         tunda = setTimeout(() => {
           const i = Math.round(jalurP.scrollLeft / jalurP.clientWidth);
-          if (i !== aktif && i >= 0 && i < n) tandai(i);
+          if (i !== aktif && i >= 0 && i < n) { tandai(i); mulai(); }
         }, 90);
       }, { passive: true });
       addEventListener('resize', () => jalurP.scrollTo({ left: slide()[aktif].offsetLeft - slide()[0].offsetLeft }));
       let jam = null;
       let diam = false;
-      const henti = () => { clearInterval(jam); jam = null; };
+      const henti = () => { clearTimeout(jam); jam = null; };
       function mulai() {
         henti();
-        if (halusP && !diam && !document.hidden) jam = setInterval(() => ke(aktif + 1), 2000);
+        // sapaan (slide 1) tampil 5 detik, pengumuman 3 detik (permintaan pemilik)
+        if (halusP && !diam && !document.hidden) jam = setTimeout(() => { ke(aktif + 1); mulai(); }, aktif === 0 ? 5000 : 3000);
       }
       papan.addEventListener('focusin', (e) => { if (e.target.matches(':focus-visible')) { diam = true; henti(); } });
       papan.addEventListener('focusout', (e) => { if (!papan.contains(e.relatedTarget)) { diam = false; mulai(); } });
