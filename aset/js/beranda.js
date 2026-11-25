@@ -86,7 +86,7 @@ if (jalur) {
 
 
 // Papan pengumuman utama di pembuka beranda: kabar berkategori Pengumuman, yang ditandai
-// unggulan didahulukan. Berganti sendiri tiap 7 detik, berhenti saat disentuh/difokus,
+// unggulan didahulukan. Berganti sendiri tiap 2 detik (permintaan pemilik), berhenti saat difokus,
 // dan tidak bergerak sendiri bila pengunjung memilih gerak dikurangi.
 const papan = $('[data-papan]');
 if (papan) {
@@ -96,18 +96,16 @@ if (papan) {
       if (!ada.length) return;
       const jalurP = $('[data-papan-jalur]', papan);
       const titik = $('[data-papan-titik]', papan);
-      const hitungP = $('[data-papan-hitung]', papan);
-      const n = ada.length;
+            const n = ada.length;
       jalurP.innerHTML = ada.map((k, i) => slidePengumuman(k, i, n)).join('');
       titik.innerHTML = n > 1 ? ada.map((k, i) => `<button type="button" aria-label="Tampilkan pengumuman ${i + 1}"></button>`).join('') : '';
-      $('[data-papan-kendali]', papan).hidden = n < 2;
+      papan.classList.toggle('papan-tunggal', n < 2);
       papan.hidden = false;
       const slide = () => [...jalurP.children];
       const halusP = !matchMedia('(prefers-reduced-motion: reduce)').matches;
       let aktif = 0;
       const tandai = (i) => {
         aktif = i;
-        hitungP.textContent = `${i + 1} / ${n}`;
         slide().forEach((s, j) => (j === i ? s.removeAttribute('tabindex') : s.setAttribute('tabindex', '-1')));
         [...titik.children].forEach((b, j) => b.setAttribute('aria-current', j === i ? 'true' : 'false'));
       };
@@ -137,11 +135,9 @@ if (papan) {
       const henti = () => { clearInterval(jam); jam = null; };
       function mulai() {
         henti();
-        if (n > 1 && halusP && !diam && !document.hidden) jam = setInterval(() => ke(aktif + 1), 7000);
+        if (n > 1 && halusP && !diam && !document.hidden) jam = setInterval(() => ke(aktif + 1), 2000);
       }
-      papan.addEventListener('pointerenter', () => { diam = true; henti(); });
-      papan.addEventListener('pointerleave', () => { diam = false; mulai(); });
-      papan.addEventListener('focusin', () => { diam = true; henti(); });
+      papan.addEventListener('focusin', (e) => { if (e.target.matches(':focus-visible')) { diam = true; henti(); } });
       papan.addEventListener('focusout', (e) => { if (!papan.contains(e.relatedTarget)) { diam = false; mulai(); } });
       document.addEventListener('visibilitychange', mulai);
       tandai(0);

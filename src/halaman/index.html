@@ -1,5 +1,11 @@
 <!--{"judul":"Beranda","judulPenuh":"Yayasan Cahaya Teratai Putih, Kota Mataram","deskripsi":"Yayasan Cahaya Teratai Putih adalah lembaga keagamaan, sosial, dan kemanusiaan di Kota Mataram yang berasaskan ajaran leluhur Betara Sakti Dang Hyang Nirartha.","path":"","nav":"beranda","kelasBody":"beranda","skrip":["beranda.js","langit.js"],"prioritas":"1.0"}-->
 <main id="isi">
+  <section class="papan" data-papan aria-roledescription="carousel" aria-label="Pengumuman utama" hidden>
+    <div class="papan-jalur" data-papan-jalur></div>
+    <button class="papan-panah papan-mundur" type="button" data-papan-mundur aria-label="Pengumuman sebelumnya"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-arrow-left"/></svg></button>
+    <button class="papan-panah papan-maju" type="button" data-papan-maju aria-label="Pengumuman berikutnya"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-arrow-right"/></svg></button>
+    <div class="papan-titik" data-papan-titik></div>
+  </section>
   <section class="langit" aria-labelledby="judul-utama">
     <span class="riak" aria-hidden="true"></span><span class="riak" aria-hidden="true"></span><span class="riak" aria-hidden="true"></span>
     <div class="langit-isi">
@@ -11,18 +17,6 @@
         <a class="tombol tombol-utama besar" href="#tentang-yayasan">Kenali yayasan</a>
         <a class="tombol tombol-garis-langit besar" href="{{BASE}}booking/">Booking konsultasi</a>
       </div>
-    </div>
-    <div class="papan" data-papan aria-roledescription="carousel" aria-label="Pengumuman utama" hidden>
-      <div class="papan-kepala">
-        <p class="papan-label">Pengumuman utama</p>
-        <div class="papan-kendali" data-papan-kendali>
-          <button class="papan-tombol" type="button" data-papan-mundur aria-label="Pengumuman sebelumnya"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-arrow-left"/></svg></button>
-          <span class="papan-hitung" data-papan-hitung aria-hidden="true"></span>
-          <button class="papan-tombol" type="button" data-papan-maju aria-label="Pengumuman berikutnya"><svg class="ikon" aria-hidden="true"><use href="{{BASE}}aset/img/ikon.svg#i-arrow-right"/></svg></button>
-        </div>
-      </div>
-      <div class="papan-jalur" data-papan-jalur aria-live="polite"></div>
-      <div class="papan-titik" data-papan-titik></div>
     </div>
     <p class="langit-waktu" data-jam-mataram></p>
   </section>

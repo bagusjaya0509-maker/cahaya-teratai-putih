@@ -58,17 +58,16 @@ export const slideKegiatan = (k) => `
   <span class="geser-lanjut">Lihat keterangan ${ikon('arrow-right')}</span>
 </a>`;
 
-// Papan pengumuman di pembuka beranda: satu pengumuman per slide.
+// Papan pengumuman (billboard) selebar layar di atas beranda: foto penuh + judul di kotak gelap.
 export const slidePengumuman = (k, i, n) => {
-  const gambar = k.sampulKecil ? urlSampul(k.sampulKecil) : (k.video ? gambarYoutube(k.video) : '');
+  const foto = k.sampul || k.sampulKecil;
+  const gambar = foto ? urlSampul(foto) : (k.video ? gambarYoutube(k.video) : '');
   return `
 <a class="papan-slide" href="${urlKabar(k)}" role="group" aria-roledescription="slide" aria-label="${i + 1} dari ${n}: ${esc(k.judul)}"${i ? ' tabindex="-1"' : ''}>
-  <span class="papan-gambar">${gambar ? `<img src="${esc(gambar)}" alt="" loading="${i ? 'lazy' : 'eager'}" decoding="async">` : `<img class="papan-lambang" src="${BASE}aset/img/lambang-emas.svg" alt="">`}</span>
-  <span class="papan-teks">
+  ${gambar ? `<img class="papan-foto" src="${esc(gambar)}" alt="" loading="${i ? 'lazy' : 'eager'}" decoding="async">` : `<span class="papan-foto papan-foto-kosong"><img src="${BASE}aset/img/lambang-emas.svg" alt=""></span>`}
+  <span class="papan-keterangan">
     <span class="papan-kat">${esc(k.kategori || 'Pengumuman')}</span>
     <strong class="papan-judul">${esc(k.judul)}</strong>
-    ${k.ringkasan ? `<span class="papan-ringkas">${esc(k.ringkasan)}</span>` : ''}
-    <span class="papan-meta"><time>${tanggal(k.terbitPada)}</time><span class="papan-baca">Baca selengkapnya ${ikon('arrow-right')}</span></span>
   </span>
 </a>`;
 };
