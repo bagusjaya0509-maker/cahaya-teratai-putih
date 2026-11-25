@@ -85,9 +85,9 @@ if (jalur) {
 }
 
 
-// Papan pengumuman utama di pembuka beranda: kabar berkategori Pengumuman, yang ditandai
-// unggulan didahulukan. Berganti sendiri tiap 2 detik (permintaan pemilik), berhenti saat difokus,
-// dan tidak bergerak sendiri bila pengunjung memilih gerak dikurangi.
+// Papan sorotan di pembuka beranda: slide pertama = sapaan yayasan (langit), lalu kabar berkategori
+// Pengumuman (unggulan didahulukan) selebar dan setinggi pembuka. Berganti tiap 2 detik (permintaan
+// pemilik), berhenti saat difokus papan ketik, dan tidak bergerak sendiri bila gerak dikurangi.
 const papan = $('[data-papan]');
 if (papan) {
   daftarKabar({ kategori: 'Pengumuman', batas: 8 })
@@ -96,18 +96,18 @@ if (papan) {
       if (!ada.length) return;
       const jalurP = $('[data-papan-jalur]', papan);
       const titik = $('[data-papan-titik]', papan);
-            const n = ada.length;
-      jalurP.innerHTML = ada.map((k, i) => slidePengumuman(k, i, n)).join('');
-      titik.innerHTML = n > 1 ? ada.map((k, i) => `<button type="button" aria-label="Tampilkan pengumuman ${i + 1}"></button>`).join('') : '';
-      papan.classList.toggle('papan-tunggal', n < 2);
-      papan.hidden = false;
+      const n = ada.length + 1;
+      jalurP.insertAdjacentHTML('beforeend', ada.map((k, i) => slidePengumuman(k, i + 1, n)).join(''));
+      titik.innerHTML = Array.from({ length: n }, (_, i) => `<button type="button" aria-label="Tampilkan slide ${i + 1}"></button>`).join('');
+      papan.classList.remove('papan-tunggal');
       const slide = () => [...jalurP.children];
       const halusP = !matchMedia('(prefers-reduced-motion: reduce)').matches;
       let aktif = 0;
       const tandai = (i) => {
         aktif = i;
-        slide().forEach((s, j) => (j === i ? s.removeAttribute('tabindex') : s.setAttribute('tabindex', '-1')));
+        slide().forEach((s, j) => { if (s.matches('a')) { if (j === i) s.removeAttribute('tabindex'); else s.setAttribute('tabindex', '-1'); } });
         [...titik.children].forEach((b, j) => b.setAttribute('aria-current', j === i ? 'true' : 'false'));
+        document.body.classList.toggle('papan-foto-aktif', i > 0);
       };
       const ke = (i) => {
         const j = (i + n) % n;
@@ -129,13 +129,12 @@ if (papan) {
         }, 90);
       }, { passive: true });
       addEventListener('resize', () => jalurP.scrollTo({ left: slide()[aktif].offsetLeft - slide()[0].offsetLeft }));
-      // putar otomatis
       let jam = null;
       let diam = false;
       const henti = () => { clearInterval(jam); jam = null; };
       function mulai() {
         henti();
-        if (n > 1 && halusP && !diam && !document.hidden) jam = setInterval(() => ke(aktif + 1), 2000);
+        if (halusP && !diam && !document.hidden) jam = setInterval(() => ke(aktif + 1), 2000);
       }
       papan.addEventListener('focusin', (e) => { if (e.target.matches(':focus-visible')) { diam = true; henti(); } });
       papan.addEventListener('focusout', (e) => { if (!papan.contains(e.relatedTarget)) { diam = false; mulai(); } });
