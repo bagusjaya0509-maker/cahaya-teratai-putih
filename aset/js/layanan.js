@@ -10,7 +10,7 @@
 // memberi sesi tamu (Anonymous Auth), jadi aturan Firestore tetap bisa mengenali
 // pemilik data dan booking bisa dipantau dari perangkat yang sama.
 import { KONFIG, MODE, ASAL, sesiLokal } from './inti.js';
-import { nomorBooking, namaLayanan, tanggalBooking } from './rujukan.js';
+import { nomorBooking } from './rujukan.js';
 
 const VERSI_FB = '12.19.0';
 const ADMIN_UTAMA = (KONFIG.adminUtama || []).map((e) => e.toLowerCase());
@@ -242,7 +242,7 @@ const fbMesin = {
       ...data, nomor, uid: p.uid, email: p.email || '', status: 'baru', jadwalTanggal: '', jadwalJam: '',
       dibuat: F.serverTimestamp(), diubah: F.serverTimestamp(), balasanTamu: null, dibacaAdmin: null,
     });
-    kabariPengurus({ ...data, id: ref.id, nomor });
+    kabariPengurus('booking', ref.id);
     return { id: ref.id, nomor };
   },
   async bookingSaya() {
@@ -291,6 +291,7 @@ const fbMesin = {
     b.set(ref, { ...data, ...akun, uid: p.uid, status: 'tampil', dibuat: F.serverTimestamp() });
     b.set(F.doc(db, 'testimoniPublik', ref.id), { ...potongTestimoni({ ...data, ...akun }), tampilPada: F.serverTimestamp() });
     await b.commit();
+    kabariPengurus('testimoni', ref.id);
   },
 
   // ---------- panel pengurus ----------
@@ -542,24 +543,22 @@ const fbMesin = {
   },
 };
 
-// Pemberitahuan surel untuk pengurus lewat FormSubmit (gratis, tanpa server).
-// Hanya nomor, layanan, dan tanggal yang dikirim; cerita tamu tetap di Firestore.
-function kabariPengurus(b) {
-  const tujuan = KONFIG.notifikasi?.emailBookingBaru;
-  if (!tujuan || MODE !== 'firebase' || ['localhost', '127.0.0.1'].includes(location.hostname)) return;
-  fetch(`https://formsubmit.co/ajax/${encodeURIComponent(tujuan)}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-    body: JSON.stringify({
-      _subject: `[Cahaya Teratai Putih] Booking baru ${b.nomor}`,
-      _template: 'table',
-      _captcha: 'false',
-      Nomor: b.nomor,
-      Layanan: namaLayanan(b.layanan),
-      'Tanggal diinginkan': tanggalBooking(b.tanggal),
-      'Buka di panel': `${ASAL}admin/#booking/${b.id}`,
-    }),
-  }).catch(() => {});
+// Notifikasi email booking & Suara Umat ke pengurus lewat layanan yayasan-surat di VPS (Resend), 28 Nov 2026.
+// Menggantikan FormSubmit. VPS membaca datanya sendiri dari Firestore memakai token pengirim,
+// jadi isinya tidak bisa dipalsukan; penerima = pengurus terdaftar + PENERIMA_TAMBAHAN di VPS.
+async function kabariPengurus(jenis, id) {
+  const url = (KONFIG.suratMasuk || '').replace(/\/penerima$/, '/notif');
+  if (!url || MODE !== 'firebase' || ['localhost', '127.0.0.1'].includes(location.hostname)) return;
+  try {
+    const { auth } = await fb();
+    const token = await auth.currentUser?.getIdToken();
+    if (!token) return;
+    await fetch(url, {
+      method: 'POST', keepalive: true,
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ jenis, id }),
+    });
+  } catch { /* notifikasi tidak boleh menggagalkan pengiriman */ }
 }
 
 // ======================================================================
