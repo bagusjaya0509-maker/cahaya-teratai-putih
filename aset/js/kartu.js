@@ -51,7 +51,18 @@ export function sampul(k, kelas = '') {
   return `<div class="sampul sampul-kosong ${kelas}" aria-hidden="true"><span class="sampul-kat">${esc(k.kategori || 'Kabar')}</span></div>`;
 }
 
-export const slideKegiatan = (k) => `
+// Kegiatan yang punya video: gambar = tombol putar di tempat (beranda.js), judul & "Lihat keterangan" ke halaman kabar.
+export const slideKegiatan = (k) => (/^[\w-]{11}$/.test(k.video || '') ? `
+<div class="geser-kartu geser-video">
+  <button type="button" class="geser-media" data-putar-di-tempat="${esc(k.video)}" data-judul="${esc(k.judul)}" aria-label="Putar video: ${esc(k.judul)}">
+    <img src="${esc(urlSampul(k.sampulKecil))}" alt="${esc(k.judul)}" loading="lazy" decoding="async">
+    <span class="tanda-putar" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+  </button>
+  <a class="geser-judul" href="${urlKabar(k)}">${esc(k.judul)}</a>
+  <a class="geser-lanjut" href="${urlKabar(k)}">Lihat keterangan ${ikon('arrow-right')}</a>
+</div>` : slideKegiatanBiasa(k));
+
+const slideKegiatanBiasa = (k) => `
 <a class="geser-kartu" href="${urlKabar(k)}">
   <img src="${esc(urlSampul(k.sampulKecil))}" alt="${esc(k.judul)}" loading="lazy" decoding="async">
   <span class="geser-judul">${esc(k.judul)}</span>

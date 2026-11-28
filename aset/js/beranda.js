@@ -74,6 +74,28 @@ if (jalur) {
   jalur.addEventListener('load', perbarui, true);
   addEventListener('resize', perbarui);
   perbarui();
+  // Kegiatan bervideo: klik gambar = video YouTube diputar di tempat, seukuran gambarnya.
+  jalur.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-putar-di-tempat]');
+    if (!b) return;
+    const id = b.dataset.putarDiTempat;
+    if (!/^[\w-]{11}$/.test(id)) return;
+    const img = b.querySelector('img');
+    const w = img ? img.offsetWidth : 640;
+    const h = img ? img.offsetHeight : 360;
+    const wadah = document.createElement('div');
+    wadah.className = 'geser-pemutar';
+    wadah.style.width = `${w}px`;
+    wadah.style.height = `${h}px`;
+    const f = document.createElement('iframe');
+    f.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+    f.title = b.dataset.judul || 'Video kegiatan';
+    f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    f.referrerPolicy = 'strict-origin-when-cross-origin';
+    f.allowFullscreen = true;
+    wadah.append(f);
+    b.replaceWith(wadah);
+  });
   daftarKabar({ kategori: 'Kegiatan', batas: 12 })
     .then((d) => {
       const ada = d.filter((k) => k.sampulKecil);
